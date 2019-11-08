@@ -1,4 +1,4 @@
-package playerclient
+package parser
 
 // FlagID is the type representing each marker flag in the field
 type FlagID byte

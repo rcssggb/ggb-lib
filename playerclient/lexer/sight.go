@@ -1,4 +1,4 @@
-package parse
+package lexer
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"strings"
 )
 
-// SightData contains
-type SightData struct {
+// SightSymbols contains
+type SightSymbols struct {
 	Time     int
 	SightMap map[string][]string
 }
 
 // Sight parses (see 0 ((f r t) 55.7 3) ...
-func Sight(m string) (data *SightData, err error) {
+func Sight(m string) (data *SightSymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(see ")
 	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
@@ -25,7 +25,7 @@ func Sight(m string) (data *SightData, err error) {
 		return
 	}
 
-	data = &SightData{
+	data = &SightSymbols{
 		Time:     int(time),
 		SightMap: make(map[string][]string),
 	}

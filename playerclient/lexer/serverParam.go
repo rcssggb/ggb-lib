@@ -1,16 +1,16 @@
-package parse
+package lexer
 
 import (
 	"errors"
 	"strings"
 )
 
-// ServerParams is the type to be returned by parse.ServerParams
-type ServerParams map[string]string
+// ServerParamSymbols is the type to be returned by parse.ServerParamSymbols
+type ServerParamSymbols map[string]string
 
 // ServerParam parses (server_param ...
-func ServerParam(m string) (sp ServerParams, err error) {
-	sp = make(ServerParams)
+func ServerParam(m string) (sp ServerParamSymbols, err error) {
+	sp = make(ServerParamSymbols)
 
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(server_param ")

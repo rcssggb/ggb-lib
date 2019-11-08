@@ -1,6 +1,7 @@
-package parse
+package lexer
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -25,25 +26,10 @@ func TestSightShort(t *testing.T) {
 		"f c b":             []string{"16.6", "-1", "-0", "-0.8"},
 		"f b 0":             []string{"21.5", "2", "-0", "-0.6"},
 	}
-	if len(sightData.SightMap) != len(correctData) {
-		t.FailNow()
-	}
-	for objName, sightVals := range sightData.SightMap {
-		correctVals, ok := correctData[objName]
-		if !ok {
-			t.Fail()
-		}
-		if len(sightVals) != len(correctVals) {
-			t.Fail()
-			continue
-		}
-		for idx, val := range correctVals {
-			if sightVals[idx] != val {
-				t.Fail()
-			}
-		}
-	}
 
+	if !reflect.DeepEqual(correctData, sightData.SightMap) {
+		t.Fail()
+	}
 }
 
 // (see 0 ((f r t) 49.4 3) ((f r b) 86.5 55) ((f g r b) 66 42) ((g r) 61.6 37) ((f g r t) 58 31) ((f p r c) 49.4 48) ((f p r t) 37 27) ((f t r 10) 7.3 -16 0 0) ((f t r 20) 17.1 -7 0 0) ((f t r 30) 27.1 -4) ((f t r 40) 37 -3) ((f t r 50) 47 -2) ((f b r 50) 89.1 58) ((f r 0) 66 34) ((f r t 10) 60.9 26) ((f r t 20) 56.8 17) ((f r t 30) 55.1 7) ((f r b 10) 72.2 41) ((f r b 20) 79 46) ((f r b 30) 86.5 51))
