@@ -1,8 +1,9 @@
-package parser
+package flags
 
 // FlagID is the type representing each marker flag in the field
 type FlagID byte
 
+// TODO: add comment with each flag coordinate
 const (
 	CenterFlag FlagID = iota + 0
 

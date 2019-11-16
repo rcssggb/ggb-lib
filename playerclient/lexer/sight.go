@@ -49,6 +49,10 @@ func Sight(m string) (data *SightSymbols, err error) {
 			err = fmt.Errorf("invalid number of sight values in object %s seen in %s", objName, m)
 		}
 
+		if objName[0] == 'p' {
+			// for now we're skipping players, format will need to change a bit
+			continue
+		}
 		data.SightMap[objName] = splitParam
 	}
 
