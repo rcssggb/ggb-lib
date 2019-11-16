@@ -1,6 +1,6 @@
 package parser
 
-import "../lexer"
+import "github.com/rcssggb/ggb-lib/playerclient/lexer"
 
 // SightData is the final format of everything that was seen by the player
 type SightData struct {
@@ -17,6 +17,5 @@ type FlagData struct {
 
 // Sight parses sight data coming from lexer
 func Sight(symbols lexer.SightSymbols) (*SightData, error) {
-
 	return nil, nil
 }

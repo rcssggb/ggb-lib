@@ -3,7 +3,7 @@ package playerclient
 import (
 	"log"
 
-	"./lexer"
+	"github.com/rcssggb/ggb-lib/playerclient/lexer"
 )
 
 // decode continuously receives messages from recvChannel and calls lexer and parser to structure the message data
