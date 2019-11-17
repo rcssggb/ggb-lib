@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"sort"
 	"testing"
 
@@ -39,8 +38,6 @@ func TestSightShort(t *testing.T) {
 	if sightData.Flags.Len() != 4 {
 		t.Fail()
 	}
-
-	fmt.Printf("%+v\n", sightData)
 }
 
 func TestSightWithBall(t *testing.T) {
@@ -107,6 +104,4 @@ func TestSightWithBall(t *testing.T) {
 	if sightData.Ball != expectedBall {
 		t.Fail()
 	}
-
-	fmt.Printf("%+v\n", sightData)
 }

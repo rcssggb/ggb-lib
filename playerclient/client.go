@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"log"
 	"net"
+
+	"github.com/rcssggb/ggb-lib/playerclient/parser"
 )
 
 // Client ...
 type Client struct {
 	conn        *net.UDPConn
 	recvChannel chan message
+	sightData   parser.SightData
 	TeamName    string
 	TeamSide    sideType
 	ShirtNum    int

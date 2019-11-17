@@ -91,7 +91,7 @@ func SenseBody(symbols lexer.SenseBodySymbols) (senseBodyData *SenseBodyData, er
 
 		default:
 			err = fmt.Errorf("Parse not implemented for %s", objName)
-			fmt.Println(err.Error())
+			// fmt.Println(err.Error())
 		}
 	}
 
