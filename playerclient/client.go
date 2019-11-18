@@ -14,6 +14,7 @@ type Client struct {
 	serverAddr  *net.UDPAddr
 	cmdChannel  chan command
 	recvChannel chan message
+	errChannel  chan string
 	currentTime int
 	sightData   parser.SightData
 	TeamName    string
@@ -29,6 +30,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	client.TeamName = teamName
 	client.cmdChannel = make(chan command, 32)
 	client.recvChannel = make(chan message, 32)
+	client.errChannel = make(chan string, 32)
 	client.currentTime = 0
 
 	// Open listener socker to request player connection

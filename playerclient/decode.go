@@ -34,6 +34,8 @@ func (c *Client) decode() {
 			}
 		case serverParamMsg:
 			_, err = lexer.ServerParam(m.data)
+		case errorMsg:
+			c.errChannel <- m.String()
 		case unsupportedMsg:
 			continue
 		}
