@@ -28,7 +28,10 @@ func (c *Client) decode() {
 			if err != nil {
 				log.Println(err)
 			}
-			c.sightData = *sightData
+			if sightData.Time >= c.currentTime {
+				c.sightData = *sightData
+				c.currentTime = sightData.Time
+			}
 		case serverParamMsg:
 			_, err = lexer.ServerParam(m.data)
 		case unsupportedMsg:

@@ -11,7 +11,10 @@ import (
 // Client ...
 type Client struct {
 	conn        *net.UDPConn
+	serverAddr  *net.UDPAddr
+	cmdChannel  chan command
 	recvChannel chan message
+	currentTime int
 	sightData   parser.SightData
 	TeamName    string
 	TeamSide    sideType
@@ -21,25 +24,30 @@ type Client struct {
 
 // NewPlayerClient is the constructor for the playerclient.Client object
 func NewPlayerClient(teamName, serverIP string) (*Client, error) {
+	// Instantiate new Player struct
+	client := &Client{}
+	client.TeamName = teamName
+	client.cmdChannel = make(chan command, 32)
+	client.recvChannel = make(chan message, 32)
+	client.currentTime = 0
+
 	// Open listener socker to request player connection
 	serverHost := serverIP + ":6000"
 	serverAddr, err := net.ResolveUDPAddr("udp", serverHost)
 	if err != nil {
 		return nil, err
 	}
+	client.serverAddr = serverAddr
+
 	conn, err := net.ListenUDP("udp", nil)
 	if err != nil {
 		return nil, err
 	}
-
-	// Instantiate new Player struct
-	client := &Client{}
 	client.conn = conn
-	client.TeamName = teamName
-	client.recvChannel = make(chan message, 32)
 
 	go client.listen()
 	go client.decode()
+	go client.execute()
 
 	// Send connect message
 	log.Printf("Connecting to %s as a player for %s\n", serverHost, teamName)
