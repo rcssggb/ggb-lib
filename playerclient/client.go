@@ -39,7 +39,6 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	client.serverAddr = serverAddr
 
 	conn, err := net.ListenUDP("udp", nil)
 	if err != nil {

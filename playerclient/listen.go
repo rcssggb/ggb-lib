@@ -11,7 +11,10 @@ func (c *Client) listen() {
 
 	for {
 		c.conn.SetReadDeadline(time.Now().Add(1 * time.Second))
-		n, _, err := c.conn.ReadFromUDP(response)
+		n, serverAddr, err := c.conn.ReadFromUDP(response)
+		if c.serverAddr == nil {
+			c.serverAddr = serverAddr
+		}
 		now := time.Now()
 		if err != nil {
 			log.Println(err)
