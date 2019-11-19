@@ -3,6 +3,7 @@ package playerclient
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 // execute continuously receives messages from cmdChannel and sends them to server
@@ -22,6 +23,11 @@ func (c *Client) execute() {
 			err = fmt.Errorf("command too early, putting it back to channel")
 			log.Println(err)
 			c.cmdChannel <- cmd
+		}
+
+		// Wait until client receives player port
+		for c.serverAddr == nil {
+			time.Sleep(1 * time.Millisecond)
 		}
 
 		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString), c.serverAddr)

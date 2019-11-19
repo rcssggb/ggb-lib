@@ -3,7 +3,7 @@ package actions
 import (
 	"fmt"
 
-	"github.com/rcssggb/ggb-lib/common/field"
+	"github.com/rcssggb/ggb-lib/rcsscommon/field"
 )
 
 // Move constructs the string to send a "move" command to the server

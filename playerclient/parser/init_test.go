@@ -1,6 +1,10 @@
-package lexer
+package parser
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/rcssggb/ggb-lib/common"
+)
 
 func TestInitBasic(t *testing.T) {
 	initData, err := Init("(init l 1 before_kick_off)")
@@ -16,7 +20,7 @@ func TestInitBasic(t *testing.T) {
 	if initData.Unum != 1 {
 		t.Fail()
 	}
-	if initData.Side != 'l' {
+	if initData.Side != common.LeftSide {
 		t.Fail()
 	}
 }

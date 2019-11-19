@@ -10,15 +10,18 @@ import (
 // decode continuously receives messages from recvChannel and calls lexer and parser to structure the message data
 func (c *Client) decode() {
 	var m message
-	var err error
+
 	for {
 		m = <-c.recvChannel
 		switch m.Type() {
 		case initMsg:
-			_, err = lexer.Init(m.data)
+			initData, err := parser.Init(m.data)
 			if err != nil {
 				log.Println(err)
 			}
+			c.shirtNum = initData.Unum
+			c.teamSide = initData.Side
+			c.playMode = initData.PlayMode
 		case sightMsg:
 			sightSymbols, err := lexer.Sight(m.data)
 			if err != nil {
@@ -33,14 +36,11 @@ func (c *Client) decode() {
 				c.currentTime = sightData.Time
 			}
 		case serverParamMsg:
-			_, err = lexer.ServerParam(m.data)
+			// _, err := lexer.ServerParam(m.data)
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:
 			continue
-		}
-		if err != nil {
-			log.Println(err)
 		}
 	}
 }

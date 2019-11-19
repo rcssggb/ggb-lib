@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 // Client ...
@@ -17,17 +18,17 @@ type Client struct {
 	errChannel  chan string
 	currentTime int
 	sightData   parser.SightData
-	TeamName    string
-	TeamSide    sideType
-	ShirtNum    int
-	PlayMode    string
+	teamName    string
+	teamSide    rcsscommon.SideType
+	shirtNum    int
+	playMode    string
 }
 
 // NewPlayerClient is the constructor for the playerclient.Client object
 func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	// Instantiate new Player struct
 	client := &Client{}
-	client.TeamName = teamName
+	client.teamName = teamName
 	client.cmdChannel = make(chan command, 32)
 	client.recvChannel = make(chan message, 32)
 	client.errChannel = make(chan string, 32)

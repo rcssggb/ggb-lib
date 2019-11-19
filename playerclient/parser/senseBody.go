@@ -3,8 +3,8 @@ package parser
 import (
 	"fmt"
 
-	body "github.com/rcssggb/ggb-lib/common/senseBody"
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
+	body "github.com/rcssggb/ggb-lib/rcsscommon/senseBody"
 )
 
 // ViewModeData specifies the settings of the sight sensor

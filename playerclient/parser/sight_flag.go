@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rcssggb/ggb-lib/common/flags"
+	"github.com/rcssggb/ggb-lib/rcsscommon/flags"
 )
 
 // FlagArray is an array of FlagData

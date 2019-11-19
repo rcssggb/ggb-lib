@@ -1,6 +1,6 @@
 package parser
 
-import "github.com/rcssggb/ggb-lib/common/flags"
+import "github.com/rcssggb/ggb-lib/rcsscommon/flags"
 
 var flagMap = map[string]flags.FlagID{
 	"f c":       flags.CenterFlag,
