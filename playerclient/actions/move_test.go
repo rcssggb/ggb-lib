@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/rcssggb/ggb-lib/common/field"
+	"github.com/rcssggb/ggb-lib/rcsscommon/field"
 )
 
 func TestMoveInt(t *testing.T) {

@@ -3,7 +3,7 @@ package parser
 import (
 	"testing"
 
-	"github.com/rcssggb/ggb-lib/common"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 func TestInitBasic(t *testing.T) {
@@ -20,7 +20,7 @@ func TestInitBasic(t *testing.T) {
 	if initData.Unum != 1 {
 		t.Fail()
 	}
-	if initData.Side != common.LeftSide {
+	if initData.Side != rcsscommon.LeftSide {
 		t.Fail()
 	}
 }
