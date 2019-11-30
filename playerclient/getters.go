@@ -28,3 +28,8 @@ func (c *Client) Shirt() int {
 func (c *Client) PlayMode() string {
 	return c.playMode
 }
+
+// Time returns current simulation time step
+func (c *Client) Time() int {
+	return c.currentTime
+}
