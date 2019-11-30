@@ -21,7 +21,7 @@ func Sight(m string) (data *SightSymbols, err error) {
 	timeEnd := strings.Index(trimmedMsg, " ")
 	if timeEnd == -1 {
 		// If player sees nothing, message will be `(see <time>)`
-		timeEnd = len(trimmedMsg)
+		timeEnd = strings.Index(trimmedMsg, ")")
 	}
 	timeStr := string(trimmedMsg[0:timeEnd])
 	time, err := strconv.ParseInt(timeStr, 10, 64)
