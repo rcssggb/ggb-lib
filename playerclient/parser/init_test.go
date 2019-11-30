@@ -7,7 +7,7 @@ import (
 )
 
 func TestInitBasic(t *testing.T) {
-	initData, err := Init("(init l 1 before_kick_off)")
+	initData, err := Init("(init l 1 before_kick_off)\x00")
 	if err != nil {
 		t.Fail()
 	}

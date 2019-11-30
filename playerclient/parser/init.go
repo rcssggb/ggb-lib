@@ -2,6 +2,8 @@ package parser
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
@@ -22,7 +24,8 @@ func Init(m string) (data *InitData, err error) {
 	if err != nil {
 		return
 	}
-	playMode = playMode[0 : len(playMode)-1] // trim out last )
+	playModeEnd := strings.Index(playMode, ")")
+	playMode = playMode[0:playModeEnd] // trim out last )
 
 	data = &InitData{
 		Side:     side,
