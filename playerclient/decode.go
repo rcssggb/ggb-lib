@@ -26,10 +26,12 @@ func (c *Client) decode() {
 			sightSymbols, err := lexer.Sight(m.data)
 			if err != nil {
 				log.Println(err)
+				continue
 			}
 			sightData, err := parser.Sight(*sightSymbols)
 			if err != nil {
 				log.Println(err)
+				continue
 			}
 			if sightData.Time >= c.currentTime {
 				c.sightData = *sightData

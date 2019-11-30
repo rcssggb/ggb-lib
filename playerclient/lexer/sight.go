@@ -26,6 +26,7 @@ func Sight(m string) (data *SightSymbols, err error) {
 	timeStr := string(trimmedMsg[0:timeEnd])
 	time, err := strconv.ParseInt(timeStr, 10, 64)
 	if err != nil {
+		err = fmt.Errorf("error parsing string %s: %s", m, err)
 		return
 	}
 
