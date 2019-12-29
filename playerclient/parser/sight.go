@@ -11,7 +11,7 @@ import (
 type SightData struct {
 	Time  int
 	Flags FlagArray
-	Ball  BallData
+	Ball  *BallData
 }
 
 // Sight parses sight data coming from lexer

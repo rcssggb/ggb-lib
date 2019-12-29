@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rcssggb/ggb-lib/rcsscommon/flags"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 // FlagArray is an array of FlagData
@@ -13,12 +13,12 @@ type FlagArray []FlagData
 
 // FlagData contains data about the field markers
 type FlagData struct {
-	ID        flags.FlagID
+	ID        rcsscommon.FlagID
 	Distance  float64
 	Direction float64
 }
 
-func parseFlag(flagID flags.FlagID, data []string) (flag FlagData, err error) {
+func parseFlag(flagID rcsscommon.FlagID, data []string) (flag FlagData, err error) {
 	if len(data) < 2 {
 		err = fmt.Errorf("missing flag data, got: %s", strings.Join(data, " "))
 		return

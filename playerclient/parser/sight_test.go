@@ -101,7 +101,7 @@ func TestSightWithBall(t *testing.T) {
 		DirChange:  0.9,
 	}
 
-	if sightData.Ball != expectedBall {
+	if sightData.Ball == nil || *sightData.Ball != expectedBall {
 		t.Fail()
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 func TestSenseBody(t *testing.T) {
@@ -36,8 +37,31 @@ func TestSenseBody(t *testing.T) {
 		t.FailNow()
 	}
 
-	if senseBodyData.Time != 0 {
-		t.Fail()
+	expectedData := SenseBodyData{
+		Time: 0,
+		ViewMode: ViewModeData{
+			Quality: rcsscommon.ViewQualityHigh,
+			Width:   rcsscommon.ViewWidthNormal,
+		},
+		Stamina: StaminaData{
+			Value:    8000,
+			Effort:   1,
+			Capacity: 130600,
+		},
+		Speed: SpeedData{
+			Magnitude: 0,
+			Direction: 0,
+		},
+		HeadAngle:     0,
+		KickCount:     0,
+		DashCount:     0,
+		TurnCount:     1,
+		TurnNeckCount: 1,
+		CatchCount:    0,
+		MoveCount:     0,
 	}
 
+	if *senseBodyData != expectedData {
+		t.Fail()
+	}
 }

@@ -14,7 +14,7 @@ type BallData struct {
 	DirChange  float64
 }
 
-func parseBall(data []string) (ball BallData, err error) {
+func parseBall(data []string) (ball *BallData, err error) {
 	var distStr, dirStr, distChngStr, dirChngStr string
 	var dist, dir, distChng, dirChng float64
 	if len(data) < 2 {
@@ -52,7 +52,7 @@ func parseBall(data []string) (ball BallData, err error) {
 		}
 	}
 
-	ball = BallData{
+	ball = &BallData{
 		Distance:   dist,
 		Direction:  dir,
 		DistChange: distChng,
