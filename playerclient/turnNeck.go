@@ -8,10 +8,11 @@ other action commands. The neck will rotate with the given Angle relative to pre
 Angle. Note that the resulting neck angle will be between minneckang (default: −90)
 and maxneckang (default: 90) relative to the player’s body direction.
 */
-func (c *Client) TurnNeck(time int, moment float64) {
+func (c *Client) TurnNeck(time int, moment float64) string {
 	turnNeckStr := actions.TurnNeck(moment)
 	c.cmdChannel <- command{
 		time:      time,
 		cmdString: turnNeckStr,
 	}
+	return turnNeckStr
 }

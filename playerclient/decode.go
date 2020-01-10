@@ -1,8 +1,6 @@
 package playerclient
 
 import (
-	"log"
-
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
 )
@@ -17,7 +15,8 @@ func (c *Client) decode() {
 		case initMsg:
 			initData, err := parser.Init(m.data)
 			if err != nil {
-				log.Println(err)
+				c.errChannel <- err.Error()
+				continue
 			}
 			c.shirtNum = initData.Unum
 			c.teamSide = initData.Side
@@ -25,17 +24,36 @@ func (c *Client) decode() {
 		case sightMsg:
 			sightSymbols, err := lexer.Sight(m.data)
 			if err != nil {
-				log.Println(err)
+				c.errChannel <- err.Error()
 				continue
 			}
+
 			sightData, err := parser.Sight(*sightSymbols)
 			if err != nil {
-				log.Println(err)
+				c.errChannel <- err.Error()
 				continue
 			}
+
 			if sightData.Time >= c.currentTime {
 				c.sightData = *sightData
 				c.currentTime = sightData.Time
+			}
+		case bodyMsg:
+			bodySymbols, err := lexer.SenseBody(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+
+			bodyData, err := parser.SenseBody(*bodySymbols)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+
+			if bodyData.Time >= c.currentTime {
+				c.bodyData = *bodyData
+				c.currentTime = bodyData.Time
 			}
 		case serverParamMsg:
 			// _, err := lexer.ServerParam(m.data)

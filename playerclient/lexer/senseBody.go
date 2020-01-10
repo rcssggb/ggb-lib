@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -15,15 +16,24 @@ func SenseBody(m string) (data *SenseBodySymbols, err error) {
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(sense_body ")
 	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
 
-	timeStr := string(trimmedMsg[0])
+	timeEnd := strings.Index(trimmedMsg, " ")
+	if timeEnd == -1 {
+		// Fail-safe carried from lexer.Sight, possibly useless but it's better to be safe than sorry
+		timeEnd = strings.Index(trimmedMsg, ")")
+	}
+	timeStr := string(trimmedMsg[0:timeEnd])
 	time, err := strconv.ParseInt(timeStr, 10, 64)
+	if err != nil {
+		err = fmt.Errorf("error parsing string %s: %s", m, err)
+		return
+	}
 
 	data = &SenseBodySymbols{
 		Time:         int(time),
 		SenseBodyMap: make(map[string][]string),
 	}
 
-	trimmedMsg = trimmedMsg[2:]
+	trimmedMsg = trimmedMsg[timeEnd+1:]
 
 	i := 0
 	var openObj int

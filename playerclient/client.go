@@ -18,6 +18,7 @@ type Client struct {
 	errChannel  chan string
 	currentTime int
 	sightData   parser.SightData
+	bodyData    parser.SenseBodyData
 	teamName    string
 	teamSide    rcsscommon.SideType
 	shirtNum    int

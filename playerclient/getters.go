@@ -9,6 +9,11 @@ func (c *Client) See() parser.SightData {
 	return c.sightData
 }
 
+// SenseBody returns current senseBodyData object
+func (c *Client) SenseBody() parser.SenseBodyData {
+	return c.bodyData
+}
+
 // TeamSide returns player's team side on the field
 func (c *Client) TeamSide() rcsscommon.SideType {
 	return c.teamSide

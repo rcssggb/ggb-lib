@@ -40,5 +40,4 @@ func TestSenseBody(t *testing.T) {
 	if !reflect.DeepEqual(correctData, senseBodyData.SenseBodyMap) {
 		t.Fail()
 	}
-
 }
