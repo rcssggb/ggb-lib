@@ -26,12 +26,19 @@ func main() {
 
 	for {
 		currentTime := player.Time()
+		sight := player.See()
+		body := player.SenseBody()
 
 		if currentTime == 0 {
-			player.Move(currentTime, -25, -15)
+			player.Move(currentTime, -5, 0)
+		} else if sight.Ball == nil {
+			player.Turn(currentTime, 20)
 		} else {
-			player.Dash(currentTime, 50, float64(currentTime))
+			ballAngle := sight.Ball.Direction + body.HeadAngle
+			player.Dash(currentTime, 70, ballAngle-85)
+			player.TurnNeck(currentTime, sight.Ball.Direction)
 		}
+
 		err = player.Error()
 		if err != nil {
 			log.Println(err)
