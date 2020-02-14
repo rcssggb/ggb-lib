@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/rcssggb/ggb-lib/rcsscommon/field"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 func TestMoveInt(t *testing.T) {
@@ -36,28 +36,28 @@ func TestMoveNegFloat(t *testing.T) {
 }
 
 func TestMoveOutOfBounds(t *testing.T) {
-	moveStr := Move(field.MinX-1, 0)
-	if moveStr != fmt.Sprintf("(move %.1f 0.0)", field.MinX) {
+	moveStr := Move(rcsscommon.FieldMinX-1, 0)
+	if moveStr != fmt.Sprintf("(move %.1f 0.0)", rcsscommon.FieldMinX) {
 		t.Fail()
 	}
 
-	moveStr = Move(field.MaxX+7.2, 0)
-	if moveStr != fmt.Sprintf("(move %.1f 0.0)", field.MaxX) {
+	moveStr = Move(rcsscommon.FieldMaxX+7.2, 0)
+	if moveStr != fmt.Sprintf("(move %.1f 0.0)", rcsscommon.FieldMaxX) {
 		t.Fail()
 	}
 
-	moveStr = Move(7.2, field.MinY-2.4)
-	if moveStr != fmt.Sprintf("(move 7.2 %.1f)", field.MinY) {
+	moveStr = Move(7.2, rcsscommon.FieldMinY-2.4)
+	if moveStr != fmt.Sprintf("(move 7.2 %.1f)", rcsscommon.FieldMinY) {
 		t.Fail()
 	}
 
-	moveStr = Move(7.2, field.MaxY+271.2)
-	if moveStr != fmt.Sprintf("(move 7.2 %.1f)", field.MaxY) {
+	moveStr = Move(7.2, rcsscommon.FieldMaxY+271.2)
+	if moveStr != fmt.Sprintf("(move 7.2 %.1f)", rcsscommon.FieldMaxY) {
 		t.Fail()
 	}
 
-	moveStr = Move(field.MinX-12, field.MaxY+271.2)
-	if moveStr != fmt.Sprintf("(move %.1f %.1f)", field.MinX, field.MaxY) {
+	moveStr = Move(rcsscommon.FieldMinX-12, rcsscommon.FieldMaxY+271.2)
+	if moveStr != fmt.Sprintf("(move %.1f %.1f)", rcsscommon.FieldMinX, rcsscommon.FieldMaxY) {
 		t.Fail()
 	}
 }

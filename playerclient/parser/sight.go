@@ -20,7 +20,7 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 		Time: symbols.Time,
 	}
 
-	for objName, data := range symbols.SightMap {
+	for objName, data := range symbols.ObjMap {
 
 		// Test if object is ball
 		if objName == "b" {

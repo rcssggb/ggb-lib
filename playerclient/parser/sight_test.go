@@ -10,7 +10,7 @@ import (
 func TestSightShort(t *testing.T) {
 	sightSymbols := lexer.SightSymbols{
 		Time: 37,
-		SightMap: map[string][]string{
+		ObjMap: map[string][]string{
 			"f b r 10":          []string{"25", "-21", "-0", "-0.6"},
 			"f b l 10":          []string{"22.2", "28"},
 			"p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
@@ -43,7 +43,7 @@ func TestSightShort(t *testing.T) {
 func TestSightWithBall(t *testing.T) {
 	sightSymbols := lexer.SightSymbols{
 		Time: 3000,
-		SightMap: map[string][]string{
+		ObjMap: map[string][]string{
 			"f c":      []string{"14.6", "42", "0.292", "0.9"},
 			"f l t":    []string{"76.7", "36"},
 			"f l b":    []string{"68", "-20"},
