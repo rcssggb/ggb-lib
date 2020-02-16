@@ -10,16 +10,16 @@ import (
 
 // SightData is the final format of everything that was seen by the player
 type SightData struct {
-	Time  int
-	Flags FlagArray
-	Ball  *BallData
+	Time    int
+	Flags   FlagArray
+	Players PlayerArray
+	Ball    *BallData
 }
 
 // Sight parses sight data coming from lexer
 func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 	sightData = &SightData{
-		Time:  symbols.Time,
-		Flags: FlagArray{},
+		Time: symbols.Time,
 	}
 
 	for objName, data := range symbols.ObjMap {
@@ -60,6 +60,10 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 	}
 
 	sort.Sort(sightData.Flags)
+
+	sightData.Players = parsePlayers(symbols.Players)
+
+	sort.Sort(sightData.Players)
 
 	return
 }

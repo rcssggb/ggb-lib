@@ -20,6 +20,13 @@ func TestSightShort(t *testing.T) {
 			"f c b":             []string{"16.6", "-1", "-0", "-0.8"},
 			"f b 0":             []string{"21.5", "2", "-0", "-0.6"},
 		},
+		Players: lexer.SightPlayersSymbols{
+			Known: map[string][]string{
+				"p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
+			},
+			KnownTeam: map[string][][]string{},
+			Unknown:   [][]string{},
+		},
 	}
 	sightData, err := Sight(sightSymbols)
 	if err != nil {
@@ -67,6 +74,8 @@ func TestSightShort(t *testing.T) {
 	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
 		t.Fail()
 	}
+
+	// TODO: test PlayerArray
 }
 
 func TestSightWithBall(t *testing.T) {
@@ -100,6 +109,27 @@ func TestSightWithBall(t *testing.T) {
 			"f l b 30": []string{"71.5", "-16"},
 			"b":        []string{"14.9", "42", "0.298", "0.9"},
 			"l l":      []string{"63.4", "-89"},
+		},
+		Players: lexer.SightPlayersSymbols{
+			Known: map[string][]string{
+				"p \"HELIOS_B\" 6": []string{"20.1", "-3", "0.402", "0.5", "-35", "50"},
+				"p \"HELIOS_B\" 3": []string{"27.1", "-12", "0", "0.2", "-52", "-122"},
+				"p \"HELIOS_B\" 8": []string{"13.5", "-16", "0", "1", "-53", "-113"},
+				"p \"HELIOS_A\" 7": []string{"10", "-34", "-0", "1.4", "-52", "38"},
+			},
+			KnownTeam: map[string][][]string{
+				"\"HELIOS_B\"": [][]string{
+					[]string{"30", "13"},
+					[]string{"33.1", "44"},
+					[]string{"27.1", "-31"},
+				},
+			},
+			Unknown: [][]string{
+				[]string{"60.3", "7"},
+				[]string{"60.3", "-6"},
+				[]string{"44.7", "6"},
+				[]string{"66.7", "17"},
+			},
 		},
 	}
 
@@ -266,4 +296,5 @@ func TestSightWithBall(t *testing.T) {
 		t.Fail()
 	}
 
+	// TODO: test PlayerArray
 }
