@@ -1,10 +1,12 @@
 package parser
 
 import (
+	"reflect"
 	"sort"
 	"testing"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
 func TestSightShort(t *testing.T) {
@@ -36,6 +38,33 @@ func TestSightShort(t *testing.T) {
 	}
 
 	if sightData.Flags.Len() != 4 {
+		t.Fail()
+	}
+
+	expectedFlags := FlagArray{
+		FlagData{
+			ID:        rcsscommon.FlagCenterBot,
+			Distance:  16.6,
+			Direction: -1,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBot0,
+			Distance:  21.5,
+			Direction: 2,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft10,
+			Distance:  22.2,
+			Direction: 28,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotRight10,
+			Distance:  25,
+			Direction: -21,
+		},
+	}
+
+	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
 		t.Fail()
 	}
 }
@@ -86,11 +115,143 @@ func TestSightWithBall(t *testing.T) {
 		t.Fail()
 	}
 
+	expectedFlags := FlagArray{
+		FlagData{
+			ID:        rcsscommon.FlagCenter,
+			Distance:  14.6,
+			Direction: 42,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft10,
+			Distance:  36.2,
+			Direction: -53,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft20,
+			Distance:  42.5,
+			Direction: -42,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftPenaltyBot,
+			Distance:  47.9,
+			Direction: -12,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftPenaltyCenter,
+			Distance:  47.9,
+			Direction: 13,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft30,
+			Distance:  50.4,
+			Direction: -35,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftPenaltyTop,
+			Distance:  55.7,
+			Direction: 33,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagTopLeft20,
+			Distance:  58,
+			Direction: 58,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft40,
+			Distance:  59.1,
+			Direction: -29,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftGoalBot,
+			Distance:  63.4,
+			Direction: 3,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagTopLeft30,
+			Distance:  63.4,
+			Direction: 51,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftGoal,
+			Distance:  64.1,
+			Direction: 10,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftGoalTop,
+			Distance:  65.4,
+			Direction: 16,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftBot,
+			Distance:  68,
+			Direction: -20,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagBotLeft50,
+			Distance:  68,
+			Direction: -25,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftBot10,
+			Distance:  68.7,
+			Direction: 1,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftBot20,
+			Distance:  69.4,
+			Direction: -8,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeft0,
+			Distance:  69.4,
+			Direction: 9,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagTopLeft40,
+			Distance:  70.8,
+			Direction: 45,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftBot30,
+			Distance:  71.5,
+			Direction: -16,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftTop10,
+			Distance:  71.5,
+			Direction: 17,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftTop20,
+			Distance:  74.4,
+			Direction: 24,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftTop,
+			Distance:  76.7,
+			Direction: 36,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagTopLeft50,
+			Distance:  78.3,
+			Direction: 40,
+		},
+		FlagData{
+			ID:        rcsscommon.FlagLeftTop30,
+			Distance:  79,
+			Direction: 31,
+		},
+	}
+
 	if !sort.IsSorted(sightData.Flags) {
 		t.Fail()
 	}
 
 	if sightData.Flags.Len() != 25 {
+		t.Fail()
+	}
+
+	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
 		t.Fail()
 	}
 
@@ -104,4 +265,5 @@ func TestSightWithBall(t *testing.T) {
 	if sightData.Ball == nil || *sightData.Ball != expectedBall {
 		t.Fail()
 	}
+
 }

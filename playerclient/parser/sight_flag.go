@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -55,5 +56,11 @@ func (f FlagArray) Swap(i, j int) {
 
 // Less reports whether the element with index i should sort before the element with index j.
 func (f FlagArray) Less(i, j int) bool {
+	if f[i].Distance == f[j].Distance {
+		if math.Abs(f[i].Direction) == math.Abs(f[j].Direction) {
+			return f[i].Direction < f[j].Direction
+		}
+		return math.Abs(f[i].Direction) < math.Abs(f[j].Direction)
+	}
 	return f[i].Distance < f[j].Distance
 }
