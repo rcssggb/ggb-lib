@@ -8,15 +8,15 @@ import (
 
 // SightSymbols contains
 type SightSymbols struct {
-	Time       int
-	ObjMap     map[string][]string
-	PlayersMap SightPlayersSymbols
+	Time    int
+	ObjMap  map[string][]string
+	Players SightPlayersSymbols
 }
 
 type SightPlayersSymbols struct {
-	KnownPlayersMap     map[string][]string
-	KnownTeamPlayersMap map[string][][]string
-	UnknownPlayers      [][]string
+	Known     map[string][]string
+	KnownTeam map[string][][]string
+	Unknown   [][]string
 }
 
 // Sight parses (see 0 ((f r t) 55.7 3) ...
@@ -40,10 +40,10 @@ func Sight(m string) (data *SightSymbols, err error) {
 	data = &SightSymbols{
 		Time:   int(time),
 		ObjMap: make(map[string][]string),
-		PlayersMap: SightPlayersSymbols{
-			KnownPlayersMap:     make(map[string][]string),
-			KnownTeamPlayersMap: make(map[string][][]string),
-			UnknownPlayers:      [][]string{},
+		Players: SightPlayersSymbols{
+			Known:     make(map[string][]string),
+			KnownTeam: make(map[string][][]string),
+			Unknown:   [][]string{},
 		},
 	}
 
@@ -72,11 +72,11 @@ func Sight(m string) (data *SightSymbols, err error) {
 			objNameParts := strings.Split(objName, " ")
 			switch len(objNameParts) {
 			case 3:
-				data.PlayersMap.KnownPlayersMap[objName] = splitParam
+				data.Players.Known[objName] = splitParam
 			case 2:
-				data.PlayersMap.KnownTeamPlayersMap[objNameParts[1]] = append(data.PlayersMap.KnownTeamPlayersMap[objNameParts[1]], splitParam)
+				data.Players.KnownTeam[objNameParts[1]] = append(data.Players.KnownTeam[objNameParts[1]], splitParam)
 			case 1:
-				data.PlayersMap.UnknownPlayers = append(data.PlayersMap.UnknownPlayers, splitParam)
+				data.Players.Unknown = append(data.Players.Unknown, splitParam)
 			default:
 				err = fmt.Errorf("invalid object name %s seen in %s", objName, m)
 				return

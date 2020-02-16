@@ -21,10 +21,9 @@ func TestSightShort(t *testing.T) {
 	correctObjData := map[string][]string{
 		"f b r 10": []string{"25", "-21", "-0", "-0.6"},
 		"f b l 10": []string{"22.2", "28"},
-		// "p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
-		"l b":   []string{"16.6", "-79"},
-		"f c b": []string{"16.6", "-1", "-0", "-0.8"},
-		"f b 0": []string{"21.5", "2", "-0", "-0.6"},
+		"l b":      []string{"16.6", "-79"},
+		"f c b":    []string{"16.6", "-1", "-0", "-0.8"},
+		"f b 0":    []string{"21.5", "2", "-0", "-0.6"},
 	}
 
 	if !reflect.DeepEqual(correctObjData, sightData.ObjMap) {
@@ -32,14 +31,14 @@ func TestSightShort(t *testing.T) {
 	}
 
 	correctPlayersData := SightPlayersSymbols{
-		KnownPlayersMap: map[string][]string{
+		Known: map[string][]string{
 			"p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
 		},
-		KnownTeamPlayersMap: map[string][][]string{},
-		UnknownPlayers:      [][]string{},
+		KnownTeam: map[string][][]string{},
+		Unknown:   [][]string{},
 	}
 
-	if !reflect.DeepEqual(correctPlayersData, sightData.PlayersMap) {
+	if !reflect.DeepEqual(correctPlayersData, sightData.Players) {
 		t.Fail()
 	}
 }
@@ -92,20 +91,20 @@ func TestSightWithBallAndPlayers(t *testing.T) {
 	}
 
 	correctPlayersData := SightPlayersSymbols{
-		KnownPlayersMap: map[string][]string{
+		Known: map[string][]string{
 			"p \"HELIOS_B\" 6": []string{"20.1", "-3", "0.402", "0.5", "-35", "50"},
 			"p \"HELIOS_B\" 3": []string{"27.1", "-12", "0", "0.2", "-52", "-122"},
 			"p \"HELIOS_B\" 8": []string{"13.5", "-16", "0", "1", "-53", "-113"},
 			"p \"HELIOS_A\" 7": []string{"10", "-34", "-0", "1.4", "-52", "38"},
 		},
-		KnownTeamPlayersMap: map[string][][]string{
+		KnownTeam: map[string][][]string{
 			"\"HELIOS_B\"": [][]string{
 				[]string{"30", "13"},
 				[]string{"33.1", "44"},
 				[]string{"27.1", "-31"},
 			},
 		},
-		UnknownPlayers: [][]string{
+		Unknown: [][]string{
 			[]string{"60.3", "7"},
 			[]string{"60.3", "-6"},
 			[]string{"44.7", "6"},
@@ -113,7 +112,7 @@ func TestSightWithBallAndPlayers(t *testing.T) {
 		},
 	}
 
-	if !reflect.DeepEqual(correctPlayersData, sightData.PlayersMap) {
+	if !reflect.DeepEqual(correctPlayersData, sightData.Players) {
 		t.Fail()
 	}
 }
