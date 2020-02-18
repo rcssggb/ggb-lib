@@ -34,6 +34,8 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 			continue
 		}
 
+		teamName := strings.ReplaceAll(pNameParts[1], "\"", "")
+
 		unum, parseErr := strconv.ParseInt(pNameParts[2], 10, 64)
 		if parseErr != nil {
 			log.Printf("warning: unable to parse unum integer \"%s\": %s\n", pNameParts[2], parseErr)
@@ -52,7 +54,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 		}
 
 		players = append(players, PlayerData{
-			Team:       pNameParts[1],
+			Team:       teamName,
 			Unum:       int(unum),
 			Distance:   dist,
 			Direction:  dir,
@@ -63,6 +65,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 
 	// Add known team players to player array
 	for teamName, pList := range playersSymbols.KnownTeam {
+		teamName = strings.ReplaceAll(teamName, "\"", "")
 		for _, pData := range pList {
 			dist, dir, distChange, dirChange, err := parsePlayerVals(pData)
 			if err != nil {
