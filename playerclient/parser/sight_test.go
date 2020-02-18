@@ -2,7 +2,6 @@ package parser
 
 import (
 	"reflect"
-	"sort"
 	"testing"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
@@ -13,12 +12,11 @@ func TestSightShort(t *testing.T) {
 	sightSymbols := lexer.SightSymbols{
 		Time: 37,
 		ObjMap: map[string][]string{
-			"f b r 10":          []string{"25", "-21", "-0", "-0.6"},
-			"f b l 10":          []string{"22.2", "28"},
-			"p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
-			"l b":               []string{"16.6", "-79"},
-			"f c b":             []string{"16.6", "-1", "-0", "-0.8"},
-			"f b 0":             []string{"21.5", "2", "-0", "-0.6"},
+			"f b r 10": []string{"25", "-21", "-0", "-0.6"},
+			"f b l 10": []string{"22.2", "28"},
+			"l b":      []string{"16.6", "-79"},
+			"f c b":    []string{"16.6", "-1", "-0", "-0.8"},
+			"f b 0":    []string{"21.5", "2", "-0", "-0.6"},
 		},
 		Players: lexer.SightPlayersSymbols{
 			Known: map[string][]string{
@@ -29,9 +27,11 @@ func TestSightShort(t *testing.T) {
 		},
 	}
 	sightData, err := Sight(sightSymbols)
+
 	if err != nil {
 		t.Fail()
 	}
+
 	if sightData == nil {
 		t.FailNow()
 	}
@@ -40,11 +40,7 @@ func TestSightShort(t *testing.T) {
 		t.Fail()
 	}
 
-	if !sort.IsSorted(sightData.Flags) {
-		t.Fail()
-	}
-
-	if sightData.Flags.Len() != 4 {
+	if sightData.Ball != nil {
 		t.Fail()
 	}
 
@@ -75,7 +71,20 @@ func TestSightShort(t *testing.T) {
 		t.Fail()
 	}
 
-	// TODO: test PlayerArray
+	expectedPlayers := PlayerArray{
+		PlayerData{
+			Team:       "\"HELIOS_B\"",
+			Unum:       10,
+			Distance:   7.4,
+			Direction:  1,
+			DistChange: -0.148,
+			DirChange:  -1.8,
+		},
+	}
+
+	if !reflect.DeepEqual(sightData.Players, expectedPlayers) {
+		t.Fail()
+	}
 }
 
 func TestSightWithBall(t *testing.T) {
@@ -273,14 +282,6 @@ func TestSightWithBall(t *testing.T) {
 		},
 	}
 
-	if !sort.IsSorted(sightData.Flags) {
-		t.Fail()
-	}
-
-	if sightData.Flags.Len() != 25 {
-		t.Fail()
-	}
-
 	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
 		t.Fail()
 	}
@@ -296,5 +297,73 @@ func TestSightWithBall(t *testing.T) {
 		t.Fail()
 	}
 
-	// TODO: test PlayerArray
+	expectedPlayers := PlayerArray{
+		PlayerData{
+			Team:       "\"HELIOS_A\"",
+			Unum:       7,
+			Distance:   10,
+			Direction:  -34,
+			DistChange: -0,
+			DirChange:  1.4,
+		},
+		PlayerData{
+			Team:       "\"HELIOS_B\"",
+			Unum:       8,
+			Distance:   13.5,
+			Direction:  -16,
+			DistChange: 0,
+			DirChange:  1,
+		},
+		PlayerData{
+			Team:       "\"HELIOS_B\"",
+			Unum:       6,
+			Distance:   20.1,
+			Direction:  -3,
+			DistChange: 0.402,
+			DirChange:  0.5,
+		},
+		PlayerData{
+			Team:       "\"HELIOS_B\"",
+			Unum:       3,
+			Distance:   27.1,
+			Direction:  -12,
+			DistChange: 0,
+			DirChange:  0.2,
+		},
+		PlayerData{
+			Team:      "\"HELIOS_B\"",
+			Distance:  27.1,
+			Direction: -31,
+		},
+		PlayerData{
+			Team:      "\"HELIOS_B\"",
+			Distance:  30,
+			Direction: 13,
+		},
+		PlayerData{
+			Team:      "\"HELIOS_B\"",
+			Distance:  33.1,
+			Direction: 44,
+		},
+		PlayerData{
+			Distance:  44.7,
+			Direction: 6,
+		},
+		PlayerData{
+			Distance:  60.3,
+			Direction: -6,
+		},
+		PlayerData{
+			Distance:  60.3,
+			Direction: 7,
+		},
+		PlayerData{
+			Distance:  66.7,
+			Direction: 17,
+		},
+	}
+
+	if !reflect.DeepEqual(sightData.Players, expectedPlayers) {
+		t.Fail()
+	}
 }
