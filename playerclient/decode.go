@@ -1,6 +1,8 @@
 package playerclient
 
 import (
+	"log"
+
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
 )
@@ -55,11 +57,12 @@ func (c *Client) decode() {
 				c.bodyData = *bodyData
 				c.currentTime = bodyData.Time
 			}
-		case serverParamMsg:
-			// _, err := lexer.ServerParam(m.data)
+		// case serverParamMsg:
+		// _, err := lexer.ServerParam(m.data)
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:
+			log.Println(m.String())
 			continue
 		}
 	}

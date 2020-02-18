@@ -24,5 +24,5 @@ func Move(x, y float64) string {
 		y = rcsscommon.FieldMaxY
 	}
 
-	return fmt.Sprintf("(move %.1f %.1f)", x, y)
+	return fmt.Sprintf("(move %.1f %.1f)\x00", x, y)
 }

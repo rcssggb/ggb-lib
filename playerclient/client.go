@@ -54,7 +54,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 
 	// Send connect message
 	log.Printf("Connecting to %s as a player for %s\n", serverHost, teamName)
-	cmdMessage := fmt.Sprintf("(init %s (version 15))", teamName)
+	cmdMessage := fmt.Sprintf("(init %s (version 16))\x00", teamName)
 	_, err = conn.WriteToUDP([]byte(cmdMessage), serverAddr)
 	if err != nil {
 		return nil, err
