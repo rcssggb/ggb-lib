@@ -23,6 +23,8 @@ func (m message) Type() (mType messageType) {
 		mType = sightMsg
 	case strings.HasPrefix(m.data, "(sense_body "):
 		mType = bodyMsg
+	case strings.HasPrefix(m.data, "(warning "):
+		fallthrough
 	case strings.HasPrefix(m.data, "(error "):
 		mType = errorMsg
 	case strings.HasPrefix(m.data, "(init "):
@@ -35,8 +37,6 @@ func (m message) Type() (mType messageType) {
 		mType = serverParamMsg
 	// Unsupported msgs below
 	case strings.HasPrefix(m.data, "(score "):
-		mType = unsupportedMsg
-	case strings.HasPrefix(m.data, "(warning "):
 		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(ok "):
 		mType = unsupportedMsg
