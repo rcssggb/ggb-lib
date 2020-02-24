@@ -75,6 +75,7 @@ func Hear(m string) (data *HearSymbols, err error) {
 		}
 
 		data.Message = strings.Join(msgParts[1:len(msgParts)], " ")
+		return
 	}
 
 	// If message was sent by another player
