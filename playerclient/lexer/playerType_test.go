@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -14,8 +13,6 @@ func TestPlayerType(t *testing.T) {
 	if playerTypeData == nil {
 		t.FailNow()
 	}
-
-	fmt.Println(playerTypeData)
 
 	correctData := map[string]string{
 		"id":                       "13",

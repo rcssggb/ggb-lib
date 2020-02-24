@@ -14,7 +14,7 @@ func ServerParam(m string) (sp ServerParamSymbols, err error) {
 
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(server_param ")
-	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
 
 	for closeIdx := strings.Index(trimmedMsg, ")"); closeIdx != -1; closeIdx = strings.Index(trimmedMsg, ")") {
 		currParam := trimmedMsg[1:closeIdx]

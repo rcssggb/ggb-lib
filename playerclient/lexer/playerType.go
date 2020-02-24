@@ -8,7 +8,7 @@ import (
 func PlayerType(m string) (data map[string]string, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(player_type ")
-	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
 
 	data = make(map[string]string)
 

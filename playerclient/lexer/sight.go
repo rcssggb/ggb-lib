@@ -23,7 +23,7 @@ type SightPlayersSymbols struct {
 func Sight(m string) (data *SightSymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(see ")
-	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
 
 	timeEnd := strings.Index(trimmedMsg, " ")
 	if timeEnd == -1 {

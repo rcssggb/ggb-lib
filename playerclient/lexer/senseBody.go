@@ -14,7 +14,7 @@ type SenseBodySymbols struct {
 func SenseBody(m string) (data *SenseBodySymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(sense_body ")
-	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
 
 	timeEnd := strings.Index(trimmedMsg, " ")
 	if timeEnd == -1 {
