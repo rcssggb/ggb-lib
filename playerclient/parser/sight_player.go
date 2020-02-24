@@ -23,6 +23,8 @@ type PlayerData struct {
 	Direction  float64
 	DistChange float64
 	DirChange  float64
+	BodyDir    float64
+	HeadDir    float64
 }
 
 func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray) {
@@ -47,7 +49,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 			continue
 		}
 
-		dist, dir, distChange, dirChange, err := parsePlayerVals(pData)
+		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -60,6 +62,8 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 			Direction:  dir,
 			DistChange: distChange,
 			DirChange:  dirChange,
+			BodyDir:    bodyDir,
+			HeadDir:    headDir,
 		})
 	}
 
@@ -67,7 +71,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 	for teamName, pList := range playersSymbols.KnownTeam {
 		teamName = strings.ReplaceAll(teamName, "\"", "")
 		for _, pData := range pList {
-			dist, dir, distChange, dirChange, err := parsePlayerVals(pData)
+			dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 			if err != nil {
 				log.Println(err)
 				continue
@@ -79,13 +83,15 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 				Direction:  dir,
 				DistChange: distChange,
 				DirChange:  dirChange,
+				BodyDir:    bodyDir,
+				HeadDir:    headDir,
 			})
 		}
 	}
 
 	// Add unknown players to player array
 	for _, pData := range playersSymbols.Unknown {
-		dist, dir, distChange, dirChange, err := parsePlayerVals(pData)
+		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -96,13 +102,15 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 			Direction:  dir,
 			DistChange: distChange,
 			DirChange:  dirChange,
+			BodyDir:    bodyDir,
+			HeadDir:    headDir,
 		})
 	}
 
 	return
 }
 
-func parsePlayerVals(data []string) (dist, dir, distChange, dirChange float64, err error) {
+func parsePlayerVals(data []string) (dist, dir, distChange, dirChange, bodyDir, headDir float64, err error) {
 	distStr := data[0]
 	dist, err = strconv.ParseFloat(distStr, 64)
 	if err != nil {
@@ -117,6 +125,7 @@ func parsePlayerVals(data []string) (dist, dir, distChange, dirChange float64, e
 		return
 	}
 
+	// If player polar velocities were measured
 	if len(data) >= 4 {
 		distChngStr := data[2]
 		distChange, err = strconv.ParseFloat(distChngStr, 64)
@@ -130,6 +139,29 @@ func parsePlayerVals(data []string) (dist, dir, distChange, dirChange float64, e
 		if err != nil {
 			err = fmt.Errorf("warning: unable to parse float \"%s\": %s", dirChngStr, err)
 			return
+		}
+
+		// If player facing was measured, parse it
+		if len(data) >= 6 {
+			bodyDirStr := data[4]
+			bodyDir, err = strconv.ParseFloat(bodyDirStr, 64)
+			if err != nil {
+				err = fmt.Errorf("warning: unable to parse float \"%s\": %s", bodyDirStr, err)
+				return
+			}
+
+			headDirStr := data[5]
+			headDir, err = strconv.ParseFloat(headDirStr, 64)
+			if err != nil {
+				err = fmt.Errorf("warning: unable to parse float \"%s\": %s", headDirStr, err)
+				return
+			}
+		} else {
+			// If player facing was not measured, assume he is facing towards it's velocity
+			dirChngRad := 3.14159 * dirChange / 180.0
+			tanVel := dist * dirChngRad
+			bodyDir = 180.0 * math.Atan2(tanVel, distChange) / 3.14159
+			headDir = bodyDir
 		}
 	}
 

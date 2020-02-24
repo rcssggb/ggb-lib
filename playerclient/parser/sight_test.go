@@ -79,6 +79,8 @@ func TestSightShort(t *testing.T) {
 			Direction:  1,
 			DistChange: -0.148,
 			DirChange:  -1.8,
+			BodyDir:    167,
+			HeadDir:    -153,
 		},
 	}
 
@@ -305,6 +307,8 @@ func TestSightWithBall(t *testing.T) {
 			Direction:  -34,
 			DistChange: -0,
 			DirChange:  1.4,
+			BodyDir:    -52,
+			HeadDir:    38,
 		},
 		PlayerData{
 			Team:       "HELIOS_B",
@@ -313,6 +317,8 @@ func TestSightWithBall(t *testing.T) {
 			Direction:  -16,
 			DistChange: 0,
 			DirChange:  1,
+			BodyDir:    -53,
+			HeadDir:    -113,
 		},
 		PlayerData{
 			Team:       "HELIOS_B",
@@ -321,6 +327,8 @@ func TestSightWithBall(t *testing.T) {
 			Direction:  -3,
 			DistChange: 0.402,
 			DirChange:  0.5,
+			BodyDir:    -35,
+			HeadDir:    50,
 		},
 		PlayerData{
 			Team:       "HELIOS_B",
@@ -329,6 +337,8 @@ func TestSightWithBall(t *testing.T) {
 			Direction:  -12,
 			DistChange: 0,
 			DirChange:  0.2,
+			BodyDir:    -52,
+			HeadDir:    -122,
 		},
 		PlayerData{
 			Team:      "HELIOS_B",
