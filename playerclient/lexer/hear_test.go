@@ -124,6 +124,50 @@ func TestHearKnownPlayerWithSpace(t *testing.T) {
 	}
 }
 
-// (hear 1495 82 our 6 "BMD3UHL gu")
+func TestHearOnlineCoach(t *testing.T) {
+	hearSyms, err := Hear("(hear 5749 online_coach_left (freeform \"(player_types (1 0)(2 5)(3 12)(4 15)(5 10)(6 1)(7 2)(8 6)(9 9)(10 3)(11 16))\"))\x00")
 
-// (hear 0 referee kick_off_l)
+	if err != nil {
+		t.Fail()
+	}
+
+	if hearSyms == nil {
+		t.FailNow()
+	}
+
+	if hearSyms.Time != 5749 {
+		t.Fail()
+	}
+
+	if hearSyms.Sender != "online_coach_left" {
+		t.Fail()
+	}
+
+	if hearSyms.Message != "(freeform \"(player_types (1 0)(2 5)(3 12)(4 15)(5 10)(6 1)(7 2)(8 6)(9 9)(10 3)(11 16))\")" {
+		t.Fail()
+	}
+}
+
+func TestHearDirection(t *testing.T) {
+	hearSyms, err := Hear("(hear 1495 82 our 6 \"BMD3UHL gu\")\x00")
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if hearSyms == nil {
+		t.FailNow()
+	}
+
+	if hearSyms.Time != 1495 {
+		t.Fail()
+	}
+
+	if hearSyms.Sender != "82 our 6" {
+		t.Fail()
+	}
+
+	if hearSyms.Message != "\"BMD3UHL gu\"" {
+		t.Fail()
+	}
+}

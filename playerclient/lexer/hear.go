@@ -13,7 +13,7 @@ type HearSymbols struct {
 	Message string
 }
 
-// Hear parses (see 0 ((f r t) 55.7 3) ...
+// Hear parses (hear TIME SENDER MESSAGE)
 func Hear(m string) (data *HearSymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(hear ")
@@ -65,6 +65,18 @@ func Hear(m string) (data *HearSymbols, err error) {
 		return
 	}
 
+	// If message sender was a coach
+	if strings.HasPrefix(msgParts[0], "online_coach") {
+		data.Sender = msgParts[0]
+
+		if len(msgParts) < 2 {
+			err = fmt.Errorf("invalid online coach message: %s", m)
+			return
+		}
+
+		data.Message = strings.Join(msgParts[1:len(msgParts)], " ")
+	}
+
 	// If message was sent by another player
 	if trimmedMsg[0] == '(' {
 		closeIdx := strings.Index(trimmedMsg, ")")
@@ -77,9 +89,30 @@ func Hear(m string) (data *HearSymbols, err error) {
 		return
 	}
 
-	// TODO: If message sender was a coach
+	// At this point, message must be from unknown player (hear TIME DIR [our|opp] [UNUM] MESSAGE)
+	if len(msgParts) < 2 {
+		err = fmt.Errorf("invalid hear message: %s", m)
+		return
+	}
 
-	// TODO: If message sender is just a direction
+	// If unknown player is friendly, message is (hear TIME DIR our UNUM MESSAGE)
+	if msgParts[1] == "our" {
+		if len(msgParts) < 3 {
+			err = fmt.Errorf("invalid unknown player message format: %s", m)
+			return
+		}
+		data.Sender = strings.Join(msgParts[0:3], " ")
+		data.Message = strings.Join(msgParts[3:len(msgParts)], " ")
+		return
+	}
 
+	// If unknown player is an opponent, message is (hear TIME DIR opp MESSAGE)
+	if msgParts[1] == "opp" {
+		data.Sender = strings.Join(msgParts[0:2], " ")
+		data.Message = strings.Join(msgParts[2:len(msgParts)], " ")
+		return
+	}
+
+	err = fmt.Errorf("unknown hear format")
 	return
 }
