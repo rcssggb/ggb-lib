@@ -39,14 +39,14 @@ func main() {
 			ballAngle := sight.Ball.Direction + body.HeadAngle
 			ballDist := sight.Ball.Distance
 			if ballDist < 0.7 {
-				player.Kick(currentTime, 100, 0)
+				player.Kick(currentTime, 20, 0)
 			} else {
-				player.Dash(currentTime, 70, ballAngle)
+				player.Dash(currentTime, 50, ballAngle)
 				player.TurnNeck(currentTime, sight.Ball.Direction)
 			}
 		} else {
 			ballAngle := sight.Ball.Direction + body.HeadAngle
-			player.Dash(currentTime, 70, ballAngle-85)
+			player.Dash(currentTime, 50, ballAngle-85)
 			player.TurnNeck(currentTime, sight.Ball.Direction)
 		}
 

@@ -58,9 +58,15 @@ func (c *Client) decode() {
 				c.currentTime = bodyData.Time
 			}
 		case hearMsg:
-			_, err := lexer.Hear(m.data)
+			hearSyms, err := lexer.Hear(m.data)
 			if err != nil {
 				c.errChannel <- err.Error()
+			}
+
+			if hearSyms.Time >= c.currentTime {
+				if hearSyms.Sender == "referee" {
+					c.playMode = hearSyms.Message
+				}
 			}
 
 		// case serverParamMsg:
