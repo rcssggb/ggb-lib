@@ -57,6 +57,12 @@ func (c *Client) decode() {
 				c.bodyData = *bodyData
 				c.currentTime = bodyData.Time
 			}
+		case hearMsg:
+			_, err := lexer.Hear(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+			}
+
 		// case serverParamMsg:
 		// _, err := lexer.ServerParam(m.data)
 		case errorMsg:

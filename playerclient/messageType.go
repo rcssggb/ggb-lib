@@ -9,6 +9,7 @@ const (
 	initMsg
 	sightMsg
 	bodyMsg
+	hearMsg
 	playerTypeMsg
 	playerParamMsg
 	serverParamMsg

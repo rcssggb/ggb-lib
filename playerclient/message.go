@@ -23,6 +23,8 @@ func (m message) Type() (mType messageType) {
 		mType = sightMsg
 	case strings.HasPrefix(m.data, "(sense_body "):
 		mType = bodyMsg
+	case strings.HasPrefix(m.data, "(hear "):
+		mType = hearMsg
 	case strings.HasPrefix(m.data, "(warning "):
 		fallthrough
 	case strings.HasPrefix(m.data, "(error "):
@@ -43,8 +45,6 @@ func (m message) Type() (mType messageType) {
 	case strings.HasPrefix(m.data, "(change_player_type "):
 		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(fullstate "):
-		mType = unsupportedMsg
-	case strings.HasPrefix(m.data, "(hear "):
 		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(change "):
 		mType = unsupportedMsg
