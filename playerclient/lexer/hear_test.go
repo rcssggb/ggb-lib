@@ -76,11 +76,53 @@ func TestHearSelfWithSpaceInMessage(t *testing.T) {
 	}
 }
 
-//
+func TestHearKnownPlayer(t *testing.T) {
+	hearSyms, err := Hear("(hear 1494 (p \"HELIOS_A\" 6) \"Bnraishl+k\")\x00")
 
-// (hear 4 self "RrNx?*Rg U")
+	if err != nil {
+		t.Fail()
+	}
 
-// (hear 1494 (p "HELIOS_A" 6) "Bnraishl+k")
+	if hearSyms == nil {
+		t.FailNow()
+	}
+
+	if hearSyms.Time != 1494 {
+		t.Fail()
+	}
+
+	if hearSyms.Sender != "p \"HELIOS_A\" 6" {
+		t.Fail()
+	}
+
+	if hearSyms.Message != "\"Bnraishl+k\"" {
+		t.Fail()
+	}
+}
+
+func TestHearKnownPlayerWithSpace(t *testing.T) {
+	hearSyms, err := Hear("(hear 1494 (p \"HELIOS_A\" 6) \"Bnrais l+k\")\x00")
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if hearSyms == nil {
+		t.FailNow()
+	}
+
+	if hearSyms.Time != 1494 {
+		t.Fail()
+	}
+
+	if hearSyms.Sender != "p \"HELIOS_A\" 6" {
+		t.Fail()
+	}
+
+	if hearSyms.Message != "\"Bnrais l+k\"" {
+		t.Fail()
+	}
+}
 
 // (hear 1495 82 our 6 "BMD3UHL gu")
 

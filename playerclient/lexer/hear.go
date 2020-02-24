@@ -65,7 +65,17 @@ func Hear(m string) (data *HearSymbols, err error) {
 		return
 	}
 
-	// TODO: If message was sent by another player
+	// If message was sent by another player
+	if trimmedMsg[0] == '(' {
+		closeIdx := strings.Index(trimmedMsg, ")")
+		if closeIdx == -1 {
+			err = fmt.Errorf("invalid player message format: %s", m)
+		}
+
+		data.Sender = trimmedMsg[1:closeIdx]
+		data.Message = trimmedMsg[closeIdx+2 : len(trimmedMsg)]
+		return
+	}
 
 	// TODO: If message sender was a coach
 
