@@ -6,6 +6,7 @@ import (
 	"time"
 
 	playerclient "github.com/rcssggb/ggb-lib/playerclient"
+	trainerclient "github.com/rcssggb/ggb-lib/trainerclient"
 )
 
 const logPath = "/logs/ggb-team.log"
@@ -18,6 +19,11 @@ func main() {
 	hostName := "rcssserver"
 
 	player, err := playerclient.NewPlayerClient("ggb-lib-test", hostName)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	trainer, err := trainerclient.NewTrainerClient(hostName)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -51,10 +57,20 @@ func main() {
 		}
 
 		err = player.Error()
-		if err != nil {
-			log.Println(err)
+		for err != nil {
+			player.Log(err)
+			err = player.Error()
 		}
 
+		err = trainer.Error()
+		for err != nil {
+			trainer.Log(err)
+			err = trainer.Error()
+		}
+
+		/* TODO: make function like player.WaitNextStep() to asynchronously wait
+		for next simulation stem using an internal client channel
+		*/
 		for player.Time() <= currentTime {
 			time.Sleep(10 * time.Millisecond)
 		}
