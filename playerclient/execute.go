@@ -2,7 +2,6 @@ package playerclient
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
@@ -15,13 +14,10 @@ func (c *Client) execute() {
 
 		// Check if command is supposed to be sent in current time
 		if cmd.time < c.currentTime {
-			err = fmt.Errorf("command too late, discarding")
-			log.Println(err)
+			c.errChannel <- fmt.Sprintf("warning: %s for time %d was too late, discarding", cmd, cmd.time)
 			continue
 		}
 		if cmd.time > c.currentTime {
-			err = fmt.Errorf("command too early, putting it back to channel")
-			log.Println(err)
 			c.cmdChannel <- cmd
 		}
 
@@ -30,10 +26,12 @@ func (c *Client) execute() {
 			time.Sleep(1 * time.Millisecond)
 		}
 
+		// TODO: right now commands are \x00 padded during string construction
+		// I believe \x00 should be added right before sending command to server
+
 		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString), c.serverAddr)
 		if err != nil {
-			err = fmt.Errorf("error sending command to server: %s", err)
-			log.Println(err)
+			c.errChannel <- fmt.Sprintf("error sending command to server: %s", err)
 		}
 	}
 }

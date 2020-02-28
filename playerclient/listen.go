@@ -1,7 +1,7 @@
 package playerclient
 
 import (
-	"log"
+	"fmt"
 	"time"
 )
 
@@ -10,14 +10,13 @@ func (c *Client) listen() {
 	response := make([]byte, 8192)
 
 	for {
-		c.conn.SetReadDeadline(time.Now().Add(1 * time.Second))
 		n, serverAddr, err := c.conn.ReadFromUDP(response)
 		if c.serverAddr == nil {
 			c.serverAddr = serverAddr
 		}
 		now := time.Now()
 		if err != nil {
-			log.Println(err)
+			c.errChannel <- fmt.Sprintf("error reading from UDP port: %s", err)
 			continue
 		}
 		c.recvChannel <- message{

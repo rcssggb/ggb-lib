@@ -2,7 +2,6 @@ package playerclient
 
 import (
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
@@ -53,7 +52,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	go client.execute()
 
 	// Send connect message
-	log.Printf("Connecting to %s as a player for %s\n", serverHost, teamName)
+	fmt.Printf("Connecting to %s as a player for %s\n", serverHost, teamName)
 	cmdMessage := fmt.Sprintf("(init %s (version 16))\x00", teamName)
 	_, err = conn.WriteToUDP([]byte(cmdMessage), serverAddr)
 	if err != nil {

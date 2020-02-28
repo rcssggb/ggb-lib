@@ -22,6 +22,7 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 		Time: symbols.Time,
 	}
 
+	// Parse flag markers, ball and goal object
 	for objName, data := range symbols.ObjMap {
 
 		// Make sure objName is not empty
@@ -61,8 +62,11 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 
 	sort.Sort(sightData.Flags)
 
+	/* TODO: bring parsePlayers logic here and make Sight function receive
+	errChannel to send back multiple errors without stopping parsing
+	*/
+	// Parse players
 	sightData.Players = parsePlayers(symbols.Players)
-
 	sort.Sort(sightData.Players)
 
 	return

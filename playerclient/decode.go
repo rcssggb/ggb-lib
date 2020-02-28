@@ -1,7 +1,7 @@
 package playerclient
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
@@ -74,8 +74,7 @@ func (c *Client) decode() {
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:
-			log.Println(m.String())
-			continue
+			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m.String())
 		}
 	}
 }
