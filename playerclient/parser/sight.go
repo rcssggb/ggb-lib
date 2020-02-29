@@ -2,7 +2,6 @@ package parser
 
 import (
 	"fmt"
-	"log"
 	"sort"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
@@ -17,7 +16,7 @@ type SightData struct {
 }
 
 // Sight parses sight data coming from lexer
-func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
+func Sight(symbols lexer.SightSymbols, errCh chan string) (sightData *SightData) {
 	sightData = &SightData{
 		Time: symbols.Time,
 	}
@@ -27,7 +26,7 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 
 		// Make sure objName is not empty
 		if len(objName) == 0 {
-			err = fmt.Errorf("empty object name")
+			errCh <- fmt.Sprintf("empty object name in sight symbols map")
 			return
 		}
 
@@ -35,10 +34,10 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 
 		// Test if object is ball
 		if objType == 'b' {
-			ball, ballErr := parseBall(data)
-			if ballErr != nil {
-				err = fmt.Errorf("error parsing ball: %s", err)
-				return
+			ball, err := parseBall(data)
+			if err != nil {
+				errCh <- fmt.Sprintf("error parsing ball sight data: %s", err)
+				continue
 			}
 			sightData.Ball = ball
 		}
@@ -47,26 +46,22 @@ func Sight(symbols lexer.SightSymbols) (sightData *SightData, err error) {
 		if objType == 'f' || objType == 'g' {
 			flagID, flagDefined := flagMap[objName]
 			if !flagDefined {
-				log.Printf("seen unknown flag marker (%s)\n", objName)
+				errCh <- fmt.Sprintf("seen unknown flag marker (%s)", objName)
 				continue
 			}
-			flagData, flagErr := parseFlag(flagID, data)
-			if flagErr != nil {
-				err = fmt.Errorf("error parsing flag: %s", err)
-				return
+			flagData, err := parseFlag(flagID, data)
+			if err != nil {
+				errCh <- fmt.Sprintf("unable to parse flag sight data: %s", err)
+				continue
 			}
 			sightData.Flags = append(sightData.Flags, flagData)
-			continue
 		}
 	}
 
 	sort.Sort(sightData.Flags)
 
-	/* TODO: bring parsePlayers logic here and make Sight function receive
-	errChannel to send back multiple errors without stopping parsing
-	*/
 	// Parse players
-	sightData.Players = parsePlayers(symbols.Players)
+	sightData.Players = parsePlayers(symbols.Players, errCh)
 	sort.Sort(sightData.Players)
 
 	return

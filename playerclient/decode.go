@@ -30,13 +30,9 @@ func (c *Client) decode() {
 				continue
 			}
 
-			sightData, err := parser.Sight(*sightSymbols)
-			if err != nil {
-				c.errChannel <- err.Error()
-				continue
-			}
+			sightData := parser.Sight(*sightSymbols, c.errChannel)
 
-			if sightData.Time >= c.currentTime {
+			if sightData != nil && sightData.Time >= c.currentTime {
 				c.sightData = *sightData
 				c.currentTime = sightData.Time
 			}

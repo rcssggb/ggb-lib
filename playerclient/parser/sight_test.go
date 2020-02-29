@@ -26,9 +26,11 @@ func TestSightShort(t *testing.T) {
 			Unknown:   [][]string{},
 		},
 	}
-	sightData, err := Sight(sightSymbols)
 
-	if err != nil {
+	errCh := make(chan string, 32)
+	sightData := Sight(sightSymbols, errCh)
+
+	if len(errCh) != 0 {
 		t.Fail()
 	}
 
@@ -144,10 +146,13 @@ func TestSightWithBall(t *testing.T) {
 		},
 	}
 
-	sightData, err := Sight(sightSymbols)
-	if err != nil {
+	errCh := make(chan string, 32)
+	sightData := Sight(sightSymbols, errCh)
+
+	if len(errCh) != 0 {
 		t.Fail()
 	}
+
 	if sightData == nil {
 		t.FailNow()
 	}

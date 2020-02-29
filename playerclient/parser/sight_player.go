@@ -2,7 +2,6 @@ package parser
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -27,12 +26,12 @@ type PlayerData struct {
 	HeadDir    float64
 }
 
-func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray) {
+func parsePlayers(playersSymbols lexer.SightPlayersSymbols, errCh chan string) (players PlayerArray) {
 	// Add known players to player array
 	for pName, pData := range playersSymbols.Known {
 		pNameParts := strings.Split(pName, " ")
 		if len(pNameParts) != 3 {
-			log.Println("internal warning: known player name should be of form (p <team_name> <unum>)")
+			errCh <- fmt.Sprintf("invalid known player name (should be of form `p <team_name> <unum>`)")
 			continue
 		}
 
@@ -40,18 +39,13 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 
 		unum, parseErr := strconv.ParseInt(pNameParts[2], 10, 64)
 		if parseErr != nil {
-			log.Printf("warning: unable to parse unum integer \"%s\": %s\n", pNameParts[2], parseErr)
-			continue
-		}
-
-		if len(pData) < 2 {
-			log.Printf("warning: missing seen player data, got: ((%s)) %s)", pName, strings.Join(pData, " "))
+			errCh <- fmt.Sprintf("unable to parse unum integer for player %s: %s\n", pName, parseErr)
 			continue
 		}
 
 		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 		if err != nil {
-			log.Println(err)
+			errCh <- fmt.Sprintf("unable to parse sight data for seen player %s: %s", pName, err)
 			continue
 		}
 
@@ -73,7 +67,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 		for _, pData := range pList {
 			dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 			if err != nil {
-				log.Println(err)
+				errCh <- fmt.Sprintf("unable to parse sight data for seen player of team %s: %s", teamName, err)
 				continue
 			}
 
@@ -93,7 +87,7 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 	for _, pData := range playersSymbols.Unknown {
 		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
 		if err != nil {
-			log.Println(err)
+			errCh <- fmt.Sprintf("unable to parse sight data for seen player: %s", err)
 			continue
 		}
 
@@ -111,17 +105,22 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols) (players PlayerArray
 }
 
 func parsePlayerVals(data []string) (dist, dir, distChange, dirChange, bodyDir, headDir float64, err error) {
+	if len(data) < 2 {
+		err = fmt.Errorf("too few values in player data, got: %s", strings.Join(data, " "))
+		return
+	}
+
 	distStr := data[0]
 	dist, err = strconv.ParseFloat(distStr, 64)
 	if err != nil {
-		err = fmt.Errorf("warning: unable to parse float \"%s\": %s", distStr, err)
+		err = fmt.Errorf("unable to parse float \"%s\": %s", distStr, err)
 		return
 	}
 
 	dirStr := data[1]
 	dir, err = strconv.ParseFloat(dirStr, 64)
 	if err != nil {
-		err = fmt.Errorf("warning: unable to parse float \"%s\": %s", dirStr, err)
+		err = fmt.Errorf("unable to parse float \"%s\": %s", dirStr, err)
 		return
 	}
 
@@ -130,14 +129,14 @@ func parsePlayerVals(data []string) (dist, dir, distChange, dirChange, bodyDir, 
 		distChngStr := data[2]
 		distChange, err = strconv.ParseFloat(distChngStr, 64)
 		if err != nil {
-			err = fmt.Errorf("warning: unable to parse float \"%s\": %s", distChngStr, err)
+			err = fmt.Errorf("unable to parse float \"%s\": %s", distChngStr, err)
 			return
 		}
 
 		dirChngStr := data[3]
 		dirChange, err = strconv.ParseFloat(dirChngStr, 64)
 		if err != nil {
-			err = fmt.Errorf("warning: unable to parse float \"%s\": %s", dirChngStr, err)
+			err = fmt.Errorf("unable to parse float \"%s\": %s", dirChngStr, err)
 			return
 		}
 
@@ -146,14 +145,14 @@ func parsePlayerVals(data []string) (dist, dir, distChange, dirChange, bodyDir, 
 			bodyDirStr := data[4]
 			bodyDir, err = strconv.ParseFloat(bodyDirStr, 64)
 			if err != nil {
-				err = fmt.Errorf("warning: unable to parse float \"%s\": %s", bodyDirStr, err)
+				err = fmt.Errorf("unable to parse float \"%s\": %s", bodyDirStr, err)
 				return
 			}
 
 			headDirStr := data[5]
 			headDir, err = strconv.ParseFloat(headDirStr, 64)
 			if err != nil {
-				err = fmt.Errorf("warning: unable to parse float \"%s\": %s", headDirStr, err)
+				err = fmt.Errorf("unable to parse float \"%s\": %s", headDirStr, err)
 				return
 			}
 		} else {
