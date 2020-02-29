@@ -26,7 +26,7 @@ func (c *Client) execute() {
 			time.Sleep(1 * time.Millisecond)
 		}
 
-		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString), c.serverAddr)
+		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString+"\x00"), c.serverAddr)
 		if err != nil {
 			c.errChannel <- fmt.Sprintf("error sending command to server: %s", err)
 		}

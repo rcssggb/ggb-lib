@@ -15,5 +15,5 @@ func Dash(power, direction float64) string {
 		normDir += 360.0
 	}
 
-	return fmt.Sprintf("(dash %.3f %.3f)\x00", power, normDir)
+	return fmt.Sprintf("(dash %.3f %.3f)", power, normDir)
 }

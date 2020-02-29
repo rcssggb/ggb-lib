@@ -26,10 +26,7 @@ func (c *Client) execute() {
 			time.Sleep(1 * time.Millisecond)
 		}
 
-		// TODO: right now commands are \x00 padded during string construction
-		// I believe \x00 should be added right before sending command to server
-
-		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString), c.serverAddr)
+		_, err = c.conn.WriteToUDP([]byte(cmd.cmdString+"\x00"), c.serverAddr)
 		if err != nil {
 			c.errChannel <- fmt.Sprintf("error sending command to server: %s", err)
 		}
