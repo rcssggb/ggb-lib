@@ -9,6 +9,8 @@ import (
 )
 
 // Client ...
+// TODO: unify playerclient and trainerclient common functions and variables
+// in a clientcommon package
 type Client struct {
 	conn        *net.UDPConn
 	serverAddr  *net.UDPAddr

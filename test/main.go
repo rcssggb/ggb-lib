@@ -68,11 +68,6 @@ func main() {
 			err = trainer.Error()
 		}
 
-		/* TODO: make function like player.WaitNextStep() to asynchronously wait
-		for next simulation stem using an internal client channel
-		*/
-		for player.Time() <= currentTime {
-			time.Sleep(10 * time.Millisecond)
-		}
+		player.WaitNextStep(currentTime)
 	}
 }
