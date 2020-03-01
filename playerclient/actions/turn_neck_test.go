@@ -5,8 +5,8 @@ import (
 )
 
 func TestTurnNeck(t *testing.T) {
-	kickStr := TurnNeck(20)
-	if kickStr != "(turn_neck 20.000)" {
+	turnNeckStr := TurnNeck(20)
+	if turnNeckStr != "(turn_neck 20.000)" {
 		t.Fail()
 	}
 }
