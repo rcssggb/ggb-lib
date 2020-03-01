@@ -1,3 +1,13 @@
 package actions
 
 // TODO: unit tests for kick action
+import (
+	"testing"
+)
+
+func TestKick(t *testing.T) {
+	kickStr := Kick(46, 0)
+	if kickStr != "(kick 46.000 0.000000)" {
+		t.Fail()
+	}
+}
