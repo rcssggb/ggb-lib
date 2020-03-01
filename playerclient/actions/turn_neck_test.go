@@ -1,3 +1,12 @@
 package actions
 
-// TODO: unit tests for turn_neck action
+import (
+	"testing"
+)
+
+func TestTurnNeck(t *testing.T) {
+	kickStr := TurnNeck(20)
+	if kickStr != "(turn_neck 20.000)" {
+		t.Fail()
+	}
+}
