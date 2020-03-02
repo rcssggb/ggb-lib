@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"log"
 	"testing"
 )
 
@@ -14,7 +13,6 @@ func TestDash(t *testing.T) {
 
 func TestDashPositiveDirNormalization(t *testing.T) {
 	dashStr := Dash(70, 270)
-	log.Println(dashStr)
 	if dashStr != "(dash 70.000 -90.000)" {
 		t.Fail()
 	}
@@ -22,7 +20,6 @@ func TestDashPositiveDirNormalization(t *testing.T) {
 
 func TestDashNegativeDirNormalization(t *testing.T) {
 	dashStr := Dash(100, -225)
-	log.Println(dashStr)
 	if dashStr != "(dash 100.000 135.000)" {
 		t.Fail()
 	}
