@@ -1,5 +1,10 @@
 package rcsscommon
 
+import (
+	"fmt"
+	"strings"
+)
+
 // ServerParams is an object containing all supported server parameters.
 type ServerParams struct {
 	// TODO: explain each server param behavior
@@ -195,9 +200,9 @@ type ServerParams struct {
 	WindRandom                float64
 }
 
-// Init initializes server params with default version 16.0.0 values
-func (sp *ServerParams) Init() {
-	*sp = ServerParams{
+// DefaultServerParams initializes server params with default version 16.0.0 values
+func DefaultServerParams() ServerParams {
+	return ServerParams{
 		AudioCutDist:              50,
 		AutoMode:                  false,
 		BackDashRate:              0.6,
@@ -391,4 +396,216 @@ func (sp *ServerParams) Init() {
 	}
 }
 
-// TODO: centralize server params lexer and parser for both player and trainer with methods to update this struct
+// Parse receives a string from server and updates all server params
+func (sp *ServerParams) Parse(m string) error {
+	trimmedMsg := m
+	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(server_param (")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, "))\x00")
+
+	params := strings.Split(trimmedMsg, ")(")
+
+	for _, param := range params {
+		paramParts := strings.Split(param, " ")
+		if len(paramParts) < 2 {
+			return fmt.Errorf("invalid server param format: %s", param)
+		}
+		paramName := paramParts[0]
+		paramVal := strings.Join(paramParts[1:len(paramParts)], " ")
+
+		paramVal = strings.TrimPrefix(paramVal, "\"")
+		paramVal = strings.TrimSuffix(paramVal, "\"")
+
+		// TODO: define parsing behavior for all server params
+		switch paramName {
+		case "audio_cut_dist":
+		case "auto_mode":
+		case "back_dash_rate":
+		case "back_passes":
+		case "ball_accel_max":
+		case "ball_decay":
+		case "ball_rand":
+		case "ball_size":
+		case "ball_speed_max":
+		case "ball_stuck_area":
+		case "ball_weight":
+		case "catch_ban_cycle":
+		case "catch_probability":
+		case "catchable_area_l":
+		case "catchable_area_w":
+		case "ckick_margin":
+		case "clang_advice_win":
+		case "clang_define_win":
+		case "clang_del_win":
+		case "clang_info_win":
+		case "clang_mess_delay":
+		case "clang_mess_per_cycle":
+		case "clang_meta_win":
+		case "clang_rule_win":
+		case "clang_win_size":
+		case "coach":
+		case "coach_port":
+		case "coach_w_referee":
+		case "connect_wait":
+		case "control_radius":
+		case "dash_angle_step":
+		case "dash_power_rate":
+		case "drop_ball_time":
+		case "effort_dec":
+		case "effort_dec_thr":
+		case "effort_inc":
+		case "effort_inc_thr":
+		case "effort_init":
+		case "effort_min":
+		case "extra_half_time":
+		case "extra_stamina":
+		case "forbid_kick_off_offside":
+		case "foul_cycles":
+		case "foul_detect_probability":
+		case "foul_exponent":
+		case "free_kick_faults":
+		case "freeform_send_period":
+		case "freeform_wait_period":
+		case "fullstate_l":
+		case "fullstate_r":
+		case "game_log_compression":
+		case "game_log_dated":
+		case "game_log_dir":
+		case "game_log_fixed":
+		case "game_log_fixed_name":
+		case "game_log_version":
+		case "game_logging":
+		case "game_over_wait":
+		case "goal_width":
+		case "goalie_max_moves":
+		case "golden_goal":
+		case "half_time":
+		case "hear_decay":
+		case "hear_inc":
+		case "hear_max":
+		case "inertia_moment":
+		case "keepaway":
+		case "keepaway_length":
+		case "keepaway_log_dated":
+		case "keepaway_log_dir":
+		case "keepaway_log_fixed":
+		case "keepaway_log_fixed_name":
+		case "keepaway_logging":
+		case "keepaway_start":
+		case "keepaway_width":
+		case "kick_off_wait":
+		case "kick_power_rate":
+		case "kick_rand":
+		case "kick_rand_factor_l":
+		case "kick_rand_factor_r":
+		case "kickable_margin":
+		case "landmark_file":
+		case "log_date_format":
+		case "log_times":
+		case "max_back_tackle_power":
+		case "max_dash_angle":
+		case "max_dash_power":
+		case "max_goal_kicks":
+		case "max_tackle_power":
+		case "maxmoment":
+		case "maxneckang":
+		case "maxneckmoment":
+		case "maxpower":
+		case "min_dash_angle":
+		case "min_dash_power":
+		case "minmoment":
+		case "minneckang":
+		case "minneckmoment":
+		case "minpower":
+		case "nr_extra_halfs":
+		case "nr_normal_halfs":
+		case "offside_active_area_size":
+		case "offside_kick_margin":
+		case "olcoach_port":
+		case "old_coach_hear":
+		case "pen_allow_mult_kicks":
+		case "pen_before_setup_wait":
+		case "pen_coach_moves_players":
+		case "pen_dist_x":
+		case "pen_max_extra_kicks":
+		case "pen_max_goalie_dist_x":
+		case "pen_nr_kicks":
+		case "pen_random_winner":
+		case "pen_ready_wait":
+		case "pen_setup_wait":
+		case "pen_taken_wait":
+		case "penalty_shoot_outs":
+		case "player_accel_max":
+		case "player_decay":
+		case "player_rand":
+		case "player_size":
+		case "player_speed_max":
+		case "player_speed_max_min":
+		case "player_weight":
+		case "point_to_ban":
+		case "point_to_duration":
+		case "port":
+		case "prand_factor_l":
+		case "prand_factor_r":
+		case "profile":
+		case "proper_goal_kicks":
+		case "quantize_step":
+		case "quantize_step_l":
+		case "record_messages":
+		case "recover_dec":
+		case "recover_dec_thr":
+		case "recover_init":
+		case "recover_min":
+		case "recv_step":
+		case "say_coach_cnt_max":
+		case "say_coach_msg_size":
+		case "say_msg_size":
+		case "send_comms":
+		case "send_step":
+		case "send_vi_step":
+		case "sense_body_step":
+		case "side_dash_rate":
+		case "simulator_step":
+		case "slow_down_factor":
+		case "slowness_on_top_for_left_team":
+		case "slowness_on_top_for_right_team":
+		case "stamina_capacity":
+		case "stamina_inc_max":
+		case "stamina_max":
+		case "start_goal_l":
+		case "start_goal_r":
+		case "stopped_ball_vel":
+		case "synch_micro_sleep":
+		case "synch_mode":
+		case "synch_offset":
+		case "synch_see_offset":
+		case "tackle_back_dist":
+		case "tackle_cycles":
+		case "tackle_dist":
+		case "tackle_exponent":
+		case "tackle_power_rate":
+		case "tackle_rand_factor":
+		case "tackle_width":
+		case "team_actuator_noise":
+		case "team_l_start":
+		case "team_r_start":
+		case "text_log_compression":
+		case "text_log_dated":
+		case "text_log_dir":
+		case "text_log_fixed":
+		case "text_log_fixed_name":
+		case "text_logging":
+		case "use_offside":
+		case "verbose":
+		case "visible_angle":
+		case "visible_distance":
+		case "wind_ang":
+		case "wind_dir":
+		case "wind_force":
+		case "wind_none":
+		case "wind_rand":
+		case "wind_random":
+		}
+	}
+
+	return nil
+}
