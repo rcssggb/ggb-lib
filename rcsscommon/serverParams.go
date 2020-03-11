@@ -2,6 +2,7 @@ package rcsscommon
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -13,9 +14,13 @@ type ServerParams struct {
 	BackDashRate              float64
 	BackPasses                bool
 	BallAccelMax              float64
+	BallDecay                 float64
+	BallRand                  float64
+	BallSize                  float64
+	BallSpeedMax              float64
 	BallStuckArea             float64
 	BallWeight                float64
-	CatchBanCycle             int
+	CatchBanCycle             int64
 	CatchProbability          float64
 	CatchableAreaL            float64
 	CatchableAreaW            float64
@@ -208,6 +213,10 @@ func DefaultServerParams() ServerParams {
 		BackDashRate:              0.6,
 		BackPasses:                true,
 		BallAccelMax:              2.7,
+		BallDecay:                 0.94,
+		BallRand:                  0.05,
+		BallSize:                  0.085,
+		BallSpeedMax:              3,
 		BallStuckArea:             3,
 		BallWeight:                0.2,
 		CatchBanCycle:             5,
@@ -397,7 +406,7 @@ func DefaultServerParams() ServerParams {
 }
 
 // Parse receives a string from server and updates all server params
-func (sp *ServerParams) Parse(m string) error {
+func (sp *ServerParams) Parse(m string, errCh chan string) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(server_param (")
 	trimmedMsg = strings.TrimSuffix(trimmedMsg, "))\x00")
@@ -407,7 +416,8 @@ func (sp *ServerParams) Parse(m string) error {
 	for _, param := range params {
 		paramParts := strings.Split(param, " ")
 		if len(paramParts) < 2 {
-			return fmt.Errorf("invalid server param format: %s", param)
+			errCh <- fmt.Sprintf("invalid server param format: %s", param)
+			return
 		}
 		paramName := paramParts[0]
 		paramVal := strings.Join(paramParts[1:len(paramParts)], " ")
@@ -415,197 +425,388 @@ func (sp *ServerParams) Parse(m string) error {
 		paramVal = strings.TrimPrefix(paramVal, "\"")
 		paramVal = strings.TrimSuffix(paramVal, "\"")
 
-		// TODO: define parsing behavior for all server params
+		var err error
 		switch paramName {
 		case "audio_cut_dist":
+			sp.AudioCutDist, err = strconv.ParseFloat(paramVal, 64)
 		case "auto_mode":
+			sp.AutoMode, err = strconv.ParseBool(paramVal)
 		case "back_dash_rate":
+			sp.BackDashRate, err = strconv.ParseFloat(paramVal, 64)
 		case "back_passes":
+			sp.BackPasses, err = strconv.ParseBool(paramVal)
 		case "ball_accel_max":
+			sp.BallAccelMax, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_decay":
+			sp.BallDecay, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_rand":
+			sp.BallRand, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_size":
+			sp.BallSize, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_speed_max":
+			sp.BallSpeedMax, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_stuck_area":
+			sp.BallStuckArea, err = strconv.ParseFloat(paramVal, 64)
 		case "ball_weight":
+			sp.BallWeight, err = strconv.ParseFloat(paramVal, 64)
 		case "catch_ban_cycle":
+			sp.CatchBanCycle, err = strconv.ParseInt(paramVal, 10, 64)
 		case "catch_probability":
+			sp.CatchProbability, err = strconv.ParseFloat(paramVal, 64)
 		case "catchable_area_l":
+			sp.CatchableAreaL, err = strconv.ParseFloat(paramVal, 64)
 		case "catchable_area_w":
+			sp.CatchableAreaW, err = strconv.ParseFloat(paramVal, 64)
 		case "ckick_margin":
+			sp.CKickMargin, err = strconv.ParseFloat(paramVal, 64)
 		case "clang_advice_win":
+			sp.CLangAdviceWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_define_win":
+			sp.CLangDefineWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_del_win":
+			sp.CLangDelWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_info_win":
+			sp.CLangInfoWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_mess_delay":
+			sp.CLangMessDelay, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_mess_per_cycle":
+			sp.CLangMessPerCycle, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_meta_win":
+			sp.CLangMetaWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_rule_win":
+			sp.CLangRuleWin, err = strconv.ParseInt(paramVal, 10, 64)
 		case "clang_win_size":
+			sp.CLangWinSize, err = strconv.ParseInt(paramVal, 10, 64)
 		case "coach":
+			sp.Coach, err = strconv.ParseBool(paramVal)
 		case "coach_port":
+			sp.CoachPort, err = strconv.ParseInt(paramVal, 10, 64)
 		case "coach_w_referee":
+			sp.CoachWReferee, err = strconv.ParseBool(paramVal)
 		case "connect_wait":
+			sp.ConnectWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "control_radius":
+			sp.ControlRadius, err = strconv.ParseFloat(paramVal, 64)
 		case "dash_angle_step":
+			sp.DashAngleStep, err = strconv.ParseFloat(paramVal, 64)
 		case "dash_power_rate":
+			sp.DashPowerRate, err = strconv.ParseFloat(paramVal, 64)
 		case "drop_ball_time":
+			sp.DropBallTime, err = strconv.ParseInt(paramVal, 10, 64)
 		case "effort_dec":
+			sp.EffortDec, err = strconv.ParseFloat(paramVal, 64)
 		case "effort_dec_thr":
+			sp.EffortDecThr, err = strconv.ParseFloat(paramVal, 64)
 		case "effort_inc":
+			sp.EffortInc, err = strconv.ParseFloat(paramVal, 64)
 		case "effort_inc_thr":
+			sp.EffortIncThr, err = strconv.ParseFloat(paramVal, 64)
 		case "effort_init":
+			sp.EffortInit, err = strconv.ParseFloat(paramVal, 64)
 		case "effort_min":
+			sp.EffortMin, err = strconv.ParseFloat(paramVal, 64)
 		case "extra_half_time":
+			sp.ExtraHalfTime, err = strconv.ParseInt(paramVal, 10, 64)
 		case "extra_stamina":
+			sp.ExtraStamina, err = strconv.ParseFloat(paramVal, 64)
 		case "forbid_kick_off_offside":
+			sp.ForbidKickOffOffside, err = strconv.ParseBool(paramVal)
 		case "foul_cycles":
+			sp.FoulCycles, err = strconv.ParseInt(paramVal, 10, 64)
 		case "foul_detect_probability":
+			sp.FoulDetectProbability, err = strconv.ParseFloat(paramVal, 64)
 		case "foul_exponent":
+			sp.FoulExponent, err = strconv.ParseFloat(paramVal, 64)
 		case "free_kick_faults":
+			sp.FreeKickFaults, err = strconv.ParseInt(paramVal, 10, 64)
 		case "freeform_send_period":
+			sp.FreeformSendPeriod, err = strconv.ParseInt(paramVal, 10, 64)
 		case "freeform_wait_period":
+			sp.FreeformWaitPeriod, err = strconv.ParseInt(paramVal, 10, 64)
 		case "fullstate_l":
+			sp.FullstateL, err = strconv.ParseBool(paramVal)
 		case "fullstate_r":
+			sp.FullstateR, err = strconv.ParseBool(paramVal)
 		case "game_log_compression":
+			sp.GameLogCompression, err = strconv.ParseBool(paramVal)
 		case "game_log_dated":
+			sp.GameLogDated, err = strconv.ParseBool(paramVal)
 		case "game_log_dir":
+			sp.GameLogDir = paramVal
 		case "game_log_fixed":
+			sp.GameLogFixed, err = strconv.ParseBool(paramVal)
 		case "game_log_fixed_name":
+			sp.GameLogFixedName = paramVal
 		case "game_log_version":
+			sp.GameLogVersion, err = strconv.ParseInt(paramVal, 10, 64)
 		case "game_logging":
+			sp.GameLogging, err = strconv.ParseBool(paramVal)
 		case "game_over_wait":
+			sp.GameOverWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "goal_width":
+			sp.GoalWidth, err = strconv.ParseFloat(paramVal, 64)
 		case "goalie_max_moves":
+			sp.GoalieMaxMoves, err = strconv.ParseInt(paramVal, 10, 64)
 		case "golden_goal":
+			sp.GoldenGoal, err = strconv.ParseBool(paramVal)
 		case "half_time":
+			sp.HalfTime, err = strconv.ParseInt(paramVal, 10, 64)
 		case "hear_decay":
+			sp.HearDecay, err = strconv.ParseFloat(paramVal, 64)
 		case "hear_inc":
+			sp.HearInc, err = strconv.ParseFloat(paramVal, 64)
 		case "hear_max":
+			sp.HearMax, err = strconv.ParseFloat(paramVal, 64)
 		case "inertia_moment":
+			sp.InertiaMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "keepaway":
+			sp.Keepaway, err = strconv.ParseBool(paramVal)
 		case "keepaway_length":
+			sp.KeepawayLength, err = strconv.ParseFloat(paramVal, 64)
 		case "keepaway_log_dated":
+			sp.KeepawayLogDated, err = strconv.ParseBool(paramVal)
 		case "keepaway_log_dir":
+			sp.KeepawayLogDir = paramVal
 		case "keepaway_log_fixed":
+			sp.KeepawayLogFixed, err = strconv.ParseBool(paramVal)
 		case "keepaway_log_fixed_name":
+			sp.KeepawayLogFixedName = paramVal
 		case "keepaway_logging":
+			sp.KeepawayLogging, err = strconv.ParseBool(paramVal)
 		case "keepaway_start":
+			sp.KeepawayStart, err = strconv.ParseInt(paramVal, 10, 64)
 		case "keepaway_width":
+			sp.KeepawayWidth, err = strconv.ParseFloat(paramVal, 64)
 		case "kick_off_wait":
+			sp.KickOffWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "kick_power_rate":
+			sp.KickPowerRate, err = strconv.ParseFloat(paramVal, 64)
 		case "kick_rand":
+			sp.KickRand, err = strconv.ParseFloat(paramVal, 64)
 		case "kick_rand_factor_l":
+			sp.KickRandFactorL, err = strconv.ParseBool(paramVal)
 		case "kick_rand_factor_r":
+			sp.KickRandFactorR, err = strconv.ParseBool(paramVal)
 		case "kickable_margin":
+			sp.KickableMargin, err = strconv.ParseFloat(paramVal, 64)
 		case "landmark_file":
+			sp.LandmarkFile = paramVal
 		case "log_date_format":
+			sp.LogDateFormat = paramVal
 		case "log_times":
+			sp.LogTimes, err = strconv.ParseBool(paramVal)
 		case "max_back_tackle_power":
+			sp.MaxBackTacklePower, err = strconv.ParseFloat(paramVal, 64)
 		case "max_dash_angle":
+			sp.MaxDashAngle, err = strconv.ParseFloat(paramVal, 64)
 		case "max_dash_power":
+			sp.MaxDashPower, err = strconv.ParseFloat(paramVal, 64)
 		case "max_goal_kicks":
+			sp.MaxGoalKicks, err = strconv.ParseInt(paramVal, 10, 64)
 		case "max_tackle_power":
+			sp.MaxTacklePower, err = strconv.ParseFloat(paramVal, 64)
 		case "maxmoment":
+			sp.MaxMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "maxneckang":
+			sp.MaxNeckAng, err = strconv.ParseFloat(paramVal, 64)
 		case "maxneckmoment":
+			sp.MaxNeckMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "maxpower":
+			sp.MaxPower, err = strconv.ParseFloat(paramVal, 64)
 		case "min_dash_angle":
+			sp.MinDashAngle, err = strconv.ParseFloat(paramVal, 64)
 		case "min_dash_power":
+			sp.MinDashPower, err = strconv.ParseFloat(paramVal, 64)
 		case "minmoment":
+			sp.MinMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "minneckang":
+			sp.MinNeckAng, err = strconv.ParseFloat(paramVal, 64)
 		case "minneckmoment":
+			sp.MinNeckMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "minpower":
+			sp.MinPower, err = strconv.ParseFloat(paramVal, 64)
 		case "nr_extra_halfs":
+			sp.NrExtraHalfs, err = strconv.ParseInt(paramVal, 10, 64)
 		case "nr_normal_halfs":
+			sp.NrNormalHalfs, err = strconv.ParseInt(paramVal, 10, 64)
 		case "offside_active_area_size":
+			sp.OffsideActiveAreaSize, err = strconv.ParseFloat(paramVal, 64)
 		case "offside_kick_margin":
+			sp.OffsideKickMargin, err = strconv.ParseFloat(paramVal, 64)
 		case "olcoach_port":
+			sp.OnlineCoachPort, err = strconv.ParseInt(paramVal, 10, 64)
 		case "old_coach_hear":
+			sp.OldCoachHear, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_allow_mult_kicks":
+			sp.PenAllowMultKicks, err = strconv.ParseBool(paramVal)
 		case "pen_before_setup_wait":
+			sp.PenBeforeSetupWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_coach_moves_players":
+			sp.PenCoachMovesPlayers, err = strconv.ParseBool(paramVal)
 		case "pen_dist_x":
+			sp.PenDistX, err = strconv.ParseFloat(paramVal, 64)
 		case "pen_max_extra_kicks":
+			sp.PenMaxExtraKicks, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_max_goalie_dist_x":
+			sp.PenMaxGoalieDistX, err = strconv.ParseFloat(paramVal, 64)
 		case "pen_nr_kicks":
+			sp.PenNrKicks, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_random_winner":
+			sp.PenRandomWinner, err = strconv.ParseBool(paramVal)
 		case "pen_ready_wait":
+			sp.PenReadyWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_setup_wait":
+			sp.PenSetupWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "pen_taken_wait":
+			sp.PenTakenWait, err = strconv.ParseInt(paramVal, 10, 64)
 		case "penalty_shoot_outs":
+			sp.PenaltyShootOuts, err = strconv.ParseBool(paramVal)
 		case "player_accel_max":
+			sp.PlayerAccelMax, err = strconv.ParseFloat(paramVal, 64)
 		case "player_decay":
+			sp.PlayerDecay, err = strconv.ParseFloat(paramVal, 64)
 		case "player_rand":
+			sp.PlayerRand, err = strconv.ParseFloat(paramVal, 64)
 		case "player_size":
+			sp.PlayerSize, err = strconv.ParseFloat(paramVal, 64)
 		case "player_speed_max":
+			sp.PlayerSpeedMax, err = strconv.ParseFloat(paramVal, 64)
 		case "player_speed_max_min":
+			sp.PlayerSpeedMaxMin, err = strconv.ParseFloat(paramVal, 64)
 		case "player_weight":
+			sp.PlayerWeight, err = strconv.ParseFloat(paramVal, 64)
 		case "point_to_ban":
+			sp.PointToBan, err = strconv.ParseInt(paramVal, 10, 64)
 		case "point_to_duration":
+			sp.PointToDuration, err = strconv.ParseInt(paramVal, 10, 64)
 		case "port":
+			sp.Port, err = strconv.ParseInt(paramVal, 10, 64)
 		case "prand_factor_l":
+			sp.PRandFactorL, err = strconv.ParseFloat(paramVal, 64)
 		case "prand_factor_r":
+			sp.PRandFactorR, err = strconv.ParseFloat(paramVal, 64)
 		case "profile":
+			sp.Profile, err = strconv.ParseInt(paramVal, 10, 64)
 		case "proper_goal_kicks":
+			sp.ProperGoalKicks, err = strconv.ParseInt(paramVal, 10, 64)
 		case "quantize_step":
+			sp.QuantizeStep, err = strconv.ParseFloat(paramVal, 64)
 		case "quantize_step_l":
+			sp.QuantizeStepL, err = strconv.ParseFloat(paramVal, 64)
 		case "record_messages":
+			sp.RecordMessages, err = strconv.ParseBool(paramVal)
 		case "recover_dec":
+			sp.RecoverDec, err = strconv.ParseFloat(paramVal, 64)
 		case "recover_dec_thr":
+			sp.RecoverDecThr, err = strconv.ParseFloat(paramVal, 64)
 		case "recover_init":
+			sp.RecoverInit, err = strconv.ParseFloat(paramVal, 64)
 		case "recover_min":
+			sp.RecoverMin, err = strconv.ParseFloat(paramVal, 64)
 		case "recv_step":
+			sp.RecvStep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "say_coach_cnt_max":
+			sp.SayCoachCountMax, err = strconv.ParseInt(paramVal, 10, 64)
 		case "say_coach_msg_size":
+			sp.SayCoachMsgSize, err = strconv.ParseInt(paramVal, 10, 64)
 		case "say_msg_size":
+			sp.SayMsgSize, err = strconv.ParseInt(paramVal, 10, 64)
 		case "send_comms":
+			sp.SendComms, err = strconv.ParseInt(paramVal, 10, 64)
 		case "send_step":
+			sp.SendStep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "send_vi_step":
+			sp.SendViStep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "sense_body_step":
+			sp.SenseBodyStep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "side_dash_rate":
+			sp.SideDashRate, err = strconv.ParseFloat(paramVal, 64)
 		case "simulator_step":
+			sp.SimulatorStep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "slow_down_factor":
+			sp.SlowDownFactor, err = strconv.ParseFloat(paramVal, 64)
 		case "slowness_on_top_for_left_team":
+			sp.SlownessOnTopForLeftTeam, err = strconv.ParseBool(paramVal)
 		case "slowness_on_top_for_right_team":
+			sp.SlownessOnTopForRightTeam, err = strconv.ParseBool(paramVal)
 		case "stamina_capacity":
+			sp.StaminaCapacity, err = strconv.ParseFloat(paramVal, 64)
 		case "stamina_inc_max":
+			sp.StaminaIncMax, err = strconv.ParseFloat(paramVal, 64)
 		case "stamina_max":
+			sp.StaminaMax, err = strconv.ParseFloat(paramVal, 64)
 		case "start_goal_l":
+			sp.StartGoalL, err = strconv.ParseInt(paramVal, 10, 64)
 		case "start_goal_r":
+			sp.StartGoalR, err = strconv.ParseInt(paramVal, 10, 64)
 		case "stopped_ball_vel":
+			sp.StoppedBallVel, err = strconv.ParseFloat(paramVal, 64)
 		case "synch_micro_sleep":
+			sp.SynchMicroSleep, err = strconv.ParseInt(paramVal, 10, 64)
 		case "synch_mode":
+			sp.SynchMode, err = strconv.ParseBool(paramVal)
 		case "synch_offset":
+			sp.SynchOffset, err = strconv.ParseInt(paramVal, 10, 64)
 		case "synch_see_offset":
+			sp.SynchSeeOffset, err = strconv.ParseInt(paramVal, 10, 64)
 		case "tackle_back_dist":
+			sp.TackleBackDist, err = strconv.ParseFloat(paramVal, 64)
 		case "tackle_cycles":
+			sp.TackleCycles, err = strconv.ParseInt(paramVal, 10, 64)
 		case "tackle_dist":
+			sp.TackleDist, err = strconv.ParseFloat(paramVal, 64)
 		case "tackle_exponent":
+			sp.TackleExponent, err = strconv.ParseFloat(paramVal, 64)
 		case "tackle_power_rate":
+			sp.TacklePowerRate, err = strconv.ParseFloat(paramVal, 64)
 		case "tackle_rand_factor":
+			sp.TackleRandFactor, err = strconv.ParseFloat(paramVal, 64)
 		case "tackle_width":
+			sp.TackleWidth, err = strconv.ParseFloat(paramVal, 64)
 		case "team_actuator_noise":
+			sp.TeamActuatorNoise, err = strconv.ParseInt(paramVal, 10, 64)
 		case "team_l_start":
+			sp.TeamLStart = paramVal
 		case "team_r_start":
+			sp.TeamRStart = paramVal
 		case "text_log_compression":
+			sp.TextLogCompression, err = strconv.ParseBool(paramVal)
 		case "text_log_dated":
+			sp.TextLogDated, err = strconv.ParseBool(paramVal)
 		case "text_log_dir":
+			sp.TextLogDir = paramVal
 		case "text_log_fixed":
+			sp.TextLogFixed, err = strconv.ParseBool(paramVal)
 		case "text_log_fixed_name":
+			sp.TextLogFixedName = paramVal
 		case "text_logging":
+			sp.TextLogging, err = strconv.ParseBool(paramVal)
 		case "use_offside":
+			sp.UseOffside, err = strconv.ParseBool(paramVal)
 		case "verbose":
+			sp.Verbose, err = strconv.ParseBool(paramVal)
 		case "visible_angle":
+			sp.VisibleAngle, err = strconv.ParseFloat(paramVal, 64)
 		case "visible_distance":
+			sp.VisibleDistance, err = strconv.ParseFloat(paramVal, 64)
 		case "wind_ang":
+			sp.WindAng, err = strconv.ParseFloat(paramVal, 64)
 		case "wind_dir":
+			sp.WindDir, err = strconv.ParseFloat(paramVal, 64)
 		case "wind_force":
+			sp.WindForce, err = strconv.ParseFloat(paramVal, 64)
 		case "wind_none":
+			sp.WindNone, err = strconv.ParseBool(paramVal)
 		case "wind_rand":
+			sp.WindRand, err = strconv.ParseFloat(paramVal, 64)
 		case "wind_random":
+			sp.WindRandom, err = strconv.ParseFloat(paramVal, 64)
+		default:
+			errCh <- fmt.Sprintf("unsupported server param (%s)", param)
+		}
+		if err != nil {
+			errCh <- fmt.Sprintf("could not parse server param (%s): %s", param, err)
+			err = nil
 		}
 	}
-
-	return nil
 }
