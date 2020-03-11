@@ -1,8 +1,9 @@
 package playerclient
 
-import "github.com/rcssggb/ggb-lib/playerclient/parser"
-
-import "github.com/rcssggb/ggb-lib/rcsscommon"
+import (
+	"github.com/rcssggb/ggb-lib/playerclient/parser"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
+)
 
 // See returns current sightData object
 func (c *Client) See() parser.SightData {
@@ -37,4 +38,9 @@ func (c *Client) PlayMode() string {
 // Time returns current simulation time step
 func (c *Client) Time() int {
 	return c.currentTime
+}
+
+// ServerParams returns rcssserver params object
+func (c *Client) ServerParams() rcsscommon.ServerParams {
+	return c.serverParams
 }

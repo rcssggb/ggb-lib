@@ -12,18 +12,19 @@ import (
 // TODO: unify playerclient and trainerclient common functions and variables
 // in a clientcommon package
 type Client struct {
-	conn        *net.UDPConn
-	serverAddr  *net.UDPAddr
-	cmdChannel  chan command
-	recvChannel chan message
-	errChannel  chan string
-	currentTime int
-	sightData   parser.SightData
-	bodyData    parser.SenseBodyData
-	teamName    string
-	teamSide    rcsscommon.SideType
-	shirtNum    int
-	playMode    string
+	conn         *net.UDPConn
+	serverAddr   *net.UDPAddr
+	cmdChannel   chan command
+	recvChannel  chan message
+	errChannel   chan string
+	currentTime  int
+	serverParams rcsscommon.ServerParams
+	sightData    parser.SightData
+	bodyData     parser.SenseBodyData
+	teamName     string
+	teamSide     rcsscommon.SideType
+	shirtNum     int
+	playMode     string
 }
 
 // NewPlayerClient is the constructor for the playerclient.Client object
@@ -35,6 +36,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	client.recvChannel = make(chan message, 32)
 	client.errChannel = make(chan string, 32)
 	client.currentTime = 0
+	client.serverParams = rcsscommon.DefaultServerParams()
 
 	// Open listener socker to request player connection
 	serverHost := serverIP + ":6000"

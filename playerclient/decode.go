@@ -64,9 +64,8 @@ func (c *Client) decode() {
 					c.playMode = hearSyms.Message
 				}
 			}
-
-		// case serverParamMsg:
-		// _, err := lexer.ServerParam(m.data)
+		case serverParamMsg:
+			c.serverParams.Parse(m.data, c.errChannel)
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:

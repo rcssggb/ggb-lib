@@ -9,14 +9,15 @@ import (
 
 // Client ...
 type Client struct {
-	conn        *net.UDPConn
-	serverAddr  *net.UDPAddr
-	cmdChannel  chan command
-	recvChannel chan message
-	errChannel  chan string
-	currentTime int
-	teamSide    rcsscommon.SideType
-	playMode    string
+	conn         *net.UDPConn
+	serverAddr   *net.UDPAddr
+	cmdChannel   chan command
+	recvChannel  chan message
+	errChannel   chan string
+	currentTime  int
+	serverParams rcsscommon.ServerParams
+	teamSide     rcsscommon.SideType
+	playMode     string
 }
 
 // NewTrainerClient is the constructor for the trainerclient.Client object
@@ -27,6 +28,7 @@ func NewTrainerClient(serverIP string) (*Client, error) {
 	client.recvChannel = make(chan message, 32)
 	client.errChannel = make(chan string, 32)
 	client.currentTime = 0
+	client.serverParams = rcsscommon.DefaultServerParams()
 
 	// Open listener socker to request player connection
 	serverHost := serverIP + ":6001"

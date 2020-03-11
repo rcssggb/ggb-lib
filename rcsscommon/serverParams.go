@@ -509,6 +509,10 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 			sp.ExtraHalfTime, err = strconv.ParseInt(paramVal, 10, 64)
 		case "extra_stamina":
 			sp.ExtraStamina, err = strconv.ParseFloat(paramVal, 64)
+		case "fixed_teamname_l":
+			sp.FixedTeamnameL = paramVal
+		case "fixed_teamname_r":
+			sp.FixedTeamnameR = paramVal
 		case "forbid_kick_off_offside":
 			sp.ForbidKickOffOffside, err = strconv.ParseBool(paramVal)
 		case "foul_cycles":
@@ -557,6 +561,14 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 			sp.HearInc, err = strconv.ParseFloat(paramVal, 64)
 		case "hear_max":
 			sp.HearMax, err = strconv.ParseFloat(paramVal, 64)
+		case "illegal_defense_dist_x":
+			sp.IllegalDefenseDistX, err = strconv.ParseFloat(paramVal, 64)
+		case "illegal_defense_duration":
+			sp.IllegalDefenseDuration, err = strconv.ParseInt(paramVal, 10, 64)
+		case "illegal_defense_number":
+			sp.IllegalDefenseNumber, err = strconv.ParseInt(paramVal, 10, 64)
+		case "illegal_defense_width":
+			sp.IllegalDefenseWidth, err = strconv.ParseFloat(paramVal, 64)
 		case "inertia_moment":
 			sp.InertiaMoment, err = strconv.ParseFloat(paramVal, 64)
 		case "keepaway":
@@ -705,6 +717,8 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 			sp.RecoverMin, err = strconv.ParseFloat(paramVal, 64)
 		case "recv_step":
 			sp.RecvStep, err = strconv.ParseInt(paramVal, 10, 64)
+		case "red_card_probability":
+			sp.RedCardProbability, err = strconv.ParseFloat(paramVal, 64)
 		case "say_coach_cnt_max":
 			sp.SayCoachCountMax, err = strconv.ParseInt(paramVal, 10, 64)
 		case "say_coach_msg_size":

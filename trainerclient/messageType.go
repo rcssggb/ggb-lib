@@ -5,4 +5,7 @@ type messageType byte
 
 const (
 	unsupportedMsg messageType = iota + 0
+	initMsg
+	serverParamMsg
+	errorMsg
 )

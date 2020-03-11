@@ -11,6 +11,12 @@ func (c *Client) decode() {
 	for {
 		m = <-c.recvChannel
 		switch m.Type() {
+		case serverParamMsg:
+			c.serverParams.Parse(m.data, c.errChannel)
+		case initMsg:
+			continue
+		case errorMsg:
+			c.errChannel <- m.String()
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m.String())
 			continue

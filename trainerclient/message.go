@@ -1,6 +1,7 @@
 package trainerclient
 
 import (
+	"strings"
 	"time"
 )
 
@@ -18,6 +19,14 @@ func (m message) String() string {
 // Type parses and returns the MessageType for the message
 func (m message) Type() (mType messageType) {
 	switch {
+	case strings.HasPrefix(m.data, "(server_param "):
+		mType = serverParamMsg
+	case strings.HasPrefix(m.data, "(init ok)"):
+		mType = initMsg
+	case strings.HasPrefix(m.data, "(warning "):
+		fallthrough
+	case strings.HasPrefix(m.data, "(error "):
+		mType = errorMsg
 	default:
 		mType = unsupportedMsg
 	}
