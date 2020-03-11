@@ -33,11 +33,11 @@ func (m message) Type() (mType messageType) {
 		mType = initMsg
 	case strings.HasPrefix(m.data, "(player_type "):
 		mType = playerTypeMsg
-	case strings.HasPrefix(m.data, "(player_param "):
-		mType = playerParamMsg
 	case strings.HasPrefix(m.data, "(server_param "):
 		mType = serverParamMsg
-	// Unsupported msgs below
+		// Unsupported msgs below
+	case strings.HasPrefix(m.data, "(player_param "):
+		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(score "):
 		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(ok "):

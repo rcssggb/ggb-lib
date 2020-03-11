@@ -19,6 +19,8 @@ func (m message) String() string {
 // Type parses and returns the MessageType for the message
 func (m message) Type() (mType messageType) {
 	switch {
+	case strings.HasPrefix(m.data, "(player_type "):
+		mType = playerTypeMsg
 	case strings.HasPrefix(m.data, "(server_param "):
 		mType = serverParamMsg
 	case strings.HasPrefix(m.data, "(init ok)"):

@@ -7,5 +7,6 @@ const (
 	unsupportedMsg messageType = iota + 0
 	initMsg
 	serverParamMsg
+	playerTypeMsg
 	errorMsg
 )

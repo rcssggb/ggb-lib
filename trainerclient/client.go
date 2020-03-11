@@ -16,6 +16,7 @@ type Client struct {
 	errChannel   chan string
 	currentTime  int
 	serverParams rcsscommon.ServerParams
+	playerTypes  map[int64]rcsscommon.PlayerType
 	teamSide     rcsscommon.SideType
 	playMode     string
 }
@@ -27,6 +28,7 @@ func NewTrainerClient(serverIP string) (*Client, error) {
 	client.cmdChannel = make(chan command, 32)
 	client.recvChannel = make(chan message, 32)
 	client.errChannel = make(chan string, 32)
+	client.playerTypes = make(map[int64]rcsscommon.PlayerType)
 	client.currentTime = 0
 	client.serverParams = rcsscommon.DefaultServerParams()
 

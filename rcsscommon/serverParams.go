@@ -417,7 +417,7 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 		paramParts := strings.Split(param, " ")
 		if len(paramParts) < 2 {
 			errCh <- fmt.Sprintf("invalid server param format: %s", param)
-			return
+			continue
 		}
 		paramName := paramParts[0]
 		paramVal := strings.Join(paramParts[1:len(paramParts)], " ")
