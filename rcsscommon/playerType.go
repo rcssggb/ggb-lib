@@ -77,6 +77,8 @@ func ParsePlayerType(m string, errCh chan string) PlayerType {
 			playerType.FoulDetectProbability, err = strconv.ParseFloat(paramVal, 64)
 		case "catchable_area_l_stretch":
 			playerType.CatchableAreaLStretch, err = strconv.ParseFloat(paramVal, 64)
+		default:
+			errCh <- fmt.Sprintf("unsupported player_type param (%s)", param)
 		}
 		if err != nil {
 			errCh <- fmt.Sprintf("could not parse player type param (%s): %s", param, err)

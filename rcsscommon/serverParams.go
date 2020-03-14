@@ -35,6 +35,7 @@ type ServerParams struct {
 	CLangRuleWin              int64
 	CLangWinSize              int64
 	Coach                     bool
+	CoachMsgFile              string
 	CoachPort                 int64
 	CoachWReferee             bool
 	ConnectWait               int64
@@ -105,6 +106,7 @@ type ServerParams struct {
 	MaxGoalKicks              int64
 	MaxTacklePower            float64
 	MaxMoment                 float64
+	MaxMonitors               int64
 	MaxNeckAng                float64
 	MaxNeckMoment             float64
 	MaxPower                  float64
@@ -234,6 +236,7 @@ func DefaultServerParams() ServerParams {
 		CLangRuleWin:              1,
 		CLangWinSize:              300,
 		Coach:                     false,
+		CoachMsgFile:              "",
 		CoachPort:                 6001,
 		CoachWReferee:             false,
 		ConnectWait:               300,
@@ -304,6 +307,7 @@ func DefaultServerParams() ServerParams {
 		MaxGoalKicks:              3,
 		MaxTacklePower:            100,
 		MaxMoment:                 180,
+		MaxMonitors:               -1,
 		MaxNeckAng:                90,
 		MaxNeckMoment:             180,
 		MaxPower:                  100,
@@ -479,6 +483,8 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 			sp.CLangWinSize, err = strconv.ParseInt(paramVal, 10, 64)
 		case "coach":
 			sp.Coach, err = strconv.ParseBool(paramVal)
+		case "coach_msg_file":
+			sp.CoachMsgFile = paramVal
 		case "coach_port":
 			sp.CoachPort, err = strconv.ParseInt(paramVal, 10, 64)
 		case "coach_w_referee":
@@ -615,6 +621,8 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 			sp.MaxDashPower, err = strconv.ParseFloat(paramVal, 64)
 		case "max_goal_kicks":
 			sp.MaxGoalKicks, err = strconv.ParseInt(paramVal, 10, 64)
+		case "max_monitors":
+			sp.MaxMonitors, err = strconv.ParseInt(paramVal, 10, 64)
 		case "max_tackle_power":
 			sp.MaxTacklePower, err = strconv.ParseFloat(paramVal, 64)
 		case "maxmoment":
