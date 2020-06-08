@@ -36,6 +36,8 @@ func main() {
 		body := player.SenseBody()
 		playMode := player.PlayMode()
 
+		trainer.Look()
+
 		if currentTime == 0 {
 			player.Move(currentTime, -5, 0)
 
