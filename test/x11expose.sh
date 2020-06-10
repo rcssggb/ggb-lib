@@ -1,5 +1,7 @@
 HOST_OS=$(uname -s)
 
+echo "Exposing X11"
+
 if [ $HOST_OS == "Linux" ]; then
     xhost +local:root
 elif [ $HOST_OS == "Darwin" ]; then

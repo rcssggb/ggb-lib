@@ -36,11 +36,8 @@ func main() {
 		body := player.SenseBody()
 		playMode := player.PlayMode()
 
-		trainer.Look()
-
 		if currentTime == 0 {
 			player.Move(currentTime, -5, 0)
-
 		} else if sight.Ball == nil {
 			player.Turn(currentTime, 20)
 		} else if playMode == "kick_off_l" {
@@ -56,6 +53,14 @@ func main() {
 			ballAngle := sight.Ball.Direction + body.HeadAngle
 			player.Dash(currentTime, 50, ballAngle-85)
 			player.TurnNeck(currentTime, sight.Ball.Direction)
+		}
+
+		if currentTime%100 == 0 {
+			if (currentTime/2)%100 == 0 {
+				trainer.Log(trainer.EyeOn())
+			} else {
+				trainer.Log(trainer.EyeOff())
+			}
 		}
 
 		err = player.Error()

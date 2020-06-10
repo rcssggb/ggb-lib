@@ -16,6 +16,7 @@ type Client struct {
 	errChannel   chan string
 	currentTime  int
 	serverParams rcsscommon.ServerParams
+	eyeMode      bool
 	playerTypes  map[int64]rcsscommon.PlayerType
 	teamSide     rcsscommon.SideType
 	playMode     string
