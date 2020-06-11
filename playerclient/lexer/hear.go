@@ -61,7 +61,7 @@ func Hear(m string) (data *HearSymbols, err error) {
 			return
 		}
 
-		data.Message = strings.Join(msgParts[1:len(msgParts)], " ")
+		data.Message = strings.Join(msgParts[1:], " ")
 		return
 	}
 
@@ -74,7 +74,7 @@ func Hear(m string) (data *HearSymbols, err error) {
 			return
 		}
 
-		data.Message = strings.Join(msgParts[1:len(msgParts)], " ")
+		data.Message = strings.Join(msgParts[1:], " ")
 		return
 	}
 
@@ -86,7 +86,7 @@ func Hear(m string) (data *HearSymbols, err error) {
 		}
 
 		data.Sender = trimmedMsg[1:closeIdx]
-		data.Message = trimmedMsg[closeIdx+2 : len(trimmedMsg)]
+		data.Message = trimmedMsg[closeIdx+2:]
 		return
 	}
 
@@ -103,14 +103,14 @@ func Hear(m string) (data *HearSymbols, err error) {
 			return
 		}
 		data.Sender = strings.Join(msgParts[0:3], " ")
-		data.Message = strings.Join(msgParts[3:len(msgParts)], " ")
+		data.Message = strings.Join(msgParts[3:], " ")
 		return
 	}
 
 	// If unknown player is an opponent, message is (hear TIME DIR opp MESSAGE)
 	if msgParts[1] == "opp" {
 		data.Sender = strings.Join(msgParts[0:2], " ")
-		data.Message = strings.Join(msgParts[2:len(msgParts)], " ")
+		data.Message = strings.Join(msgParts[2:], " ")
 		return
 	}
 

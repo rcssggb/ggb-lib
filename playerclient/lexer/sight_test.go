@@ -19,11 +19,11 @@ func TestSightShort(t *testing.T) {
 	}
 
 	correctObjData := map[string][]string{
-		"f b r 10": []string{"25", "-21", "-0", "-0.6"},
-		"f b l 10": []string{"22.2", "28"},
-		"l b":      []string{"16.6", "-79"},
-		"f c b":    []string{"16.6", "-1", "-0", "-0.8"},
-		"f b 0":    []string{"21.5", "2", "-0", "-0.6"},
+		"f b r 10": {"25", "-21", "-0", "-0.6"},
+		"f b l 10": {"22.2", "28"},
+		"l b":      {"16.6", "-79"},
+		"f c b":    {"16.6", "-1", "-0", "-0.8"},
+		"f b 0":    {"21.5", "2", "-0", "-0.6"},
 	}
 
 	if !reflect.DeepEqual(correctObjData, sightData.ObjMap) {
@@ -32,7 +32,7 @@ func TestSightShort(t *testing.T) {
 
 	correctPlayersData := SightPlayersSymbols{
 		Known: map[string][]string{
-			"p \"HELIOS_B\" 10": []string{"7.4", "1", "-0.148", "-1.8", "167", "-153"},
+			"p \"HELIOS_B\" 10": {"7.4", "1", "-0.148", "-1.8", "167", "-153"},
 		},
 		KnownTeam: map[string][][]string{},
 		Unknown:   [][]string{},
@@ -57,33 +57,33 @@ func TestSightWithBallAndPlayers(t *testing.T) {
 	}
 
 	correctObjMap := map[string][]string{
-		"f c":      []string{"14.6", "42", "0.292", "0.9"},
-		"f l t":    []string{"76.7", "36"},
-		"f l b":    []string{"68", "-20"},
-		"f g l b":  []string{"63.4", "3"},
-		"g l":      []string{"64.1", "10"},
-		"f g l t":  []string{"65.4", "16"},
-		"f p l b":  []string{"47.9", "-12"},
-		"f p l c":  []string{"47.9", "13"},
-		"f p l t":  []string{"55.7", "33"},
-		"f t l 20": []string{"58", "58"},
-		"f t l 30": []string{"63.4", "51"},
-		"f t l 40": []string{"70.8", "45"},
-		"f t l 50": []string{"78.3", "40"},
-		"f b l 10": []string{"36.2", "-53"},
-		"f b l 20": []string{"42.5", "-42"},
-		"f b l 30": []string{"50.4", "-35"},
-		"f b l 40": []string{"59.1", "-29"},
-		"f b l 50": []string{"68", "-25"},
-		"f l 0":    []string{"69.4", "9"},
-		"f l t 10": []string{"71.5", "17"},
-		"f l t 20": []string{"74.4", "24"},
-		"f l t 30": []string{"79", "31"},
-		"f l b 10": []string{"68.7", "1"},
-		"f l b 20": []string{"69.4", "-8"},
-		"f l b 30": []string{"71.5", "-16"},
-		"b":        []string{"14.9", "42", "0.298", "0.9"},
-		"l l":      []string{"63.4", "-89"},
+		"f c":      {"14.6", "42", "0.292", "0.9"},
+		"f l t":    {"76.7", "36"},
+		"f l b":    {"68", "-20"},
+		"f g l b":  {"63.4", "3"},
+		"g l":      {"64.1", "10"},
+		"f g l t":  {"65.4", "16"},
+		"f p l b":  {"47.9", "-12"},
+		"f p l c":  {"47.9", "13"},
+		"f p l t":  {"55.7", "33"},
+		"f t l 20": {"58", "58"},
+		"f t l 30": {"63.4", "51"},
+		"f t l 40": {"70.8", "45"},
+		"f t l 50": {"78.3", "40"},
+		"f b l 10": {"36.2", "-53"},
+		"f b l 20": {"42.5", "-42"},
+		"f b l 30": {"50.4", "-35"},
+		"f b l 40": {"59.1", "-29"},
+		"f b l 50": {"68", "-25"},
+		"f l 0":    {"69.4", "9"},
+		"f l t 10": {"71.5", "17"},
+		"f l t 20": {"74.4", "24"},
+		"f l t 30": {"79", "31"},
+		"f l b 10": {"68.7", "1"},
+		"f l b 20": {"69.4", "-8"},
+		"f l b 30": {"71.5", "-16"},
+		"b":        {"14.9", "42", "0.298", "0.9"},
+		"l l":      {"63.4", "-89"},
 	}
 
 	if !reflect.DeepEqual(correctObjMap, sightData.ObjMap) {
@@ -92,23 +92,23 @@ func TestSightWithBallAndPlayers(t *testing.T) {
 
 	correctPlayersData := SightPlayersSymbols{
 		Known: map[string][]string{
-			"p \"HELIOS_B\" 6": []string{"20.1", "-3", "0.402", "0.5", "-35", "50"},
-			"p \"HELIOS_B\" 3": []string{"27.1", "-12", "0", "0.2", "-52", "-122"},
-			"p \"HELIOS_B\" 8": []string{"13.5", "-16", "0", "1", "-53", "-113"},
-			"p \"HELIOS_A\" 7": []string{"10", "-34", "-0", "1.4", "-52", "38"},
+			"p \"HELIOS_B\" 6": {"20.1", "-3", "0.402", "0.5", "-35", "50"},
+			"p \"HELIOS_B\" 3": {"27.1", "-12", "0", "0.2", "-52", "-122"},
+			"p \"HELIOS_B\" 8": {"13.5", "-16", "0", "1", "-53", "-113"},
+			"p \"HELIOS_A\" 7": {"10", "-34", "-0", "1.4", "-52", "38"},
 		},
 		KnownTeam: map[string][][]string{
-			"\"HELIOS_B\"": [][]string{
-				[]string{"30", "13"},
-				[]string{"33.1", "44"},
-				[]string{"27.1", "-31"},
+			"\"HELIOS_B\"": {
+				{"30", "13"},
+				{"33.1", "44"},
+				{"27.1", "-31"},
 			},
 		},
 		Unknown: [][]string{
-			[]string{"60.3", "7"},
-			[]string{"60.3", "-6"},
-			[]string{"44.7", "6"},
-			[]string{"66.7", "17"},
+			{"60.3", "7"},
+			{"60.3", "-6"},
+			{"44.7", "6"},
+			{"66.7", "17"},
 		},
 	}
 

@@ -21,6 +21,6 @@ type PlayerTypeData struct {
 
 // PlayerType parses player type data coming from lexer
 func PlayerType(symbols map[string]string) (*PlayerTypeData, error) {
-
+	// TODO
 	return nil, nil
 }

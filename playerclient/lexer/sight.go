@@ -52,11 +52,11 @@ func Sight(m string) (data *SightSymbols, err error) {
 	for openIdx := strings.Index(trimmedMsg, "(("); openIdx != -1; openIdx = strings.Index(trimmedMsg, "((") {
 		closeIdx := strings.Index(trimmedMsg, ")")
 		objName := trimmedMsg[openIdx+2 : closeIdx]
-		trimmedMsg = trimmedMsg[closeIdx+2 : len(trimmedMsg)]
+		trimmedMsg = trimmedMsg[closeIdx+2:]
 
 		closeIdx = strings.Index(trimmedMsg, ")")
 		params := trimmedMsg[:closeIdx]
-		trimmedMsg = trimmedMsg[closeIdx+1 : len(trimmedMsg)]
+		trimmedMsg = trimmedMsg[closeIdx+1:]
 
 		splitParam := strings.Split(params, " ")
 
