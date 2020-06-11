@@ -8,5 +8,7 @@ const (
 	initMsg
 	serverParamMsg
 	playerTypeMsg
+	lookMsg
+	eyeMsg
 	errorMsg
 )

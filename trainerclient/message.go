@@ -29,6 +29,12 @@ func (m message) Type() (mType messageType) {
 		fallthrough
 	case strings.HasPrefix(m.data, "(error "):
 		mType = errorMsg
+	case strings.HasPrefix(m.data, "(ok look"):
+		fallthrough
+	case strings.HasPrefix(m.data, "(see_global"):
+		mType = lookMsg
+	case strings.HasPrefix(m.data, "(ok eye"):
+		mType = eyeMsg
 	default:
 		mType = unsupportedMsg
 	}

@@ -13,6 +13,9 @@ func (c *Client) decode() {
 	for {
 		m = <-c.recvChannel
 		switch m.Type() {
+		case lookMsg:
+			// TODO
+			c.Log(m.data)
 		case serverParamMsg:
 			c.serverParams.Parse(m.data, c.errChannel)
 		case playerTypeMsg:
@@ -24,8 +27,16 @@ func (c *Client) decode() {
 			continue
 		case errorMsg:
 			c.errChannel <- m.String()
+		case eyeMsg:
+			if m.data == "(ok eye on)\x00" {
+				c.eyeMode = true
+			} else if m.data == "(ok eye off)\x00" {
+				c.eyeMode = false
+			} else {
+				c.errChannel <- fmt.Sprintf("unsupported eye response: %s", m)
+			}
 		case unsupportedMsg:
-			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m.String())
+			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue
 		}
 	}
