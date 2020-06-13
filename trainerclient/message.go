@@ -35,6 +35,8 @@ func (m message) Type() (mType messageType) {
 		mType = lookMsg
 	case strings.HasPrefix(m.data, "(ok eye"):
 		mType = eyeMsg
+	case strings.HasPrefix(m.data, "(ok team_names"):
+		mType = teamNamesMsg
 	default:
 		mType = unsupportedMsg
 	}

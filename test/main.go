@@ -36,6 +36,8 @@ func main() {
 		body := player.SenseBody()
 		playMode := player.PlayMode()
 
+		trainer.Log(trainer.TeamNames())
+
 		if currentTime == 0 {
 			player.Move(currentTime, -5, 0)
 		} else if sight.Ball == nil {

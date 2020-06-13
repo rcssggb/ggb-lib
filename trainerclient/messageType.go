@@ -10,5 +10,6 @@ const (
 	playerTypeMsg
 	lookMsg
 	eyeMsg
+	teamNamesMsg
 	errorMsg
 )

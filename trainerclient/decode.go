@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/rcssggb/ggb-lib/rcsscommon"
+	"github.com/rcssggb/ggb-lib/trainerclient/lexer"
 )
 
 // decode continuously receives messages from recvChannel and calls lexer and parser to structure the message data
@@ -35,6 +36,8 @@ func (c *Client) decode() {
 			} else {
 				c.errChannel <- fmt.Sprintf("unsupported eye response: %s", m)
 			}
+		case teamNamesMsg:
+			lexer.TeamNames(m.data)
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue
