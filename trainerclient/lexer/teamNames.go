@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -15,7 +14,6 @@ func TeamNames(m string) (lTeam, rTeam string, err error) {
 	splitTeams := strings.Split(trimmedMsg, ") (")
 	if len(splitTeams) > 2 {
 		err = errors.New("something went wrong with team_names parsing")
-		fmt.Println(err)
 		return
 	}
 
