@@ -37,7 +37,13 @@ func (c *Client) decode() {
 				c.errChannel <- fmt.Sprintf("unsupported eye response: %s", m)
 			}
 		case teamNamesMsg:
-			lexer.TeamNames(m.data)
+			lTeam, rTeam, err := lexer.TeamNames(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+			c.lTeamName = lTeam
+			c.rTeamName = rTeam
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue

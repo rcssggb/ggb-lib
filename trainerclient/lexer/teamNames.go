@@ -6,12 +6,8 @@ import (
 	"strings"
 )
 
-type TeamPositions map[string]string
-
 // TeamNames parses (ok team_names ...
-func TeamNames(m string) (tp TeamPositions, err error) {
-	tp = make(TeamPositions)
-
+func TeamNames(m string) (lTeam, rTeam string, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(ok team_names ")
 	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
@@ -30,12 +26,12 @@ func TeamNames(m string) (tp TeamPositions, err error) {
 		if strings.Contains(team, "team l") {
 			trimmedTeam := team
 			trimmedTeam = strings.TrimPrefix(trimmedTeam, "team l ")
-			tp["left"] = trimmedTeam
+			lTeam = trimmedTeam
 		}
 		if strings.Contains(team, "team r") {
 			trimmedTeam := team
 			trimmedTeam = strings.TrimPrefix(trimmedTeam, "team r ")
-			tp["right"] = trimmedTeam
+			rTeam = trimmedTeam
 		}
 	}
 

@@ -18,7 +18,8 @@ type Client struct {
 	serverParams rcsscommon.ServerParams
 	eyeMode      bool
 	playerTypes  map[int64]rcsscommon.PlayerType
-	teamSide     rcsscommon.SideType
+	lTeamName    string
+	rTeamName    string
 	playMode     string
 }
 
