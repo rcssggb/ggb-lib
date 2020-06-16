@@ -13,9 +13,10 @@ type GlobalPositions struct {
 	Ball  AbsPosition
 	lGoal AbsPosition
 	rGoal AbsPosition
-	lTeam map[int]AbsPosition
-	rTeam map[int]AbsPosition
+	Teams map[string]Team
 }
+
+type Team map[int]AbsPosition
 
 // AbsPosition defines the generic absolute position coordinates definition
 // TODO: maybe this should be in common and merged with the
@@ -34,6 +35,8 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 	gp := GlobalPositions{
 		Time: gpSymbols.Time,
 	}
+
+	gp.Teams = make(map[string]Team)
 
 	for objName, objData := range gpSymbols.Objects {
 		var err error
@@ -80,7 +83,36 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			gp.Ball.DeltaY = data[3]
 		}
 
-		// TODO: if object is a player
+		// if object is a player
+		if strings.HasPrefix(objName, "p ") {
+			if len(objData) != 6 {
+				errCh <- fmt.Sprintf("player object \"%s\" has invalid number of data values (%d)", objName, len(objData))
+				continue
+			}
+
+			// Splits "p \"team-name\" 1" into ["p" "\"team-name\"" "1"]
+			player := strings.Split(objName, " ")
+
+			teamName := player[1]
+			teamName = strings.TrimPrefix(teamName, "\"")
+			teamName = strings.TrimSuffix(teamName, "\"")
+
+			unum := strconv.Atoi(player[2])
+
+			if gp.Teams[teamName] == nil {
+				gp.Teams[teamName] = make(Team)
+			}
+
+			gp.Teams[teamName][unum] = AbsPosition{
+				X:         data[0],
+				Y:         data[1],
+				DeltaX:    data[2],
+				DeltaY:    data[3],
+				BodyAngle: data[4],
+				NeckAngle: data[5],
+			}
+		}
+
 	}
 
 	return &gp
