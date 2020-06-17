@@ -5,6 +5,7 @@ import (
 
 	"github.com/rcssggb/ggb-lib/rcsscommon"
 	"github.com/rcssggb/ggb-lib/trainerclient/lexer"
+	"github.com/rcssggb/ggb-lib/trainerclient/parser"
 )
 
 // decode continuously receives messages from recvChannel and calls lexer and parser to structure the message data
@@ -15,8 +16,15 @@ func (c *Client) decode() {
 		m = <-c.recvChannel
 		switch m.Type() {
 		case lookMsg:
-			// TODO
-			c.Log(m.data)
+			gPosSym, err := lexer.Look(m.data)
+			if err != nil {
+				c.errChannel <- fmt.Sprintf("failed to parse global positions: %s", err)
+				continue
+			}
+
+			// TODO: copy gPos to Client properly
+			// gPos := parser.Look(*gPosSym, c.errChannel)
+			_ = parser.Look(*gPosSym, c.errChannel)
 		case serverParamMsg:
 			c.serverParams.Parse(m.data, c.errChannel)
 		case playerTypeMsg:

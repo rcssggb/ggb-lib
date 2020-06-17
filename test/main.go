@@ -36,10 +36,9 @@ func main() {
 		body := player.SenseBody()
 		playMode := player.PlayMode()
 
-		trainer.Log(trainer.TeamNames())
-
 		if currentTime == 0 {
 			player.Move(currentTime, -5, 0)
+			trainer.TeamNames()
 		} else if sight.Ball == nil {
 			player.Turn(currentTime, 20)
 		} else if playMode == "kick_off_l" {
