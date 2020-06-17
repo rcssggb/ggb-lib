@@ -22,12 +22,14 @@ type Team map[int]AbsPosition
 // TODO: maybe this should be in common and merged with the
 // playerclient parser.SightData definition
 type AbsPosition struct {
-	X         float64
-	Y         float64
-	DeltaX    float64
-	DeltaY    float64
-	BodyAngle float64
-	NeckAngle float64
+	X           float64
+	Y           float64
+	DeltaX      float64
+	DeltaY      float64
+	BodyAngle   float64
+	NeckAngle   float64
+	PointingDir float64
+	Action      string
 }
 
 // Look parses global positions info coming from lexer
@@ -41,12 +43,17 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 	for objName, objData := range gpSymbols.Objects {
 		var err error
 
-		// length is 7 because it seems a "pointing direction" is sometimes provided although the docs are not provided
+		// length is 7 because it seems a "pointing direction" or "action" is sometimes provided although the docs are not provided
 		data := make([]float64, 7)
+		var actionData string
 		for idx, val := range objData {
-			data[idx], err = strconv.ParseFloat(val, 64)
-			if err != nil {
-				break
+			if val != "k" && val != "t" {
+				data[idx], err = strconv.ParseFloat(val, 64)
+				if err != nil {
+					break
+				}
+			} else {
+				actionData = val
 			}
 		}
 		if err != nil {
@@ -55,12 +62,14 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 		}
 
 		objPos := AbsPosition{
-			X:         data[0],
-			Y:         data[1],
-			DeltaX:    data[2],
-			DeltaY:    data[3],
-			BodyAngle: data[4],
-			NeckAngle: data[5],
+			X:           data[0],
+			Y:           data[1],
+			DeltaX:      data[2],
+			DeltaY:      data[3],
+			BodyAngle:   data[4],
+			NeckAngle:   data[5],
+			PointingDir: data[6],
+			Action:      actionData,
 		}
 
 		// If object is a goal
@@ -91,7 +100,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 
 		// if object is a player
 		if strings.HasPrefix(objName, "p ") {
-			if len(objData) != 6 {
+			if len(objData) != 6 && len(objData) != 7 {
 				errCh <- fmt.Sprintf("player object \"%s\" has invalid number of data values (%d)", objName, len(objData))
 				continue
 			}
@@ -113,6 +122,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			}
 
 			gp.Teams[teamName][unum] = objPos
+
 		}
 
 	}
