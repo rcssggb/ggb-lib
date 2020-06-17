@@ -29,6 +29,7 @@ func TestSightShort(t *testing.T) {
 
 	errCh := make(chan string, 32)
 	sightData := Sight(sightSymbols, errCh)
+	close(errCh)
 
 	if len(errCh) != 0 {
 		t.Fail()

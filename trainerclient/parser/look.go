@@ -9,11 +9,11 @@ import (
 )
 
 type GlobalPositions struct {
-	Time  int
-	Ball  AbsPosition
-	lGoal AbsPosition
-	rGoal AbsPosition
-	Teams map[string]Team
+	Time      int
+	Ball      AbsPosition
+	GoalLeft  AbsPosition
+	GoalRight AbsPosition
+	Teams     map[string]Team
 }
 
 type Team map[int]AbsPosition
@@ -40,7 +40,9 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 
 	for objName, objData := range gpSymbols.Objects {
 		var err error
-		data := make([]float64, len(objData))
+
+		// length is 7 because it seems a "pointing direction" is sometimes provided although the docs are not provided
+		data := make([]float64, 7)
 		for idx, val := range objData {
 			data[idx], err = strconv.ParseFloat(val, 64)
 			if err != nil {
@@ -52,6 +54,15 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			continue
 		}
 
+		objPos := AbsPosition{
+			X:         data[0],
+			Y:         data[1],
+			DeltaX:    data[2],
+			DeltaY:    data[3],
+			BodyAngle: data[4],
+			NeckAngle: data[5],
+		}
+
 		// If object is a goal
 		if strings.HasPrefix(objName, "g ") {
 			if len(objData) != 2 {
@@ -60,11 +71,9 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			}
 
 			if objName == "g r" {
-				gp.rGoal.X = data[0]
-				gp.rGoal.Y = data[1]
+				gp.GoalRight = objPos
 			} else if objName == "g l" {
-				gp.lGoal.X = data[0]
-				gp.lGoal.Y = data[1]
+				gp.GoalLeft = objPos
 			} else {
 				errCh <- fmt.Sprintf("invalid goal object \"%s\"", objName)
 			}
@@ -77,10 +86,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 				continue
 			}
 
-			gp.Ball.X = data[0]
-			gp.Ball.Y = data[1]
-			gp.Ball.DeltaX = data[2]
-			gp.Ball.DeltaY = data[3]
+			gp.Ball = objPos
 		}
 
 		// if object is a player
@@ -97,20 +103,16 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			teamName = strings.TrimPrefix(teamName, "\"")
 			teamName = strings.TrimSuffix(teamName, "\"")
 
-			unum := strconv.Atoi(player[2])
+			unum, err := strconv.Atoi(player[2])
+			if err != nil {
+				errCh <- fmt.Sprintf("failed to parse '%s' unum '%s'", objName, player[2])
+			}
 
 			if gp.Teams[teamName] == nil {
 				gp.Teams[teamName] = make(Team)
 			}
 
-			gp.Teams[teamName][unum] = AbsPosition{
-				X:         data[0],
-				Y:         data[1],
-				DeltaX:    data[2],
-				DeltaY:    data[3],
-				BodyAngle: data[4],
-				NeckAngle: data[5],
-			}
+			gp.Teams[teamName][unum] = objPos
 		}
 
 	}
