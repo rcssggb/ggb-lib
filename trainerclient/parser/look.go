@@ -28,6 +28,7 @@ type AbsPosition struct {
 	DeltaY      float64
 	BodyAngle   float64
 	NeckAngle   float64
+	IsPointing  bool
 	PointingDir float64
 	Action      string
 }
@@ -45,12 +46,16 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 
 		// length is 7 because it seems a "pointing direction" or "action" is sometimes provided although the docs are not provided
 		data := make([]float64, 7)
+		isPointing := false
 		var actionData string
 		for idx, val := range objData {
 			if val != "k" && val != "t" {
 				data[idx], err = strconv.ParseFloat(val, 64)
 				if err != nil {
 					break
+				}
+				if idx == 6 {
+					isPointing = true // it's better to use a "p" marker in action if pointing and kicking at the same time is not allowed
 				}
 			} else {
 				actionData = val
@@ -68,6 +73,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			DeltaY:      data[3],
 			BodyAngle:   data[4],
 			NeckAngle:   data[5],
+			IsPointing:  isPointing,
 			PointingDir: data[6],
 			Action:      actionData,
 		}

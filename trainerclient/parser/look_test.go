@@ -123,6 +123,64 @@ func TestOkLook100(t *testing.T) {
 	}
 }
 
-// (see_global 13 ((g r) 52.5 0) ((g l) -52.5 0) ((b) 0.560198 0.00594043 0.526587 0.00558401) ((p \"ggb-lib-test\" 1) -0.323043 -0.0455243 -0.00921727 0.000808097 0 -1 k))
+func TestSeeGlobal13K(t *testing.T) {
+	errCh := make(chan string, 64)
+
+	gpSymbols := lexer.GlobalPositions{
+		Time: 13,
+		Objects: map[string][]string{
+			"g r":                  {"52.5", "0"},
+			"g l":                  {"-52.5", "0"},
+			"b":                    {"0.560198", "0.00594043", "0.526587", "0.00558401"},
+			"p \"ggb-lib-test\" 1": {"-0.323043", "-0.0455243", "-0.00921727", "0.000808097", "0", "-1", "k"},
+		},
+	}
+
+	gPos := Look(gpSymbols, errCh)
+	close(errCh)
+
+	if len(errCh) != 0 {
+		t.Fail()
+	}
+	if gPos == nil {
+		t.FailNow()
+	}
+
+	expectedGPos := GlobalPositions{
+		Time: 13,
+		Ball: AbsPosition{
+			X:      0.560198,
+			Y:      0.00594043,
+			DeltaX: 0.526587,
+			DeltaY: 0.00558401,
+		},
+		GoalLeft: AbsPosition{
+			X: -52.5,
+			Y: 0,
+		},
+		GoalRight: AbsPosition{
+			X: 52.5,
+			Y: 0,
+		},
+		Teams: map[string]Team{
+			"ggb-lib-test": {
+				1: AbsPosition{
+					X:         -0.323043,
+					Y:         -0.0455243,
+					DeltaX:    -0.00921727,
+					DeltaY:    0.000808097,
+					BodyAngle: 0,
+					NeckAngle: -1,
+					Action:    "k",
+				},
+			},
+		},
+	}
+
+	if !reflect.DeepEqual(expectedGPos, *gPos) {
+		t.Fail()
+	}
+}
+
 // (see_global 300 ((g r) 52.5 0) ((g l) -52.5 0) ((b) 0 0 0 0) ((p "ggb-lib-test" 1) 24.4006 -7.79101 0.0380215 0.172137 51 90))
 // (ok look 300 ((g r) 52.5 0) ((g l) -52.5 0) ((b) 0 0 0 0) ((p "ggb-lib-test" 1) 24.4006 -7.79101 0.0380215 0.172137 51 90))
