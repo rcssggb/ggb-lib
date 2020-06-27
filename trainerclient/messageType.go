@@ -11,5 +11,6 @@ const (
 	lookMsg
 	eyeMsg
 	teamNamesMsg
+	checkBallMsg
 	errorMsg
 )

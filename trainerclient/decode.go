@@ -52,6 +52,13 @@ func (c *Client) decode() {
 			}
 			c.lTeamName = lTeam
 			c.rTeamName = rTeam
+		case checkBallMsg:
+			_, ballInfo, err := lexer.CheckBall(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+			c.ballInfo = ballInfo
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue

@@ -21,6 +21,7 @@ type Client struct {
 	lTeamName    string
 	rTeamName    string
 	playMode     string
+	ballInfo     string
 }
 
 // NewTrainerClient is the constructor for the trainerclient.Client object
