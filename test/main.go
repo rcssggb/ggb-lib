@@ -64,6 +64,8 @@ func main() {
 			}
 		}
 
+		trainer.CheckBall()
+
 		err = player.Error()
 		for err != nil {
 			player.Log(err)
