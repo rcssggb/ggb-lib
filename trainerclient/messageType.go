@@ -13,6 +13,7 @@ const (
 	earMsg
 	teamNamesMsg
 	checkBallMsg
+	moveMsg
 	startMsg
 	recoverMsg
 	errorMsg
