@@ -44,6 +44,14 @@ func (c *Client) decode() {
 			} else {
 				c.errChannel <- fmt.Sprintf("unsupported eye response: %s", m)
 			}
+		case earMsg:
+			if m.data == "(ok ear on)\x00" {
+				c.earMode = true
+			} else if m.data == "(ok ear off)\x00" {
+				c.earMode = false
+			} else {
+				c.errChannel <- fmt.Sprintf("unsupported ear response: %s", m)
+			}
 		case teamNamesMsg:
 			lTeam, rTeam, err := lexer.TeamNames(m.data)
 			if err != nil {

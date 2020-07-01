@@ -10,6 +10,7 @@ const (
 	playerTypeMsg
 	lookMsg
 	eyeMsg
+	earMsg
 	teamNamesMsg
 	checkBallMsg
 	errorMsg

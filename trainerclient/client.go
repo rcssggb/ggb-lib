@@ -17,6 +17,7 @@ type Client struct {
 	currentTime  int
 	serverParams rcsscommon.ServerParams
 	eyeMode      bool
+	earMode      bool
 	playerTypes  map[int64]rcsscommon.PlayerType
 	lTeamName    string
 	rTeamName    string

@@ -35,6 +35,8 @@ func (m message) Type() (mType messageType) {
 		mType = lookMsg
 	case strings.HasPrefix(m.data, "(ok eye"):
 		mType = eyeMsg
+	case strings.HasPrefix(m.data, "(ok ear"):
+		mType = earMsg
 	case strings.HasPrefix(m.data, "(ok team_names"):
 		mType = teamNamesMsg
 	case strings.HasPrefix(m.data, "(ok check_ball"):
