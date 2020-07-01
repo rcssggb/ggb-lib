@@ -6,6 +6,7 @@ import "github.com/rcssggb/ggb-lib/rcsscommon"
 ChangeMode changes the game mode
 */
 func (c *Client) ChangeMode(mode rcsscommon.ModeID) string {
+	// TODO: move the command construction to another package such as the 'actions' package in playerclient
 	changeModeString := "(change_mode "
 	switch mode {
 	case rcsscommon.BeforeKickOff:
