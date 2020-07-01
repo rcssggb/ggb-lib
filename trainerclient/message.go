@@ -25,6 +25,8 @@ func (m message) Type() (mType messageType) {
 		mType = serverParamMsg
 	case strings.HasPrefix(m.data, "(init ok)"):
 		mType = initMsg
+	case strings.HasPrefix(m.data, "(start ok)"):
+		mType = startMsg
 	case strings.HasPrefix(m.data, "(warning "):
 		fallthrough
 	case strings.HasPrefix(m.data, "(error "):

@@ -15,6 +15,10 @@ func (c *Client) decode() {
 	for {
 		m = <-c.recvChannel
 		switch m.Type() {
+		case initMsg:
+			continue
+		case startMsg:
+			continue
 		case lookMsg:
 			gPosSym, err := lexer.Look(m.data)
 			if err != nil {
@@ -32,8 +36,6 @@ func (c *Client) decode() {
 			if pType.ID != -1 {
 				c.playerTypes[pType.ID] = pType
 			}
-		case initMsg:
-			continue
 		case errorMsg:
 			c.errChannel <- m.String()
 		case eyeMsg:

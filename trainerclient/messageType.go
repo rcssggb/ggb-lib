@@ -13,5 +13,6 @@ const (
 	earMsg
 	teamNamesMsg
 	checkBallMsg
+	startMsg
 	errorMsg
 )
