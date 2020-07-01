@@ -27,6 +27,8 @@ func (m message) Type() (mType messageType) {
 		mType = initMsg
 	case strings.HasPrefix(m.data, "(start ok)"):
 		mType = startMsg
+	case strings.HasPrefix(m.data, "(recover ok)"):
+		mType = recoverMsg
 	case strings.HasPrefix(m.data, "(warning "):
 		fallthrough
 	case strings.HasPrefix(m.data, "(error "):

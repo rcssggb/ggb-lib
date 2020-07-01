@@ -19,6 +19,8 @@ func (c *Client) decode() {
 			continue
 		case startMsg:
 			continue
+		case recoverMsg:
+			continue
 		case lookMsg:
 			gPosSym, err := lexer.Look(m.data)
 			if err != nil {

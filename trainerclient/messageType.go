@@ -14,5 +14,6 @@ const (
 	teamNamesMsg
 	checkBallMsg
 	startMsg
+	recoverMsg
 	errorMsg
 )
