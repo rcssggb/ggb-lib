@@ -1,6 +1,6 @@
 package rcsscommon
 
-// ModeID is the type representing each marker game mode
+// ModeID is the type representing each game mode
 type ModeID byte
 
 const (
