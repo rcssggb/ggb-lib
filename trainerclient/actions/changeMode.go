@@ -2,43 +2,44 @@ package actions
 
 import "github.com/rcssggb/ggb-lib/rcsscommon"
 
-func ChangeMode(mode rcsscommon.ModeID) string {
+// ChangeMode constructs the string to send a change_mode command to the server
+func ChangeMode(mode rcsscommon.PlayModeID) string {
 	changeModeString := "(change_mode "
 
 	switch mode {
-	case rcsscommon.BeforeKickOff:
+	case rcsscommon.PlayModeBeforeKickOff:
 		changeModeString = changeModeString + "before_kick_off)"
-	case rcsscommon.PlayOn:
+	case rcsscommon.PlayModePlayOn:
 		changeModeString = changeModeString + "play_on)"
-	case rcsscommon.KickOffR:
+	case rcsscommon.PlayModeKickOffR:
 		changeModeString = changeModeString + "kick_off_r)"
-	case rcsscommon.KickOffL:
+	case rcsscommon.PlayModeKickOffL:
 		changeModeString = changeModeString + "kick_off_l)"
-	case rcsscommon.KickInR:
+	case rcsscommon.PlayModeKickInR:
 		changeModeString = changeModeString + "kick_in_r)"
-	case rcsscommon.KickInL:
+	case rcsscommon.PlayModeKickInL:
 		changeModeString = changeModeString + "kick_in_l)"
-	case rcsscommon.FreeKickR:
+	case rcsscommon.PlayModeFreeKickR:
 		changeModeString = changeModeString + "free_kick_r)"
-	case rcsscommon.FreeKickL:
+	case rcsscommon.PlayModeFreeKickL:
 		changeModeString = changeModeString + "free_kick_l)"
-	case rcsscommon.CornerKickR:
+	case rcsscommon.PlayModeCornerKickR:
 		changeModeString = changeModeString + "corner_kick_r)"
-	case rcsscommon.CornerKickL:
+	case rcsscommon.PlayModeCornerKickL:
 		changeModeString = changeModeString + "corner_kick_l)"
-	case rcsscommon.GoalKickR:
+	case rcsscommon.PlayModeGoalKickR:
 		changeModeString = changeModeString + "goal_kick_r)"
-	case rcsscommon.GoalKickL:
+	case rcsscommon.PlayModeGoalKickL:
 		changeModeString = changeModeString + "goal_kick_l)"
-	case rcsscommon.GoalR:
+	case rcsscommon.PlayModeGoalR:
 		changeModeString = changeModeString + "goal_r)"
-	case rcsscommon.GoalL:
+	case rcsscommon.PlayModeGoalL:
 		changeModeString = changeModeString + "goal_l)"
-	case rcsscommon.DropBall:
+	case rcsscommon.PlayModeDropBall:
 		changeModeString = changeModeString + "drop_ball)"
-	case rcsscommon.OffsideR:
+	case rcsscommon.PlayModeOffsideR:
 		changeModeString = changeModeString + "offside_r)"
-	case rcsscommon.OffsideL:
+	case rcsscommon.PlayModeOffsideL:
 		changeModeString = changeModeString + "offside_l)"
 	}
 

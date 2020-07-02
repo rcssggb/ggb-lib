@@ -8,7 +8,7 @@ import (
 /*
 ChangeMode changes the game mode
 */
-func (c *Client) ChangeMode(mode rcsscommon.ModeID) string {
+func (c *Client) ChangeMode(mode rcsscommon.PlayModeID) string {
 	changeModeString := actions.ChangeMode(mode)
 	c.cmdChannel <- command{
 		cmdString: changeModeString,
