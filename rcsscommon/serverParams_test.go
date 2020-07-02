@@ -1,6 +1,5 @@
 package rcsscommon
 
-// TODO: write tests for serverParams type behavior
 import (
 	"fmt"
 	"testing"

@@ -19,8 +19,6 @@ type GlobalPositions struct {
 type Team map[int]AbsPosition
 
 // AbsPosition defines the generic absolute position coordinates definition
-// TODO: maybe this should be in common and merged with the
-// playerclient parser.SightData definition
 type AbsPosition struct {
 	X           float64
 	Y           float64
