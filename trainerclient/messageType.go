@@ -15,6 +15,7 @@ const (
 	checkBallMsg
 	moveMsg
 	startMsg
+	genericOkMsg
 	recoverMsg
 	errorMsg
 )

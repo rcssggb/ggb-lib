@@ -47,6 +47,8 @@ func (m message) Type() (mType messageType) {
 		mType = teamNamesMsg
 	case strings.HasPrefix(m.data, "(ok check_ball"):
 		mType = checkBallMsg
+	case strings.HasPrefix(m.data, "(ok move"):
+		mType = genericOkMsg
 	default:
 		mType = unsupportedMsg
 	}

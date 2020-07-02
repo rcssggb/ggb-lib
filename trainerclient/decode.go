@@ -14,6 +14,7 @@ func (c *Client) decode() {
 
 	for {
 		m = <-c.recvChannel
+		newTime := -1
 		switch m.Type() {
 		case initMsg:
 			continue
@@ -67,15 +68,21 @@ func (c *Client) decode() {
 			c.lTeamName = lTeam
 			c.rTeamName = rTeam
 		case checkBallMsg:
-			_, ballInfo, err := lexer.CheckBall(m.data)
+			time, ballInfo, err := lexer.CheckBall(m.data)
 			if err != nil {
 				c.errChannel <- err.Error()
 				continue
 			}
+			newTime = time
 			c.ballInfo = ballInfo
+		case genericOkMsg:
+			continue
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue
+		}
+		if newTime != -1 && c.currentTime < newTime {
+			c.currentTime = newTime
 		}
 	}
 }

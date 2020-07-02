@@ -6,6 +6,7 @@ import (
 	"time"
 
 	playerclient "github.com/rcssggb/ggb-lib/playerclient"
+	"github.com/rcssggb/ggb-lib/rcsscommon"
 	trainerclient "github.com/rcssggb/ggb-lib/trainerclient"
 )
 
@@ -30,6 +31,9 @@ func main() {
 
 	time.Sleep(1 * time.Second)
 
+	trainer.Log(trainer.EyeOn())
+	trainer.TeamNames()
+
 	for {
 		currentTime := player.Time()
 		sight := player.See()
@@ -38,7 +42,6 @@ func main() {
 
 		if currentTime == 0 {
 			player.Move(currentTime, -5, 0)
-			trainer.TeamNames()
 		} else if sight.Ball == nil {
 			player.Turn(currentTime, 20)
 		} else if playMode == "kick_off_l" {
@@ -57,14 +60,9 @@ func main() {
 		}
 
 		if currentTime%100 == 0 {
-			if (currentTime/2)%100 == 0 {
-				trainer.Log(trainer.EyeOn())
-			} else {
-				trainer.Log(trainer.EyeOff())
-			}
+			ballPos := rcsscommon.RandomBallPosition()
+			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
 		}
-
-		trainer.Log(trainer.MoveBall(10, 15))
 
 		err = player.Error()
 		for err != nil {
