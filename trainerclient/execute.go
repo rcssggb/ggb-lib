@@ -12,6 +12,7 @@ func (c *Client) execute() {
 	for {
 		cmd = <-c.cmdChannel
 
+		// TODO: maybe this is not really necessary?
 		// Check if command is supposed to be sent in current time
 		if cmd.time < c.currentTime {
 			c.errChannel <- fmt.Sprintf("warning: %s for time %d was too late, discarding", cmd, cmd.time)

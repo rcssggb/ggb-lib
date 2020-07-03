@@ -45,6 +45,7 @@ func (c *Client) move(object string, isBall bool, x, y, dir, dx, dy float64) str
 
 	moveStr := fmt.Sprintf("(move %s %.1f %.1f %.1f %.1f %.1f)", object, x, y, dir, dx, dy)
 	c.cmdChannel <- command{
+		time:      c.currentTime,
 		cmdString: moveStr,
 	}
 	return moveStr

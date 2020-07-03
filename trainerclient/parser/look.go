@@ -5,39 +5,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rcssggb/ggb-lib/trainerclient/lexer"
+	"github.com/rcssggb/ggb-lib/trainerclient/types"
 )
 
-type GlobalPositions struct {
-	Time      int
-	Ball      AbsPosition
-	GoalLeft  AbsPosition
-	GoalRight AbsPosition
-	Teams     map[string]Team
-}
-
-type Team map[int]AbsPosition
-
-// AbsPosition defines the generic absolute position coordinates definition
-type AbsPosition struct {
-	X           float64
-	Y           float64
-	DeltaX      float64
-	DeltaY      float64
-	BodyAngle   float64
-	NeckAngle   float64
-	IsPointing  bool
-	PointingDir float64
-	Action      string
-}
-
 // Look parses global positions info coming from lexer
-func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
-	gp := GlobalPositions{
+func Look(gpSymbols types.GlobalPositionsSymbols, errCh chan string) *types.GlobalPositions {
+	gp := types.GlobalPositions{
 		Time: gpSymbols.Time,
 	}
 
-	gp.Teams = make(map[string]Team)
+	gp.Teams = make(map[string]types.Team)
 
 	for objName, objData := range gpSymbols.Objects {
 		var err error
@@ -64,7 +41,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			continue
 		}
 
-		objPos := AbsPosition{
+		objPos := types.AbsPosition{
 			X:           data[0],
 			Y:           data[1],
 			DeltaX:      data[2],
@@ -122,7 +99,7 @@ func Look(gpSymbols lexer.GlobalPositions, errCh chan string) *GlobalPositions {
 			}
 
 			if gp.Teams[teamName] == nil {
-				gp.Teams[teamName] = make(Team)
+				gp.Teams[teamName] = make(types.Team)
 			}
 
 			gp.Teams[teamName][unum] = objPos

@@ -5,24 +5,26 @@ import (
 	"net"
 
 	"github.com/rcssggb/ggb-lib/rcsscommon"
+	"github.com/rcssggb/ggb-lib/trainerclient/types"
 )
 
 // Client ...
 type Client struct {
-	conn         *net.UDPConn
-	serverAddr   *net.UDPAddr
-	cmdChannel   chan command
-	recvChannel  chan message
-	errChannel   chan string
-	currentTime  int
-	serverParams rcsscommon.ServerParams
-	eyeMode      bool
-	earMode      bool
-	playerTypes  map[int64]rcsscommon.PlayerType
-	lTeamName    string
-	rTeamName    string
-	playMode     string
-	ballInfo     string
+	conn            *net.UDPConn
+	serverAddr      *net.UDPAddr
+	cmdChannel      chan command
+	recvChannel     chan message
+	errChannel      chan string
+	currentTime     int
+	serverParams    rcsscommon.ServerParams
+	globalPositions types.GlobalPositions
+	eyeMode         bool
+	earMode         bool
+	playerTypes     map[int64]rcsscommon.PlayerType
+	lTeamName       string
+	rTeamName       string
+	playMode        string
+	ballInfo        string
 }
 
 // NewTrainerClient is the constructor for the trainerclient.Client object

@@ -3,6 +3,8 @@ package lexer
 import (
 	"reflect"
 	"testing"
+
+	"github.com/rcssggb/ggb-lib/trainerclient/types"
 )
 
 func TestSeeGlobal38(t *testing.T) {
@@ -14,7 +16,7 @@ func TestSeeGlobal38(t *testing.T) {
 		t.FailNow()
 	}
 
-	expectedGPos := GlobalPositions{
+	expectedGPos := types.GlobalPositionsSymbols{
 		Time: 38,
 		Objects: map[string][]string{
 			"g r":                  {"52.5", "0"},
@@ -38,7 +40,7 @@ func TestOkLook100(t *testing.T) {
 		t.FailNow()
 	}
 
-	expectedGPos := GlobalPositions{
+	expectedGPos := types.GlobalPositionsSymbols{
 		Time: 100,
 		Objects: map[string][]string{
 			"g r":                  {"52.5", "0"},
@@ -62,7 +64,7 @@ func TestSeeGlobal13K(t *testing.T) {
 		t.FailNow()
 	}
 
-	expectedGPos := GlobalPositions{
+	expectedGPos := types.GlobalPositionsSymbols{
 		Time: 13,
 		Objects: map[string][]string{
 			"g r":                  {"52.5", "0"},

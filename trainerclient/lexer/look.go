@@ -4,16 +4,12 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/rcssggb/ggb-lib/trainerclient/types"
 )
 
-// GlobalPositions contains
-type GlobalPositions struct {
-	Time    int
-	Objects map[string][]string
-}
-
 // Look parses (see_global ... and (ok look ...
-func Look(m string) (data *GlobalPositions, err error) {
+func Look(m string) (data *types.GlobalPositionsSymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(see_global ")
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(ok look ")
@@ -31,7 +27,7 @@ func Look(m string) (data *GlobalPositions, err error) {
 		return
 	}
 
-	data = &GlobalPositions{
+	data = &types.GlobalPositionsSymbols{
 		Time:    int(time),
 		Objects: make(map[string][]string),
 	}

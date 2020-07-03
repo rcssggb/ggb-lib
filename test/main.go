@@ -33,30 +33,25 @@ func main() {
 
 	trainer.Log(trainer.EyeOn())
 	trainer.TeamNames()
+	trainer.MovePlayer("ggb-lib-test", 1, -5, 0, 0, 0, 0)
+	trainer.Start()
 
 	for {
 		currentTime := player.Time()
 		sight := player.See()
 		body := player.SenseBody()
-		playMode := player.PlayMode()
 
-		if currentTime == 0 {
-			player.Move(currentTime, -5, 0)
-		} else if sight.Ball == nil {
-			player.Turn(currentTime, 20)
-		} else if playMode == "kick_off_l" {
+		if sight.Ball == nil {
+			player.Turn(currentTime, 30)
+		} else {
 			ballAngle := sight.Ball.Direction + body.HeadAngle
 			ballDist := sight.Ball.Distance
 			if ballDist < 0.7 {
 				player.Kick(currentTime, 20, 0)
 			} else {
-				player.Dash(currentTime, 50, ballAngle)
+				player.Dash(currentTime, 70, ballAngle)
 				player.TurnNeck(currentTime, sight.Ball.Direction)
 			}
-		} else {
-			ballAngle := sight.Ball.Direction + body.HeadAngle
-			player.Dash(currentTime, 50, ballAngle-85)
-			player.TurnNeck(currentTime, sight.Ball.Direction)
 		}
 
 		if currentTime%100 == 0 {

@@ -14,7 +14,6 @@ func (c *Client) decode() {
 
 	for {
 		m = <-c.recvChannel
-		newTime := -1
 		switch m.Type() {
 		case initMsg:
 			continue
@@ -30,10 +29,11 @@ func (c *Client) decode() {
 				c.errChannel <- fmt.Sprintf("failed to parse global positions: %s", err)
 				continue
 			}
-
-			// TODO: copy gPos to Client properly
-			// gPos := parser.Look(*gPosSym, c.errChannel)
-			_ = parser.Look(*gPosSym, c.errChannel)
+			gPos := parser.Look(*gPosSym, c.errChannel)
+			if c.currentTime <= gPos.Time {
+				c.globalPositions = *gPos
+				c.currentTime = gPos.Time
+			}
 		case serverParamMsg:
 			c.serverParams.Parse(m.data, c.errChannel)
 		case playerTypeMsg:
@@ -73,16 +73,15 @@ func (c *Client) decode() {
 				c.errChannel <- err.Error()
 				continue
 			}
-			newTime = time
-			c.ballInfo = ballInfo
+			if c.currentTime <= time {
+				c.ballInfo = ballInfo
+				c.currentTime = time
+			}
 		case genericOkMsg:
 			continue
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
 			continue
-		}
-		if newTime != -1 && c.currentTime < newTime {
-			c.currentTime = newTime
 		}
 	}
 }
