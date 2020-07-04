@@ -7,6 +7,7 @@ goals, the ball and all active players
 func (c *Client) Look() string {
 	lookStr := "(look)"
 	c.cmdChannel <- command{
+		time:      c.currentTime,
 		cmdString: lookStr,
 	}
 	return lookStr

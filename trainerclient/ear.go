@@ -20,6 +20,7 @@ func (c *Client) EarOff() string {
 func (c *Client) ear(mode string) string {
 	earStr := fmt.Sprintf("(ear %s)", mode)
 	c.cmdChannel <- command{
+		time:      c.currentTime,
 		cmdString: earStr,
 	}
 	return earStr

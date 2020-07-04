@@ -23,6 +23,7 @@ func (c *Client) EyeOff() string {
 func (c *Client) eye(mode string) string {
 	eyeStr := fmt.Sprintf("(eye %s)", mode)
 	c.cmdChannel <- command{
+		time:      c.currentTime,
 		cmdString: eyeStr,
 	}
 	return eyeStr
