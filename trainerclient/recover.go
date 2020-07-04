@@ -6,9 +6,6 @@ at the beggining of the game
 */
 func (c *Client) Recover() string {
 	recoverString := "(recover)"
-	c.cmdChannel <- command{
-		time:      c.currentTime,
-		cmdString: recoverString,
-	}
+	c.cmdChannel <- recoverString
 	return recoverString
 }

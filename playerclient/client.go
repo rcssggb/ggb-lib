@@ -14,7 +14,7 @@ import (
 type Client struct {
 	conn         *net.UDPConn
 	serverAddr   *net.UDPAddr
-	cmdChannel   chan command
+	cmdChannel   chan string
 	recvChannel  chan message
 	errChannel   chan string
 	currentTime  int
@@ -33,7 +33,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	// Instantiate new Player struct
 	client := &Client{}
 	client.teamName = teamName
-	client.cmdChannel = make(chan command, 32)
+	client.cmdChannel = make(chan string, 32)
 	client.recvChannel = make(chan message, 32)
 	client.errChannel = make(chan string, 32)
 	client.playerTypes = make(map[int64]rcsscommon.PlayerType)

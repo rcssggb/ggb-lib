@@ -48,6 +48,8 @@ func (m message) Type() (mType messageType) {
 	case strings.HasPrefix(m.data, "(ok check_ball"):
 		mType = checkBallMsg
 	case strings.HasPrefix(m.data, "(ok move"):
+		fallthrough
+	case strings.HasPrefix(m.data, "(ok start"):
 		mType = genericOkMsg
 	default:
 		mType = unsupportedMsg

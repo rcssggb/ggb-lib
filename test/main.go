@@ -42,19 +42,19 @@ func main() {
 		body := player.SenseBody()
 
 		if sight.Ball == nil {
-			player.Turn(currentTime, 30)
+			player.Turn(30)
 		} else {
 			ballAngle := sight.Ball.Direction + body.HeadAngle
 			ballDist := sight.Ball.Distance
 			if ballDist < 0.7 {
-				player.Kick(currentTime, 20, 0)
+				player.Kick(20, 0)
 			} else {
-				player.Dash(currentTime, 70, ballAngle)
-				player.TurnNeck(currentTime, sight.Ball.Direction)
+				player.Dash(60, ballAngle)
+				player.TurnNeck(sight.Ball.Direction)
 			}
 		}
 
-		if currentTime%100 == 0 {
+		if (currentTime+1)%300 == 0 {
 			ballPos := rcsscommon.RandomBallPosition()
 			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
 		}
