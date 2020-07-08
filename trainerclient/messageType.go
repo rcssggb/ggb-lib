@@ -13,9 +13,11 @@ const (
 	earMsg
 	teamNamesMsg
 	checkBallMsg
+	changePlayerTypeMsg
 	moveMsg
 	startMsg
 	genericOkMsg
 	recoverMsg
 	errorMsg
+	warningMsg
 )

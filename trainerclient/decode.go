@@ -43,6 +43,8 @@ func (c *Client) decode() {
 			}
 		case errorMsg:
 			c.errChannel <- m.String()
+		case warningMsg:
+			c.errChannel <- m.String()
 		case eyeMsg:
 			if m.data == "(ok eye on)\x00" {
 				c.eyeMode = true
@@ -76,6 +78,12 @@ func (c *Client) decode() {
 			if c.currentTime <= time {
 				c.ballInfo = ballInfo
 				c.currentTime = time
+			}
+		case changePlayerTypeMsg:
+			_, _, _, err := lexer.ChangePlayerType(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
 			}
 		case genericOkMsg:
 			continue

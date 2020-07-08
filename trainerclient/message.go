@@ -35,6 +35,8 @@ func (m message) Type() (mType messageType) {
 		fallthrough
 	case strings.HasPrefix(m.data, "(error "):
 		mType = errorMsg
+	case strings.HasPrefix(m.data, "(warning "):
+		mType = warningMsg
 	case strings.HasPrefix(m.data, "(ok look"):
 		fallthrough
 	case strings.HasPrefix(m.data, "(see_global"):
@@ -47,6 +49,8 @@ func (m message) Type() (mType messageType) {
 		mType = teamNamesMsg
 	case strings.HasPrefix(m.data, "(ok check_ball"):
 		mType = checkBallMsg
+	case strings.HasPrefix(m.data, "(ok change_player_type"):
+		mType = changePlayerTypeMsg
 	case strings.HasPrefix(m.data, "(ok move"):
 		fallthrough
 	case strings.HasPrefix(m.data, "(ok start"):
