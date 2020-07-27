@@ -60,9 +60,7 @@ func Sight(m string) (data *SightSymbols, err error) {
 
 		splitParam := strings.Split(params, " ")
 
-		if len(splitParam) != 2 &&
-			len(splitParam) != 4 &&
-			len(splitParam) != 6 {
+		if len(splitParam) > 7 {
 			err = fmt.Errorf("invalid number of sight values in object %s seen in %s", objName, m)
 			return
 		}

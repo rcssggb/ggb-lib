@@ -75,7 +75,7 @@ func TestSightShort(t *testing.T) {
 	}
 
 	expectedPlayers := PlayerArray{
-		PlayerData{
+		{
 			Team:       "HELIOS_B",
 			Unum:       10,
 			Distance:   7.4,
@@ -83,7 +83,7 @@ func TestSightShort(t *testing.T) {
 			DistChange: -0.148,
 			DirChange:  -1.8,
 			BodyDir:    167,
-			HeadDir:    -153,
+			NeckDir:    -153,
 		},
 	}
 
@@ -314,7 +314,7 @@ func TestSightWithBall(t *testing.T) {
 			DistChange: -0,
 			DirChange:  1.4,
 			BodyDir:    -52,
-			HeadDir:    38,
+			NeckDir:    38,
 		},
 		{
 			Team:       "HELIOS_B",
@@ -324,7 +324,7 @@ func TestSightWithBall(t *testing.T) {
 			DistChange: 0,
 			DirChange:  1,
 			BodyDir:    -53,
-			HeadDir:    -113,
+			NeckDir:    -113,
 		},
 		{
 			Team:       "HELIOS_B",
@@ -334,7 +334,7 @@ func TestSightWithBall(t *testing.T) {
 			DistChange: 0.402,
 			DirChange:  0.5,
 			BodyDir:    -35,
-			HeadDir:    50,
+			NeckDir:    50,
 		},
 		{
 			Team:       "HELIOS_B",
@@ -344,7 +344,7 @@ func TestSightWithBall(t *testing.T) {
 			DistChange: 0,
 			DirChange:  0.2,
 			BodyDir:    -52,
-			HeadDir:    -122,
+			NeckDir:    -122,
 		},
 		{
 			Team:      "HELIOS_B",

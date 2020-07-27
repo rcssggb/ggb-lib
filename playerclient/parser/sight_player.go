@@ -7,24 +7,11 @@ import (
 	"strings"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
+	"github.com/rcssggb/ggb-lib/playerclient/types"
 )
 
-// PlayerArray is an array of PlayerData
-type PlayerArray []PlayerData
-
-// PlayerData contains data about seen players.
-// Team == "" means you don't know the player's team.
-// Unum == -1 means you don't know the player's shirt num.
-type PlayerData struct {
-	Team       string
-	Unum       int
-	Distance   float64
-	Direction  float64
-	DistChange float64
-	DirChange  float64
-	BodyDir    float64
-	HeadDir    float64
-}
+// PlayerArray is an array of types.PlayerPosition
+type PlayerArray []types.PlayerPosition
 
 func parsePlayers(playersSymbols lexer.SightPlayersSymbols, errCh chan string) (players PlayerArray) {
 	// Add known players to player array
@@ -43,125 +30,80 @@ func parsePlayers(playersSymbols lexer.SightPlayersSymbols, errCh chan string) (
 			continue
 		}
 
-		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
+		ppos, err := parsePlayerVals(pData)
 		if err != nil {
 			errCh <- fmt.Sprintf("unable to parse sight data for seen player %s: %s", pName, err)
 			continue
 		}
 
-		players = append(players, PlayerData{
-			Team:       teamName,
-			Unum:       int(unum),
-			Distance:   dist,
-			Direction:  dir,
-			DistChange: distChange,
-			DirChange:  dirChange,
-			BodyDir:    bodyDir,
-			HeadDir:    headDir,
-		})
+		ppos.Team = teamName
+		ppos.Unum = int(unum)
+
+		players = append(players, ppos)
 	}
 
 	// Add known team players to player array
 	for teamName, pList := range playersSymbols.KnownTeam {
 		teamName = strings.ReplaceAll(teamName, "\"", "")
 		for _, pData := range pList {
-			dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
+			ppos, err := parsePlayerVals(pData)
 			if err != nil {
 				errCh <- fmt.Sprintf("unable to parse sight data for seen player of team %s: %s", teamName, err)
 				continue
 			}
 
-			players = append(players, PlayerData{
-				Team:       teamName,
-				Distance:   dist,
-				Direction:  dir,
-				DistChange: distChange,
-				DirChange:  dirChange,
-				BodyDir:    bodyDir,
-				HeadDir:    headDir,
-			})
+			ppos.Team = teamName
+
+			players = append(players, ppos)
 		}
 	}
 
 	// Add unknown players to player array
 	for _, pData := range playersSymbols.Unknown {
-		dist, dir, distChange, dirChange, bodyDir, headDir, err := parsePlayerVals(pData)
+		ppos, err := parsePlayerVals(pData)
 		if err != nil {
 			errCh <- fmt.Sprintf("unable to parse sight data for seen player: %s", err)
 			continue
 		}
 
-		players = append(players, PlayerData{
-			Distance:   dist,
-			Direction:  dir,
-			DistChange: distChange,
-			DirChange:  dirChange,
-			BodyDir:    bodyDir,
-			HeadDir:    headDir,
-		})
+		players = append(players, ppos)
 	}
 
 	return
 }
 
-func parsePlayerVals(data []string) (dist, dir, distChange, dirChange, bodyDir, headDir float64, err error) {
-	if len(data) < 2 {
-		err = fmt.Errorf("too few values in player data, got: %s", strings.Join(data, " "))
-		return
-	}
-
-	distStr := data[0]
-	dist, err = strconv.ParseFloat(distStr, 64)
-	if err != nil {
-		err = fmt.Errorf("unable to parse float \"%s\": %s", distStr, err)
-		return
-	}
-
-	dirStr := data[1]
-	dir, err = strconv.ParseFloat(dirStr, 64)
-	if err != nil {
-		err = fmt.Errorf("unable to parse float \"%s\": %s", dirStr, err)
-		return
-	}
-
-	// If player polar velocities were measured
-	if len(data) >= 4 {
-		distChngStr := data[2]
-		distChange, err = strconv.ParseFloat(distChngStr, 64)
-		if err != nil {
-			err = fmt.Errorf("unable to parse float \"%s\": %s", distChngStr, err)
-			return
-		}
-
-		dirChngStr := data[3]
-		dirChange, err = strconv.ParseFloat(dirChngStr, 64)
-		if err != nil {
-			err = fmt.Errorf("unable to parse float \"%s\": %s", dirChngStr, err)
-			return
-		}
-
-		// If player facing was measured, parse it
-		if len(data) >= 6 {
-			bodyDirStr := data[4]
-			bodyDir, err = strconv.ParseFloat(bodyDirStr, 64)
+func parsePlayerVals(vals []string) (ppos types.PlayerPosition, err error) {
+	data := make([]float64, 7)
+	isPointing := false
+	var actionData string
+	for idx, val := range vals {
+		if val != "k" && val != "t" {
+			data[idx], err = strconv.ParseFloat(val, 64)
 			if err != nil {
-				err = fmt.Errorf("unable to parse float \"%s\": %s", bodyDirStr, err)
-				return
+				break
 			}
-
-			headDirStr := data[5]
-			headDir, err = strconv.ParseFloat(headDirStr, 64)
-			if err != nil {
-				err = fmt.Errorf("unable to parse float \"%s\": %s", headDirStr, err)
-				return
+			if idx == 6 {
+				isPointing = true // it's better to use a "p" marker in action if pointing and kicking at the same time is not allowed
 			}
 		} else {
-			// If player facing was not measured, assume he is facing towards it's velocity
-			dirChngRad := 3.14159 * dirChange / 180.0
-			tanVel := dist * dirChngRad
-			bodyDir = 180.0 * math.Atan2(tanVel, distChange) / 3.14159
-			headDir = bodyDir
+			actionData = val
 		}
+	}
+	if err != nil {
+		err = fmt.Errorf("error parsing float64 val: %s", err)
+		return
+	}
+
+	ppos = types.PlayerPosition{
+		Distance:    data[0],
+		Direction:   data[1],
+		DistChange:  data[2],
+		DirChange:   data[3],
+		BodyDir:     data[4],
+		NeckDir:     data[5],
+		IsPointing:  isPointing,
+		PointingDir: data[6],
+		Action:      actionData,
 	}
 
 	return
