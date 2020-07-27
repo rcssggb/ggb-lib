@@ -19,9 +19,14 @@ func main() {
 
 	hostName := "rcssserver"
 
-	player, err := playerclient.NewPlayerClient("ggb-lib-test", hostName)
-	if err != nil {
-		log.Fatalln(err)
+	players := map[int]*playerclient.Client{}
+
+	for i := 0; i < 11; i++ {
+		p, err := playerclient.NewPlayerClient("ggb-lib-test", hostName)
+		players[i] = p
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	trainer, err := trainerclient.NewTrainerClient(hostName)
@@ -29,40 +34,42 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	trainer.Log(trainer.EyeOn())
 	trainer.TeamNames()
-	trainer.MovePlayer("ggb-lib-test", 1, -5, 0, 0, 0, 0)
 	trainer.Start()
 
 	for {
-		currentTime := player.Time()
-		sight := player.See()
-		body := player.SenseBody()
+		for i := 0; i < 11; i++ {
+			player := players[i]
+			sight := player.See()
+			body := player.SenseBody()
 
-		if sight.Ball == nil {
-			player.Turn(30)
-		} else {
-			ballAngle := sight.Ball.Direction + body.HeadAngle
-			ballDist := sight.Ball.Distance
-			if ballDist < 0.7 {
-				player.Kick(20, 0)
+			if sight.Ball == nil {
+				player.Turn(30)
 			} else {
-				player.Dash(60, ballAngle)
-				player.TurnNeck(sight.Ball.Direction)
+				ballAngle := sight.Ball.Direction + body.HeadAngle
+				ballDist := sight.Ball.Distance
+				if ballDist < 0.7 {
+					player.Kick(20, 0)
+				} else {
+					player.Dash(50, ballAngle)
+					player.TurnNeck(sight.Ball.Direction)
+				}
+			}
+
+			err = player.Error()
+			for err != nil {
+				player.Log(err)
+				err = player.Error()
 			}
 		}
 
+		currentTime := trainer.Time()
 		if (currentTime+1)%300 == 0 {
 			ballPos := rcsscommon.RandomBallPosition()
 			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
-		}
-
-		err = player.Error()
-		for err != nil {
-			player.Log(err)
-			err = player.Error()
 		}
 
 		err = trainer.Error()
@@ -71,6 +78,6 @@ func main() {
 			err = trainer.Error()
 		}
 
-		player.WaitNextStep(currentTime)
+		trainer.WaitNextStep(currentTime)
 	}
 }
