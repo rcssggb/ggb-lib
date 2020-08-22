@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// ServerParams is an object containing all supported server parameters.
+// ServerParams is an object containing all server.conf parameters.
 type ServerParams struct {
 	// TODO: explain each server param behavior
 	AudioCutDist              float64
