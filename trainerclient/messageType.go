@@ -7,6 +7,7 @@ const (
 	unsupportedMsg messageType = iota + 0
 	initMsg
 	serverParamMsg
+	playerParamMsg
 	playerTypeMsg
 	lookMsg
 	eyeMsg

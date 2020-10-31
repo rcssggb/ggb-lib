@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-// SightSymbols contains
 type SightSymbols struct {
 	Time    int
 	ObjMap  map[string][]string
@@ -29,6 +28,9 @@ func Sight(m string) (data *SightSymbols, err error) {
 	if timeEnd == -1 {
 		// If player sees nothing, message will be `(see <time>)`
 		timeEnd = strings.Index(trimmedMsg, ")")
+	}
+	if timeEnd >= len(trimmedMsg) || timeEnd < 0 {
+		err = fmt.Errorf("bounds out of range for message: %s", m)
 	}
 	timeStr := string(trimmedMsg[0:timeEnd])
 	time, err := strconv.ParseInt(timeStr, 10, 64)

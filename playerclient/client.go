@@ -19,6 +19,7 @@ type Client struct {
 	errChannel   chan string
 	currentTime  int
 	serverParams rcsscommon.ServerParams
+	playerParams rcsscommon.PlayerParams
 	playerTypes  map[int64]rcsscommon.PlayerType
 	sightData    parser.SightData
 	bodyData     parser.SenseBodyData
@@ -39,6 +40,7 @@ func NewPlayerClient(teamName, serverIP string) (*Client, error) {
 	client.playerTypes = make(map[int64]rcsscommon.PlayerType)
 	client.currentTime = 0
 	client.serverParams = rcsscommon.DefaultServerParams()
+	client.playerParams = rcsscommon.DefaultPlayerParams()
 
 	// Open listener socker to request player connection
 	serverHost := serverIP + ":6000"

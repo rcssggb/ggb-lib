@@ -36,6 +36,8 @@ func (c *Client) decode() {
 			}
 		case serverParamMsg:
 			c.serverParams.Parse(m.data, c.errChannel)
+		case playerParamMsg:
+			c.playerParams.Parse(m.data, c.errChannel)
 		case playerTypeMsg:
 			pType := rcsscommon.ParsePlayerType(m.data, c.errChannel)
 			if pType.ID != -1 {
