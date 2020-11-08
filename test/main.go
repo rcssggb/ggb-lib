@@ -19,11 +19,21 @@ func main() {
 
 	hostName := "rcssserver"
 
-	players := map[int]*playerclient.Client{}
+	playersA := map[int]*playerclient.Client{}
 
 	for i := 0; i < 11; i++ {
-		p, err := playerclient.NewPlayerClient("ggb-lib-test", hostName)
-		players[i] = p
+		p, err := playerclient.NewPlayerClient("ggb-lib-A", hostName)
+		playersA[i] = p
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+
+	playersB := map[int]*playerclient.Client{}
+
+	for i := 0; i < 11; i++ {
+		p, err := playerclient.NewPlayerClient("ggb-lib-B", hostName)
+		playersB[i] = p
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -42,7 +52,32 @@ func main() {
 
 	for {
 		for i := 0; i < 11; i++ {
-			player := players[i]
+			player := playersA[i]
+			sight := player.See()
+			body := player.SenseBody()
+
+			if sight.Ball == nil {
+				player.Turn(30)
+			} else {
+				ballAngle := sight.Ball.Direction + body.HeadAngle
+				ballDist := sight.Ball.Distance
+				if ballDist < 0.7 {
+					player.Kick(20, 0)
+				} else {
+					player.Dash(50, ballAngle)
+					player.TurnNeck(sight.Ball.Direction)
+				}
+			}
+
+			err = player.Error()
+			for err != nil {
+				player.Log(err)
+				err = player.Error()
+			}
+		}
+
+		for i := 0; i < 11; i++ {
+			player := playersB[i]
 			sight := player.See()
 			body := player.SenseBody()
 
