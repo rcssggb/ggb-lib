@@ -22,7 +22,7 @@ type SightPlayersSymbols struct {
 func Sight(m string) (data *SightSymbols, err error) {
 	trimmedMsg := m
 	trimmedMsg = strings.TrimPrefix(trimmedMsg, "(see ")
-	trimmedMsg = strings.TrimSuffix(trimmedMsg, ")\x00")
+	trimmedMsg = strings.TrimSuffix(trimmedMsg, "\x00")
 
 	timeEnd := strings.Index(trimmedMsg, " ")
 	if timeEnd == -1 {
@@ -30,7 +30,9 @@ func Sight(m string) (data *SightSymbols, err error) {
 		timeEnd = strings.Index(trimmedMsg, ")")
 	}
 	if timeEnd >= len(trimmedMsg) || timeEnd < 0 {
+		// code should never reach these lines
 		err = fmt.Errorf("bounds out of range for message: %s", m)
+		return
 	}
 	timeStr := string(trimmedMsg[0:timeEnd])
 	time, err := strconv.ParseInt(timeStr, 10, 64)

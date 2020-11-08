@@ -5,6 +5,36 @@ import (
 	"testing"
 )
 
+func TestSightVeryShort(t *testing.T) {
+	sightData, err := Sight("(see 29)\x00")
+	if err != nil {
+		t.Fail()
+	}
+	if sightData == nil {
+		t.FailNow()
+	}
+
+	if sightData.Time != 29 {
+		t.Fail()
+	}
+
+	correctObjData := map[string][]string{}
+
+	if !reflect.DeepEqual(correctObjData, sightData.ObjMap) {
+		t.Fail()
+	}
+
+	correctPlayersData := SightPlayersSymbols{
+		Known:     map[string][]string{},
+		KnownTeam: map[string][][]string{},
+		Unknown:   [][]string{},
+	}
+
+	if !reflect.DeepEqual(correctPlayersData, sightData.Players) {
+		t.Fail()
+	}
+}
+
 func TestSightShort(t *testing.T) {
 	sightData, err := Sight("(see 37 ((f c b) 16.6 -1 -0 -0.8) ((f b 0) 21.5 2 -0 -0.6) ((f b r 10) 25 -21 -0 -0.6) ((f b l 10) 22.2 28) ((p \"HELIOS_B\" 10) 7.4 1 -0.148 -1.8 167 -153) ((l b) 16.6 -79))\x00")
 	if err != nil {
