@@ -13,4 +13,5 @@ const (
 	playerTypeMsg
 	playerParamMsg
 	serverParamMsg
+	changePlayerTypeMsg
 )

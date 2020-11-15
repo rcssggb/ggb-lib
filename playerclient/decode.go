@@ -58,6 +58,7 @@ func (c *Client) decode() {
 			hearSyms, err := lexer.Hear(m.data)
 			if err != nil {
 				c.errChannel <- err.Error()
+				continue
 			}
 
 			if hearSyms.Time >= c.currentTime {
@@ -73,6 +74,15 @@ func (c *Client) decode() {
 			pType := rcsscommon.ParsePlayerType(m.data, c.errChannel)
 			if pType.ID != -1 {
 				c.playerTypes[pType.ID] = pType
+			}
+		case changePlayerTypeMsg:
+			cptData, err := parser.ChangePlayerType(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+			if cptData.PlayerType != -1 {
+				c.teammateTypes[cptData.Unum] = cptData.PlayerType
 			}
 		case errorMsg:
 			c.errChannel <- m.String()

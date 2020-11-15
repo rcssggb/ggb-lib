@@ -2,6 +2,7 @@ package playerclient
 
 import (
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
+	"github.com/rcssggb/ggb-lib/playerclient/types"
 	"github.com/rcssggb/ggb-lib/rcsscommon"
 )
 
@@ -43,4 +44,14 @@ func (c *Client) Time() int {
 // ServerParams returns rcssserver params object
 func (c *Client) ServerParams() rcsscommon.ServerParams {
 	return c.serverParams
+}
+
+// PlayerParams returns player params object
+func (c *Client) PlayerParams() rcsscommon.PlayerParams {
+	return c.playerParams
+}
+
+// TeammateTypes returns teammateTypes map
+func (c *Client) TeammateTypes() types.TeammateTypes {
+	return c.teammateTypes
 }
