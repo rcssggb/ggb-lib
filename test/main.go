@@ -50,62 +50,22 @@ func main() {
 	trainer.TeamNames()
 	trainer.Start()
 
+	for i := 0; i < 11; i++ {
+		p := playersL[i]
+		go player(p)
+		p = playersR[i]
+		go player(p)
+	}
+
+	serverParams := trainer.ServerParams()
 	for {
-		for i := 0; i < 11; i++ {
-			player := playersL[i]
-			sight := player.See()
-			body := player.SenseBody()
-
-			if sight.Ball == nil {
-				player.Turn(30)
-			} else {
-				ballAngle := sight.Ball.Direction + body.HeadAngle
-				ballDist := sight.Ball.Distance
-				if ballDist < 0.7 {
-					player.Kick(20, 0)
-				} else {
-					player.Dash(50, ballAngle)
-					player.TurnNeck(sight.Ball.Direction)
-				}
-			}
-
-			err = player.Error()
-			for err != nil {
-				player.Log(err)
-				err = player.Error()
-			}
-		}
-
-		for i := 0; i < 11; i++ {
-			player := playersR[i]
-			sight := player.See()
-			body := player.SenseBody()
-
-			if sight.Ball == nil {
-				player.Turn(30)
-			} else {
-				ballAngle := sight.Ball.Direction + body.HeadAngle
-				ballDist := sight.Ball.Distance
-				if ballDist < 0.7 {
-					player.Kick(20, 0)
-				} else {
-					player.Dash(50, ballAngle)
-					player.TurnNeck(sight.Ball.Direction)
-				}
-			}
-
-			err = player.Error()
-			for err != nil {
-				player.Log(err)
-				err = player.Error()
-			}
-		}
-
 		currentTime := trainer.Time()
 		if (currentTime+1)%300 == 0 {
 			ballPos := rcsscommon.RandomBallPosition()
 			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
 		}
+
+		trainer.EyeOff()
 
 		err = trainer.Error()
 		for err != nil {
@@ -113,6 +73,46 @@ func main() {
 			err = trainer.Error()
 		}
 
-		trainer.WaitNextStep(currentTime)
+		if serverParams.SynchMode {
+			trainer.DoneSynch()
+			trainer.WaitSynch()
+		} else {
+			trainer.WaitNextStep(currentTime)
+		}
+	}
+}
+
+func player(c *playerclient.Client) {
+	serverParams := c.ServerParams()
+	for {
+		sight := c.See()
+		body := c.SenseBody()
+		currentTime := c.Time()
+
+		if sight.Ball == nil {
+			c.Turn(30)
+		} else {
+			ballAngle := sight.Ball.Direction + body.HeadAngle
+			ballDist := sight.Ball.Distance
+			if ballDist < 0.7 {
+				c.Kick(20, 0)
+			} else {
+				c.Dash(50, ballAngle)
+				c.TurnNeck(sight.Ball.Direction)
+			}
+		}
+
+		err := c.Error()
+		for err != nil {
+			c.Log(err)
+			err = c.Error()
+		}
+
+		if serverParams.SynchMode {
+			c.DoneSynch()
+			c.WaitSynch()
+		} else {
+			c.WaitNextStep(currentTime)
+		}
 	}
 }

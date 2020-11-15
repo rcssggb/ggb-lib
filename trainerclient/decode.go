@@ -15,6 +15,8 @@ func (c *Client) decode() {
 	for {
 		m = <-c.recvChannel
 		switch m.Type() {
+		case thinkMsg:
+			c.thinkChan <- struct{}{}
 		case initMsg:
 			continue
 		case startMsg:

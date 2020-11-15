@@ -39,6 +39,8 @@ func (m message) Type() (mType messageType) {
 		mType = playerParamMsg
 	case strings.HasPrefix(m.data, "(change_player_type "):
 		mType = changePlayerTypeMsg
+	case strings.HasPrefix(m.data, "(think)"):
+		mType = thinkMsg
 	// Unsupported msgs below
 	case strings.HasPrefix(m.data, "(score "):
 		mType = unsupportedMsg

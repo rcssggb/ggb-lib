@@ -21,4 +21,5 @@ const (
 	recoverMsg
 	errorMsg
 	warningMsg
+	thinkMsg
 )

@@ -2,7 +2,7 @@ package playerclient
 
 import "time"
 
-// WaitNextStep blocks until next step simulation.
+// WaitNextStep blocks until currentStep step simulation argument is passed.
 // TODO: make it asynchronous using go channels or semaphores
 func (c *Client) WaitNextStep(currentStep int) {
 	for c.currentTime <= currentStep {

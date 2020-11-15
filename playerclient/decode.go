@@ -84,6 +84,8 @@ func (c *Client) decode() {
 			if cptData.PlayerType != -1 {
 				c.teammateTypes[cptData.Unum] = cptData.PlayerType
 			}
+		case thinkMsg:
+			c.thinkChan <- struct{}{}
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:
