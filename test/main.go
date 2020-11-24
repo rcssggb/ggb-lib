@@ -61,7 +61,7 @@ func main() {
 		currentTime := trainer.Time()
 		if (currentTime+1)%300 == 0 {
 			ballPos := rcsscommon.RandomBallPosition()
-			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
+			trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0)
 		}
 
 		if trainer.PlayMode() == "before_kick_off" {
@@ -69,8 +69,7 @@ func main() {
 		}
 
 		if trainer.PlayMode() == "time_over" {
-			trainer.Recover()
-			trainer.Start()
+			break
 		}
 
 		err = trainer.Error()
@@ -86,6 +85,8 @@ func main() {
 			trainer.WaitNextStep(currentTime)
 		}
 	}
+
+	time.Sleep(2 * time.Second)
 }
 
 func player(c *playerclient.Client) {
@@ -95,6 +96,11 @@ func player(c *playerclient.Client) {
 		sight := c.See()
 		body := c.SenseBody()
 		currentTime := c.Time()
+
+		if c.PlayMode() == "time_over" {
+			c.Bye()
+			break
+		}
 
 		if sight.Ball == nil {
 			c.Turn(30)
