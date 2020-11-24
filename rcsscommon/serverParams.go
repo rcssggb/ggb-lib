@@ -121,7 +121,7 @@ type ServerParams struct {
 	OffsideActiveAreaSize     float64
 	OffsideKickMargin         float64
 	OnlineCoachPort           int64
-	OldCoachHear              int64
+	OldCoachHear              bool
 	PenAllowMultKicks         bool
 	PenBeforeSetupWait        int64
 	PenCoachMovesPlayers      bool
@@ -322,7 +322,7 @@ func DefaultServerParams() ServerParams {
 		OffsideActiveAreaSize:     2.5,
 		OffsideKickMargin:         9.15,
 		OnlineCoachPort:           6002,
-		OldCoachHear:              0,
+		OldCoachHear:              false,
 		PenAllowMultKicks:         true,
 		PenBeforeSetupWait:        10,
 		PenCoachMovesPlayers:      true,
@@ -656,7 +656,7 @@ func (sp *ServerParams) Parse(m string, errCh chan string) {
 		case "olcoach_port":
 			sp.OnlineCoachPort, err = strconv.ParseInt(paramVal, 10, 64)
 		case "old_coach_hear":
-			sp.OldCoachHear, err = strconv.ParseInt(paramVal, 10, 64)
+			sp.OldCoachHear, err = strconv.ParseBool(paramVal)
 		case "pen_allow_mult_kicks":
 			sp.PenAllowMultKicks, err = strconv.ParseBool(paramVal)
 		case "pen_before_setup_wait":
