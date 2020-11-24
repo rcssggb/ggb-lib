@@ -22,4 +22,5 @@ const (
 	errorMsg
 	warningMsg
 	thinkMsg
+	hearMsg
 )

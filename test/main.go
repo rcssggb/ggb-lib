@@ -43,12 +43,10 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	trainer.EarOn()
+	trainer.EyeOn()
 
-	time.Sleep(2 * time.Second)
-
-	trainer.Log(trainer.EyeOn())
-	trainer.TeamNames()
-	trainer.Start()
+	time.Sleep(1 * time.Second)
 
 	for i := 0; i < 11; i++ {
 		p := playersL[i]
@@ -57,6 +55,7 @@ func main() {
 		go player(p)
 	}
 
+	trainer.TeamNames()
 	serverParams := trainer.ServerParams()
 	for {
 		currentTime := trainer.Time()
@@ -65,7 +64,14 @@ func main() {
 			trainer.Log(trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0))
 		}
 
-		trainer.EyeOff()
+		if trainer.PlayMode() == "before_kick_off" {
+			trainer.Start()
+		}
+
+		if trainer.PlayMode() == "time_over" {
+			trainer.Recover()
+			trainer.Start()
+		}
 
 		err = trainer.Error()
 		for err != nil {
@@ -83,6 +89,7 @@ func main() {
 }
 
 func player(c *playerclient.Client) {
+	c.Log(c.PlayMode())
 	serverParams := c.ServerParams()
 	for {
 		sight := c.See()

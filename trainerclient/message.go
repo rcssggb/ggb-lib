@@ -21,6 +21,8 @@ func (m message) Type() (mType messageType) {
 	switch {
 	case strings.HasPrefix(m.data, "(think"):
 		mType = thinkMsg
+	case strings.HasPrefix(m.data, "(hear "):
+		mType = hearMsg
 	case strings.HasPrefix(m.data, "(player_type "):
 		mType = playerTypeMsg
 	case strings.HasPrefix(m.data, "(server_param "):
@@ -56,6 +58,8 @@ func (m message) Type() (mType messageType) {
 	case strings.HasPrefix(m.data, "(ok change_player_type"):
 		mType = changePlayerTypeMsg
 	case strings.HasPrefix(m.data, "(ok move"):
+		fallthrough
+	case strings.HasPrefix(m.data, "(ok recover"):
 		fallthrough
 	case strings.HasPrefix(m.data, "(ok start"):
 		mType = genericOkMsg

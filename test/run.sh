@@ -14,5 +14,6 @@ fi
 
 
 docker-compose up
+docker-compose down
 
 bash ./x11disable.sh

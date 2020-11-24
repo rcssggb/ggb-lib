@@ -45,6 +45,18 @@ func (c *Client) decode() {
 			if pType.ID != -1 {
 				c.playerTypes[pType.ID] = pType
 			}
+		case hearMsg:
+			hearSymbols, err := lexer.Hear(m.data)
+			if err != nil {
+				c.errChannel <- err.Error()
+				continue
+			}
+			if hearSymbols.Time > c.currentTime {
+				c.currentTime = hearSymbols.Time
+			}
+			if hearSymbols.Sender == "referee" {
+				c.playMode = hearSymbols.Message
+			}
 		case errorMsg:
 			c.errChannel <- m.String()
 		case warningMsg:
