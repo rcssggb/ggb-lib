@@ -59,6 +59,8 @@ func (m message) Type() (mType messageType) {
 		mType = changePlayerTypeMsg
 	case strings.HasPrefix(m.data, "(ok move"):
 		fallthrough
+	case strings.HasPrefix(m.data, "(ok change_mode"):
+		fallthrough
 	case strings.HasPrefix(m.data, "(ok recover"):
 		fallthrough
 	case strings.HasPrefix(m.data, "(ok start"):
