@@ -39,55 +39,53 @@ func TestSightShort(t *testing.T) {
 		t.FailNow()
 	}
 
-	if sightData.Time != 37 {
-		t.Fail()
-	}
-
-	if sightData.Ball != nil {
-		t.Fail()
-	}
-
-	expectedFlags := FlagArray{
-		{
-			ID:        rcsscommon.FlagCenterBot,
-			Distance:  16.6,
-			Direction: -1,
+	expectedSight := SightData{
+		Time: 37,
+		Ball: nil,
+		Lines: LineArray{
+			{
+				ID:        rcsscommon.LineBottom,
+				Distance:  16.6,
+				Direction: -79,
+			},
 		},
-		{
-			ID:        rcsscommon.FlagBot0,
-			Distance:  21.5,
-			Direction: 2,
+		Flags: FlagArray{
+			{
+				ID:        rcsscommon.FlagCenterBot,
+				Distance:  16.6,
+				Direction: -1,
+			},
+			{
+				ID:        rcsscommon.FlagBot0,
+				Distance:  21.5,
+				Direction: 2,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft10,
+				Distance:  22.2,
+				Direction: 28,
+			},
+			{
+				ID:        rcsscommon.FlagBotRight10,
+				Distance:  25,
+				Direction: -21,
+			},
 		},
-		{
-			ID:        rcsscommon.FlagBotLeft10,
-			Distance:  22.2,
-			Direction: 28,
-		},
-		{
-			ID:        rcsscommon.FlagBotRight10,
-			Distance:  25,
-			Direction: -21,
-		},
-	}
-
-	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
-		t.Fail()
-	}
-
-	expectedPlayers := PlayerArray{
-		{
-			Team:       "HELIOS_B",
-			Unum:       10,
-			Distance:   7.4,
-			Direction:  1,
-			DistChange: -0.148,
-			DirChange:  -1.8,
-			BodyDir:    167,
-			NeckDir:    -153,
+		Players: PlayerArray{
+			{
+				Team:       "HELIOS_B",
+				Unum:       10,
+				Distance:   7.4,
+				Direction:  1,
+				DistChange: -0.148,
+				DirChange:  -1.8,
+				BodyDir:    167,
+				NeckDir:    -153,
+			},
 		},
 	}
 
-	if !reflect.DeepEqual(sightData.Players, expectedPlayers) {
+	if !reflect.DeepEqual(*sightData, expectedSight) {
 		t.Fail()
 	}
 }
@@ -158,228 +156,224 @@ func TestSightWithBall(t *testing.T) {
 		t.FailNow()
 	}
 
-	if sightData.Time != 3000 {
-		t.Fail()
-	}
-
-	expectedFlags := FlagArray{
-		{
-			ID:        rcsscommon.FlagCenter,
-			Distance:  14.6,
-			Direction: 42,
+	expectedSight := SightData{
+		Time: 3000,
+		Lines: LineArray{
+			{
+				ID:        rcsscommon.LineLeft,
+				Distance:  63.4,
+				Direction: -89,
+			},
 		},
-		{
-			ID:        rcsscommon.FlagBotLeft10,
-			Distance:  36.2,
-			Direction: -53,
+		Flags: FlagArray{
+			{
+				ID:        rcsscommon.FlagCenter,
+				Distance:  14.6,
+				Direction: 42,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft10,
+				Distance:  36.2,
+				Direction: -53,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft20,
+				Distance:  42.5,
+				Direction: -42,
+			},
+			{
+				ID:        rcsscommon.FlagLeftPenaltyBot,
+				Distance:  47.9,
+				Direction: -12,
+			},
+			{
+				ID:        rcsscommon.FlagLeftPenaltyCenter,
+				Distance:  47.9,
+				Direction: 13,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft30,
+				Distance:  50.4,
+				Direction: -35,
+			},
+			{
+				ID:        rcsscommon.FlagLeftPenaltyTop,
+				Distance:  55.7,
+				Direction: 33,
+			},
+			{
+				ID:        rcsscommon.FlagTopLeft20,
+				Distance:  58,
+				Direction: 58,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft40,
+				Distance:  59.1,
+				Direction: -29,
+			},
+			{
+				ID:        rcsscommon.FlagLeftGoalBot,
+				Distance:  63.4,
+				Direction: 3,
+			},
+			{
+				ID:        rcsscommon.FlagTopLeft30,
+				Distance:  63.4,
+				Direction: 51,
+			},
+			{
+				ID:        rcsscommon.FlagLeftGoal,
+				Distance:  64.1,
+				Direction: 10,
+			},
+			{
+				ID:        rcsscommon.FlagLeftGoalTop,
+				Distance:  65.4,
+				Direction: 16,
+			},
+			{
+				ID:        rcsscommon.FlagLeftBot,
+				Distance:  68,
+				Direction: -20,
+			},
+			{
+				ID:        rcsscommon.FlagBotLeft50,
+				Distance:  68,
+				Direction: -25,
+			},
+			{
+				ID:        rcsscommon.FlagLeftBot10,
+				Distance:  68.7,
+				Direction: 1,
+			},
+			{
+				ID:        rcsscommon.FlagLeftBot20,
+				Distance:  69.4,
+				Direction: -8,
+			},
+			{
+				ID:        rcsscommon.FlagLeft0,
+				Distance:  69.4,
+				Direction: 9,
+			},
+			{
+				ID:        rcsscommon.FlagTopLeft40,
+				Distance:  70.8,
+				Direction: 45,
+			},
+			{
+				ID:        rcsscommon.FlagLeftBot30,
+				Distance:  71.5,
+				Direction: -16,
+			},
+			{
+				ID:        rcsscommon.FlagLeftTop10,
+				Distance:  71.5,
+				Direction: 17,
+			},
+			{
+				ID:        rcsscommon.FlagLeftTop20,
+				Distance:  74.4,
+				Direction: 24,
+			},
+			{
+				ID:        rcsscommon.FlagLeftTop,
+				Distance:  76.7,
+				Direction: 36,
+			},
+			{
+				ID:        rcsscommon.FlagTopLeft50,
+				Distance:  78.3,
+				Direction: 40,
+			},
+			{
+				ID:        rcsscommon.FlagLeftTop30,
+				Distance:  79,
+				Direction: 31,
+			},
 		},
-		{
-			ID:        rcsscommon.FlagBotLeft20,
-			Distance:  42.5,
-			Direction: -42,
+		Ball: &BallData{
+			Distance:   14.9,
+			Direction:  42,
+			DistChange: 0.298,
+			DirChange:  0.9,
 		},
-		{
-			ID:        rcsscommon.FlagLeftPenaltyBot,
-			Distance:  47.9,
-			Direction: -12,
-		},
-		{
-			ID:        rcsscommon.FlagLeftPenaltyCenter,
-			Distance:  47.9,
-			Direction: 13,
-		},
-		{
-			ID:        rcsscommon.FlagBotLeft30,
-			Distance:  50.4,
-			Direction: -35,
-		},
-		{
-			ID:        rcsscommon.FlagLeftPenaltyTop,
-			Distance:  55.7,
-			Direction: 33,
-		},
-		{
-			ID:        rcsscommon.FlagTopLeft20,
-			Distance:  58,
-			Direction: 58,
-		},
-		{
-			ID:        rcsscommon.FlagBotLeft40,
-			Distance:  59.1,
-			Direction: -29,
-		},
-		{
-			ID:        rcsscommon.FlagLeftGoalBot,
-			Distance:  63.4,
-			Direction: 3,
-		},
-		{
-			ID:        rcsscommon.FlagTopLeft30,
-			Distance:  63.4,
-			Direction: 51,
-		},
-		{
-			ID:        rcsscommon.FlagLeftGoal,
-			Distance:  64.1,
-			Direction: 10,
-		},
-		{
-			ID:        rcsscommon.FlagLeftGoalTop,
-			Distance:  65.4,
-			Direction: 16,
-		},
-		{
-			ID:        rcsscommon.FlagLeftBot,
-			Distance:  68,
-			Direction: -20,
-		},
-		{
-			ID:        rcsscommon.FlagBotLeft50,
-			Distance:  68,
-			Direction: -25,
-		},
-		{
-			ID:        rcsscommon.FlagLeftBot10,
-			Distance:  68.7,
-			Direction: 1,
-		},
-		{
-			ID:        rcsscommon.FlagLeftBot20,
-			Distance:  69.4,
-			Direction: -8,
-		},
-		{
-			ID:        rcsscommon.FlagLeft0,
-			Distance:  69.4,
-			Direction: 9,
-		},
-		{
-			ID:        rcsscommon.FlagTopLeft40,
-			Distance:  70.8,
-			Direction: 45,
-		},
-		{
-			ID:        rcsscommon.FlagLeftBot30,
-			Distance:  71.5,
-			Direction: -16,
-		},
-		{
-			ID:        rcsscommon.FlagLeftTop10,
-			Distance:  71.5,
-			Direction: 17,
-		},
-		{
-			ID:        rcsscommon.FlagLeftTop20,
-			Distance:  74.4,
-			Direction: 24,
-		},
-		{
-			ID:        rcsscommon.FlagLeftTop,
-			Distance:  76.7,
-			Direction: 36,
-		},
-		{
-			ID:        rcsscommon.FlagTopLeft50,
-			Distance:  78.3,
-			Direction: 40,
-		},
-		{
-			ID:        rcsscommon.FlagLeftTop30,
-			Distance:  79,
-			Direction: 31,
-		},
-	}
-
-	if !reflect.DeepEqual(sightData.Flags, expectedFlags) {
-		t.Fail()
-	}
-
-	expectedBall := BallData{
-		Distance:   14.9,
-		Direction:  42,
-		DistChange: 0.298,
-		DirChange:  0.9,
-	}
-
-	if sightData.Ball == nil || *sightData.Ball != expectedBall {
-		t.Fail()
-	}
-
-	expectedPlayers := PlayerArray{
-		{
-			Team:       "HELIOS_A",
-			Unum:       7,
-			Distance:   10,
-			Direction:  -34,
-			DistChange: -0,
-			DirChange:  1.4,
-			BodyDir:    -52,
-			NeckDir:    38,
-		},
-		{
-			Team:       "HELIOS_B",
-			Unum:       8,
-			Distance:   13.5,
-			Direction:  -16,
-			DistChange: 0,
-			DirChange:  1,
-			BodyDir:    -53,
-			NeckDir:    -113,
-		},
-		{
-			Team:       "HELIOS_B",
-			Unum:       6,
-			Distance:   20.1,
-			Direction:  -3,
-			DistChange: 0.402,
-			DirChange:  0.5,
-			BodyDir:    -35,
-			NeckDir:    50,
-		},
-		{
-			Team:       "HELIOS_B",
-			Unum:       3,
-			Distance:   27.1,
-			Direction:  -12,
-			DistChange: 0,
-			DirChange:  0.2,
-			BodyDir:    -52,
-			NeckDir:    -122,
-		},
-		{
-			Team:      "HELIOS_B",
-			Distance:  27.1,
-			Direction: -31,
-		},
-		{
-			Team:      "HELIOS_B",
-			Distance:  30,
-			Direction: 13,
-		},
-		{
-			Team:      "HELIOS_B",
-			Distance:  33.1,
-			Direction: 44,
-		},
-		{
-			Distance:  44.7,
-			Direction: 6,
-		},
-		{
-			Distance:  60.3,
-			Direction: -6,
-		},
-		{
-			Distance:  60.3,
-			Direction: 7,
-		},
-		{
-			Distance:  66.7,
-			Direction: 17,
+		Players: PlayerArray{
+			{
+				Team:       "HELIOS_A",
+				Unum:       7,
+				Distance:   10,
+				Direction:  -34,
+				DistChange: -0,
+				DirChange:  1.4,
+				BodyDir:    -52,
+				NeckDir:    38,
+			},
+			{
+				Team:       "HELIOS_B",
+				Unum:       8,
+				Distance:   13.5,
+				Direction:  -16,
+				DistChange: 0,
+				DirChange:  1,
+				BodyDir:    -53,
+				NeckDir:    -113,
+			},
+			{
+				Team:       "HELIOS_B",
+				Unum:       6,
+				Distance:   20.1,
+				Direction:  -3,
+				DistChange: 0.402,
+				DirChange:  0.5,
+				BodyDir:    -35,
+				NeckDir:    50,
+			},
+			{
+				Team:       "HELIOS_B",
+				Unum:       3,
+				Distance:   27.1,
+				Direction:  -12,
+				DistChange: 0,
+				DirChange:  0.2,
+				BodyDir:    -52,
+				NeckDir:    -122,
+			},
+			{
+				Team:      "HELIOS_B",
+				Distance:  27.1,
+				Direction: -31,
+			},
+			{
+				Team:      "HELIOS_B",
+				Distance:  30,
+				Direction: 13,
+			},
+			{
+				Team:      "HELIOS_B",
+				Distance:  33.1,
+				Direction: 44,
+			},
+			{
+				Distance:  44.7,
+				Direction: 6,
+			},
+			{
+				Distance:  60.3,
+				Direction: -6,
+			},
+			{
+				Distance:  60.3,
+				Direction: 7,
+			},
+			{
+				Distance:  66.7,
+				Direction: 17,
+			},
 		},
 	}
 
-	if !reflect.DeepEqual(sightData.Players, expectedPlayers) {
+	if !reflect.DeepEqual(*sightData, expectedSight) {
 		t.Fail()
 	}
 }

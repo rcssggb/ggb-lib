@@ -11,6 +11,7 @@ import (
 type SightData struct {
 	Time    int
 	Flags   FlagArray
+	Lines   LineArray
 	Players PlayerArray
 	Ball    *BallData
 }
@@ -56,9 +57,24 @@ func Sight(symbols lexer.SightSymbols, errCh chan string) (sightData *SightData)
 			}
 			sightData.Flags = append(sightData.Flags, flagData)
 		}
+
+		if objType == 'l' {
+			lineID, lineDefined := lineMap[objName]
+			if !lineDefined {
+				errCh <- fmt.Sprintf("seen unknown field line (%s)", objName)
+				continue
+			}
+			lineData, err := parseLine(lineID, data)
+			if err != nil {
+				errCh <- fmt.Sprintf("unable to parse line sight data: %s", err)
+				continue
+			}
+			sightData.Lines = append(sightData.Lines, lineData)
+		}
 	}
 
 	sort.Sort(sightData.Flags)
+	sort.Sort(sightData.Lines)
 
 	// Parse players
 	sightData.Players = parsePlayers(symbols.Players, errCh)
