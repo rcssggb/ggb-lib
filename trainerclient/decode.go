@@ -51,11 +51,14 @@ func (c *Client) decode() {
 				c.errChannel <- err.Error()
 				continue
 			}
-			if hearSymbols.Time > c.currentTime {
+			if hearSymbols.Time >= c.currentTime {
 				c.currentTime = hearSymbols.Time
-			}
-			if hearSymbols.Sender == "referee" {
-				c.playMode = hearSymbols.Message
+				switch hearSymbols.Sender {
+				case "referee":
+					c.playMode = hearSymbols.Message
+				default:
+					c.errChannel <- fmt.Sprintf("ignoring heard message %s", m.data)
+				}
 			}
 		case errorMsg:
 			c.errChannel <- m.String()

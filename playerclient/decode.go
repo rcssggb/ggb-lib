@@ -62,8 +62,11 @@ func (c *Client) decode() {
 			}
 
 			if hearSyms.Time >= c.currentTime {
-				if hearSyms.Sender == "referee" {
+				switch hearSyms.Sender {
+				case "referee":
 					c.playMode = hearSyms.Message
+				default:
+					c.errChannel <- fmt.Sprintf("ignoring heard message %s", m.data)
 				}
 			}
 		case serverParamMsg:
