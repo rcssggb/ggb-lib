@@ -37,6 +37,11 @@ func (c *Client) decode() {
 				c.sightData = *sightData
 				c.currentTime = sightData.Time
 			}
+
+			select {
+			case c.sightChan <- struct{}{}:
+			default:
+			}
 		case bodyMsg:
 			bodySymbols, err := lexer.SenseBody(m.data)
 			if err != nil {
@@ -53,6 +58,11 @@ func (c *Client) decode() {
 			if bodyData.Time >= c.currentTime {
 				c.bodyData = *bodyData
 				c.currentTime = bodyData.Time
+			}
+
+			select {
+			case c.bodyChan <- struct{}{}:
+			default:
 			}
 		case hearMsg:
 			hearSyms, err := lexer.Hear(m.data)
@@ -88,7 +98,10 @@ func (c *Client) decode() {
 				c.teammateTypes[cptData.Unum] = cptData.PlayerType
 			}
 		case thinkMsg:
-			c.thinkChan <- struct{}{}
+			select {
+			case c.thinkChan <- struct{}{}:
+			default:
+			}
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:
