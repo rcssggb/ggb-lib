@@ -16,7 +16,10 @@ func (c *Client) decode() {
 		m = <-c.recvChannel
 		switch m.Type() {
 		case thinkMsg:
-			c.thinkChan <- struct{}{}
+			select {
+			case c.thinkChan <- struct{}{}:
+			default:
+			}
 		case initMsg:
 			continue
 		case startMsg:
