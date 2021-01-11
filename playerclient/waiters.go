@@ -25,5 +25,5 @@ func (c *Client) WaitSight() {
 // WaitBody blocks until (sense_body ...) message is received.
 // Can only be called once per cycle. (TODO: use sync.Cond instead)
 func (c *Client) WaitBody() {
-	<-c.sightChan
+	<-c.bodyChan
 }
