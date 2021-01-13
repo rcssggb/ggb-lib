@@ -3,6 +3,7 @@ package playerclient
 import (
 	"fmt"
 	"net"
+	"sync"
 
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
 	"github.com/rcssggb/ggb-lib/playerclient/types"
@@ -13,6 +14,7 @@ import (
 // TODO: unify playerclient and trainerclient common functions and variables
 // in a clientcommon package
 type Client struct {
+	mutex         sync.RWMutex
 	conn          *net.UDPConn
 	serverAddr    *net.UDPAddr
 	cmdChannel    chan string

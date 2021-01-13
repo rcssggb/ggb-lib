@@ -14,6 +14,8 @@ func (c *Client) decode() {
 
 	for {
 		m = <-c.recvChannel
+
+		c.mutex.Lock()
 		switch m.Type() {
 		case initMsg:
 			initData, err := parser.Init(m.data)
@@ -107,5 +109,6 @@ func (c *Client) decode() {
 		case unsupportedMsg:
 			c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m.String())
 		}
+		c.mutex.Unlock()
 	}
 }
