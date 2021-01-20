@@ -4,7 +4,8 @@ package rcsscommon
 type PlayModeID byte
 
 const (
-	PlayModeBeforeKickOff       PlayModeID = iota + 0 // before_kick_off
+	PlayModeUnknown             PlayModeID = iota + 0 // unknown play mode
+	PlayModeBeforeKickOff                             // before_kick_off
 	PlayModePlayOn                                    // play_on
 	PlayModeTimeOver                                  // time_over
 	PlayModeKickOffR                                  // kick_off_r
@@ -56,6 +57,226 @@ const (
 	PlayModeIllegalDefenseL                           // illegal_defense_l
 	PlayModeIllegalDefenseR                           // illegal_defense_r
 )
+
+// NewPlayModeID parses a string and returns a PlayModeID
+func NewPlayModeID(playMode string) PlayModeID {
+	switch playMode {
+	case "before_kick_off":
+		return PlayModeBeforeKickOff
+	case "play_on":
+		return PlayModePlayOn
+	case "time_over":
+		return PlayModeTimeOver
+	case "kick_off_r":
+		return PlayModeKickOffR
+	case "kick_off_l":
+		return PlayModeKickOffL
+	case "kick_in_r":
+		return PlayModeKickInR
+	case "kick_in_l":
+		return PlayModeKickInL
+	case "free_kick_r":
+		return PlayModeFreeKickR
+	case "free_kick_l":
+		return PlayModeFreeKickL
+	case "corner_kick_r":
+		return PlayModeCornerKickR
+	case "corner_kick_l":
+		return PlayModeCornerKickL
+	case "goal_kick_r":
+		return PlayModeGoalKickR
+	case "goal_kick_l":
+		return PlayModeGoalKickL
+	case "goal_r":
+		return PlayModeGoalR
+	case "goal_l":
+		return PlayModeGoalL
+	case "drop_ball":
+		return PlayModeDropBall
+	case "offside_r":
+		return PlayModeOffsideR
+	case "offside_l":
+		return PlayModeOffsideL
+	case "penalty_kick_l":
+		return PlayModePenaltyKickL
+	case "penalty_kick_r":
+		return PlayModePenaltyKickR
+	case "first_half_over":
+		return PlayModeFirstHalfOver
+	case "pause":
+		return PlayModePause
+	case "human_judge":
+		return PlayModeHumanJudge
+	case "foul_charge_l":
+		return PlayModeFoulChargeL
+	case "foul_charge_r":
+		return PlayModeFoulChargeR
+	case "foul_push_l":
+		return PlayModeFoulPushL
+	case "foul_push_r":
+		return PlayModeFoulPushR
+	case "foul_multiple_attack_l":
+		return PlayModeFoulMultipleAttackL
+	case "foul_multiple_attack_r":
+		return PlayModeFoulMultipleAttackR
+	case "foul_ballout_l":
+		return PlayModeFoulBalloutL
+	case "foul_ballout_r":
+		return PlayModeFoulBalloutR
+	case "back_pass_l":
+		return PlayModeBackPassL
+	case "back_pass_r":
+		return PlayModeBackPassR
+	case "free_kick_fault_l":
+		return PlayModeFreeKickFaultL
+	case "free_kick_fault_r":
+		return PlayModeFreeKickFaultR
+	case "catch_fault_l":
+		return PlayModeCatchFaultL
+	case "catch_fault_r":
+		return PlayModeCatchFaultR
+	case "indirect_free_kick_l":
+		return PlayModeIndirectFreeKickL
+	case "indirect_free_kick_r":
+		return PlayModeIndirectFreeKickR
+	case "penalty_setup_l":
+		return PlayModePenaltySetupL
+	case "penalty_setup_r":
+		return PlayModePenaltySetupR
+	case "penalty_ready_l":
+		return PlayModePenaltyReadyL
+	case "penalty_ready_r":
+		return PlayModePenaltyReadyR
+	case "penalty_taken_l":
+		return PlayModePenaltyTakenL
+	case "penalty_taken_r":
+		return PlayModePenaltyTakenR
+	case "penalty_miss_l":
+		return PlayModePenaltyMissL
+	case "penalty_miss_r":
+		return PlayModePenaltyMissR
+	case "penalty_score_l":
+		return PlayModePenaltyScoreL
+	case "penalty_score_r":
+		return PlayModePenaltyScoreR
+	case "illegal_defense_l":
+		return PlayModeIllegalDefenseL
+	case "illegal_defense_r":
+		return PlayModeIllegalDefenseR
+	default:
+		return PlayModeUnknown
+	}
+}
+
+// OneHot returns play mode encoded in a onehot vector
+func (id PlayModeID) OneHot() []float64 {
+	ret := make([]float64, 51)
+	switch id {
+	case PlayModeBeforeKickOff:
+		ret[0] = 1
+	case PlayModePlayOn:
+		ret[1] = 1
+	case PlayModeTimeOver:
+		ret[2] = 1
+	case PlayModeKickOffR:
+		ret[3] = 1
+	case PlayModeKickOffL:
+		ret[4] = 1
+	case PlayModeKickInR:
+		ret[5] = 1
+	case PlayModeKickInL:
+		ret[6] = 1
+	case PlayModeFreeKickR:
+		ret[7] = 1
+	case PlayModeFreeKickL:
+		ret[8] = 1
+	case PlayModeCornerKickR:
+		ret[9] = 1
+	case PlayModeCornerKickL:
+		ret[10] = 1
+	case PlayModeGoalKickR:
+		ret[11] = 1
+	case PlayModeGoalKickL:
+		ret[12] = 1
+	case PlayModeGoalR:
+		ret[13] = 1
+	case PlayModeGoalL:
+		ret[14] = 1
+	case PlayModeDropBall:
+		ret[15] = 1
+	case PlayModeOffsideR:
+		ret[16] = 1
+	case PlayModeOffsideL:
+		ret[17] = 1
+	case PlayModePenaltyKickL:
+		ret[18] = 1
+	case PlayModePenaltyKickR:
+		ret[19] = 1
+	case PlayModeFirstHalfOver:
+		ret[20] = 1
+	case PlayModePause:
+		ret[21] = 1
+	case PlayModeHumanJudge:
+		ret[22] = 1
+	case PlayModeFoulChargeL:
+		ret[23] = 1
+	case PlayModeFoulChargeR:
+		ret[24] = 1
+	case PlayModeFoulPushL:
+		ret[25] = 1
+	case PlayModeFoulPushR:
+		ret[26] = 1
+	case PlayModeFoulMultipleAttackL:
+		ret[27] = 1
+	case PlayModeFoulMultipleAttackR:
+		ret[28] = 1
+	case PlayModeFoulBalloutL:
+		ret[29] = 1
+	case PlayModeFoulBalloutR:
+		ret[30] = 1
+	case PlayModeBackPassL:
+		ret[31] = 1
+	case PlayModeBackPassR:
+		ret[32] = 1
+	case PlayModeFreeKickFaultL:
+		ret[33] = 1
+	case PlayModeFreeKickFaultR:
+		ret[34] = 1
+	case PlayModeCatchFaultL:
+		ret[35] = 1
+	case PlayModeCatchFaultR:
+		ret[36] = 1
+	case PlayModeIndirectFreeKickL:
+		ret[37] = 1
+	case PlayModeIndirectFreeKickR:
+		ret[38] = 1
+	case PlayModePenaltySetupL:
+		ret[39] = 1
+	case PlayModePenaltySetupR:
+		ret[40] = 1
+	case PlayModePenaltyReadyL:
+		ret[41] = 1
+	case PlayModePenaltyReadyR:
+		ret[42] = 1
+	case PlayModePenaltyTakenL:
+		ret[43] = 1
+	case PlayModePenaltyTakenR:
+		ret[44] = 1
+	case PlayModePenaltyMissL:
+		ret[45] = 1
+	case PlayModePenaltyMissR:
+		ret[46] = 1
+	case PlayModePenaltyScoreL:
+		ret[47] = 1
+	case PlayModePenaltyScoreR:
+		ret[48] = 1
+	case PlayModeIllegalDefenseL:
+		ret[49] = 1
+	case PlayModeIllegalDefenseR:
+		ret[50] = 1
+	}
+	return ret
+}
 
 func (id PlayModeID) String() string {
 	switch id {

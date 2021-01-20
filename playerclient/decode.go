@@ -25,7 +25,7 @@ func (c *Client) decode() {
 			}
 			c.shirtNum = initData.Unum
 			c.teamSide = initData.Side
-			c.playMode = initData.PlayMode
+			c.playMode = rcsscommon.NewPlayModeID(initData.PlayMode)
 		case sightMsg:
 			sightSymbols, err := lexer.Sight(m.data)
 			if err != nil {
@@ -76,7 +76,7 @@ func (c *Client) decode() {
 			if hearSyms.Time >= c.currentTime {
 				switch hearSyms.Sender {
 				case "referee":
-					c.playMode = hearSyms.Message
+					c.playMode = rcsscommon.NewPlayModeID(hearSyms.Message)
 				default:
 					c.errChannel <- fmt.Sprintf("ignoring heard message %s", m.data)
 				}

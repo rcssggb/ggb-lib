@@ -42,7 +42,7 @@ func (c *Client) Shirt() int {
 }
 
 // PlayMode returns current play mode
-func (c *Client) PlayMode() string {
+func (c *Client) PlayMode() rcsscommon.PlayModeID {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 	return c.playMode

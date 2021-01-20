@@ -21,7 +21,7 @@ func (c *Client) RightTeamName() string {
 }
 
 // PlayMode returns current play mode
-func (c *Client) PlayMode() string {
+func (c *Client) PlayMode() rcsscommon.PlayModeID {
 	return c.playMode
 }
 

@@ -33,7 +33,7 @@ type Client struct {
 	teamName      string
 	teamSide      rcsscommon.SideType
 	shirtNum      int
-	playMode      string
+	playMode      rcsscommon.PlayModeID
 }
 
 // NewPlayerClient is the constructor for the playerclient.Client object

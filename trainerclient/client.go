@@ -25,7 +25,7 @@ type Client struct {
 	playerTypes     map[int64]rcsscommon.PlayerType
 	lTeamName       string
 	rTeamName       string
-	playMode        string
+	playMode        rcsscommon.PlayModeID
 	ballInfo        string
 }
 
@@ -41,7 +41,7 @@ func NewTrainerClient(serverIP string) (*Client, error) {
 	client.currentTime = 0
 	client.serverParams = rcsscommon.DefaultServerParams()
 	client.playerParams = rcsscommon.DefaultPlayerParams()
-	client.playMode = "before_kick_off"
+	client.playMode = rcsscommon.PlayModeBeforeKickOff
 
 	// Open listener socker to request player connection
 	serverHost := serverIP + ":6001"

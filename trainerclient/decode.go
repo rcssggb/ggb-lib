@@ -58,7 +58,7 @@ func (c *Client) decode() {
 				c.currentTime = hearSymbols.Time
 				switch hearSymbols.Sender {
 				case "referee":
-					c.playMode = hearSymbols.Message
+					c.playMode = rcsscommon.NewPlayModeID(hearSymbols.Message)
 				default:
 					c.errChannel <- fmt.Sprintf("ignoring heard message %s", m.data)
 				}

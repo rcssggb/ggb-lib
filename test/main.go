@@ -64,11 +64,11 @@ func main() {
 			trainer.MoveBall(ballPos.X, ballPos.Y, 0, 0)
 		}
 
-		if trainer.PlayMode() == "before_kick_off" {
+		if trainer.PlayMode().String() == "before_kick_off" {
 			trainer.Start()
 		}
 
-		if trainer.PlayMode() == "time_over" {
+		if trainer.PlayMode().String() == "time_over" {
 			break
 		}
 
@@ -97,7 +97,7 @@ func player(c *playerclient.Client) {
 		body := c.SenseBody()
 		currentTime := c.Time()
 
-		if c.PlayMode() == "time_over" {
+		if c.PlayMode().String() == "time_over" {
 			c.Bye()
 			break
 		}
