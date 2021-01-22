@@ -32,6 +32,8 @@ type Client struct {
 	bodyData      parser.SenseBodyData
 	teamName      string
 	teamSide      rcsscommon.SideType
+	goalsL        int64
+	goalsR        int64
 	shirtNum      int
 	playMode      rcsscommon.PlayModeID
 }

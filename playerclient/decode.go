@@ -2,6 +2,8 @@ package playerclient
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/rcssggb/ggb-lib/playerclient/lexer"
 	"github.com/rcssggb/ggb-lib/playerclient/parser"
@@ -76,7 +78,21 @@ func (c *Client) decode() {
 			if hearSyms.Time >= c.currentTime {
 				switch hearSyms.Sender {
 				case "referee":
-					c.playMode = rcsscommon.NewPlayModeID(hearSyms.Message)
+					playMode := hearSyms.Message
+					if strings.HasPrefix(playMode, "goal_") {
+						goalStr := strings.TrimPrefix(playMode, "goal_")
+						goalData := strings.Split(goalStr, "_")
+						score, err := strconv.ParseInt(goalData[1], 10, 64)
+						if err == nil {
+							if goalData[0] == "l" {
+								c.goalsL = score
+							} else if goalData[1] == "r" {
+								c.goalsR = score
+							}
+						}
+						playMode = playMode[:6]
+					}
+					c.playMode = rcsscommon.NewPlayModeID(playMode)
 				default:
 					c.errChannel <- fmt.Sprintf("ignoring heard message %s", m.data)
 				}

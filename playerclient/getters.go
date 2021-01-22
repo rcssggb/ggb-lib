@@ -79,3 +79,23 @@ func (c *Client) TeammateTypes() types.TeammateTypes {
 	}
 	return ret
 }
+
+// TeamGoals returns player's own team goals
+func (c *Client) TeamGoals() int64 {
+	if c.teamSide == rcsscommon.LeftSide {
+		return c.goalsL
+	} else if c.teamSide == rcsscommon.RightSide {
+		return c.goalsR
+	}
+	return -1
+}
+
+// OpponentGoals returns opponent's team goals
+func (c *Client) OpponentGoals() int64 {
+	if c.teamSide == rcsscommon.RightSide {
+		return c.goalsL
+	} else if c.teamSide == rcsscommon.LeftSide {
+		return c.goalsR
+	}
+	return -1
+}

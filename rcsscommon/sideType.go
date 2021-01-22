@@ -7,12 +7,14 @@ const (
 	// LeftSide ...
 	LeftSide SideType = 'l'
 	// RightSide ...
-	RightSide SideType = 'l'
+	RightSide SideType = 'r'
 )
 
 func (s SideType) String() string {
-	if s == 'r' {
+	if s == LeftSide {
+		return "left"
+	} else if s == RightSide {
 		return "right"
 	}
-	return "left"
+	return ""
 }

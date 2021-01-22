@@ -1,5 +1,9 @@
 package rcsscommon
 
+import (
+	"strings"
+)
+
 // PlayModeID is the type representing each game mode
 type PlayModeID byte
 
@@ -60,6 +64,9 @@ const (
 
 // NewPlayModeID parses a string and returns a PlayModeID
 func NewPlayModeID(playMode string) PlayModeID {
+	if strings.HasPrefix(playMode, "goal_") {
+		playMode = playMode[:6]
+	}
 	switch playMode {
 	case "before_kick_off":
 		return PlayModeBeforeKickOff
@@ -101,6 +108,8 @@ func NewPlayModeID(playMode string) PlayModeID {
 		return PlayModePenaltyKickL
 	case "penalty_kick_r":
 		return PlayModePenaltyKickR
+	case "half_time":
+		fallthrough // TODO understand why half time is sent if string in code is "first_half_over"
 	case "first_half_over":
 		return PlayModeFirstHalfOver
 	case "pause":
