@@ -120,6 +120,8 @@ func (c *Client) decode() {
 			case c.thinkChan <- struct{}{}:
 			default:
 			}
+		case genericOkMsg:
+			// do nothing
 		case errorMsg:
 			c.errChannel <- m.String()
 		case unsupportedMsg:

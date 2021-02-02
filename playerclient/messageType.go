@@ -15,4 +15,5 @@ const (
 	serverParamMsg
 	changePlayerTypeMsg
 	thinkMsg
+	genericOkMsg
 )

@@ -92,6 +92,8 @@ func main() {
 func player(c *playerclient.Client) {
 	c.Log(c.PlayMode())
 	serverParams := c.ServerParams()
+	c.SynchSee()
+	c.ChangeView(rcsscommon.ViewWidthNarrow, rcsscommon.ViewQualityHigh)
 	for {
 		sight := c.See()
 		body := c.SenseBody()

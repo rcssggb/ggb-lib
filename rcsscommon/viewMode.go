@@ -19,3 +19,25 @@ const (
 
 	ViewWidthWide ViewWidth = 2
 )
+
+func (v ViewWidth) String() string {
+	switch v {
+	case ViewWidthNarrow:
+		return "narrow"
+	case ViewWidthNormal:
+		return "normal"
+	case ViewWidthWide:
+		return "wide"
+	}
+	return ""
+}
+
+func (v ViewQuality) String() string {
+	switch v {
+	case ViewQualityHigh:
+		return "high"
+	case ViewQualityLow:
+		return "low"
+	}
+	return ""
+}

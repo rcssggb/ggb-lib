@@ -41,10 +41,10 @@ func (m message) Type() (mType messageType) {
 		mType = changePlayerTypeMsg
 	case strings.HasPrefix(m.data, "(think)"):
 		mType = thinkMsg
+	case strings.HasPrefix(m.data, "(ok "):
+		mType = genericOkMsg
 	// Unsupported msgs below
 	case strings.HasPrefix(m.data, "(score "):
-		mType = unsupportedMsg
-	case strings.HasPrefix(m.data, "(ok "):
 		mType = unsupportedMsg
 	case strings.HasPrefix(m.data, "(fullstate "):
 		mType = unsupportedMsg
