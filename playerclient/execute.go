@@ -11,7 +11,12 @@ func (c *Client) execute() {
 	var cmd string
 	var err error
 	for {
-		cmd = <-c.cmdChannel
+		select {
+		case cmd = <-c.cmdChannel:
+		case <-time.After(10 * time.Minute):
+			c.errChannel <- "execute loop timed out"
+			return
+		}
 
 		// Wait until client receives player port
 		for c.serverAddr == nil {

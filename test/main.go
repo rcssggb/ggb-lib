@@ -17,11 +17,13 @@ var verbose = flag.Bool("verbose", true, "print info level logs to stdout")
 func main() {
 	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
 
+	nPlayers := 1
+
 	hostName := "rcssserver"
 
 	playersL := map[int]*playerclient.Client{}
 
-	for i := 0; i < 11; i++ {
+	for i := 0; i < nPlayers; i++ {
 		p, err := playerclient.NewPlayerClient("ggb-lib-A", hostName)
 		playersL[i] = p
 		if err != nil {
@@ -31,7 +33,7 @@ func main() {
 
 	playersR := map[int]*playerclient.Client{}
 
-	for i := 0; i < 11; i++ {
+	for i := 0; i < nPlayers; i++ {
 		p, err := playerclient.NewPlayerClient("ggb-lib-B", hostName)
 		playersR[i] = p
 		if err != nil {
@@ -48,7 +50,7 @@ func main() {
 
 	time.Sleep(1 * time.Second)
 
-	for i := 0; i < 11; i++ {
+	for i := 0; i < nPlayers; i++ {
 		p := playersL[i]
 		go player(p)
 		p = playersR[i]
