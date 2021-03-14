@@ -3,6 +3,7 @@ package trainerclient
 import (
 	"fmt"
 	"net"
+	"sync"
 
 	"github.com/rcssggb/ggb-lib/rcsscommon"
 	"github.com/rcssggb/ggb-lib/trainerclient/types"
@@ -10,6 +11,7 @@ import (
 
 // Client ...
 type Client struct {
+	mutex           sync.RWMutex
 	conn            *net.UDPConn
 	serverAddr      *net.UDPAddr
 	cmdChannel      chan string

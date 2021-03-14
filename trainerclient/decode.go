@@ -23,6 +23,7 @@ func (c *Client) decode() {
 			}
 			c.errChannel <- "decode loop timed out"
 		case m = <-c.recvChannel:
+			c.mutex.Lock()
 			switch m.Type() {
 			case thinkMsg:
 				select {
@@ -30,17 +31,18 @@ func (c *Client) decode() {
 				default:
 				}
 			case initMsg:
-				continue
+				// do nothing
 			case startMsg:
-				continue
+				// do nothing
 			case recoverMsg:
-				continue
+				// do nothing
 			case moveMsg:
-				continue
+				// do nothing
 			case lookMsg:
 				gPosSym, err := lexer.Look(m.data)
 				if err != nil {
 					c.errChannel <- fmt.Sprintf("failed to parse global positions: %s", err)
+					c.mutex.Unlock()
 					continue
 				}
 				gPos := parser.Look(*gPosSym, c.errChannel)
@@ -61,6 +63,7 @@ func (c *Client) decode() {
 				hearSymbols, err := lexer.Hear(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 				if hearSymbols.Time >= c.currentTime {
@@ -96,6 +99,7 @@ func (c *Client) decode() {
 				lTeam, rTeam, err := lexer.TeamNames(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 				c.lTeamName = lTeam
@@ -104,6 +108,7 @@ func (c *Client) decode() {
 				time, ballInfo, err := lexer.CheckBall(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 				if c.currentTime <= time {
@@ -114,14 +119,14 @@ func (c *Client) decode() {
 				_, _, _, err := lexer.ChangePlayerType(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 			case genericOkMsg:
-				continue
 			case unsupportedMsg:
 				c.errChannel <- fmt.Sprintf("unsupported message received from server: %s", m)
-				continue
 			}
+			c.mutex.Unlock()
 		}
 	}
 }

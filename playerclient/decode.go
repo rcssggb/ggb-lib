@@ -30,6 +30,7 @@ func (c *Client) decode() {
 				initData, err := parser.Init(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 				c.shirtNum = initData.Unum
@@ -39,6 +40,7 @@ func (c *Client) decode() {
 				sightSymbols, err := lexer.Sight(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 
@@ -57,12 +59,14 @@ func (c *Client) decode() {
 				bodySymbols, err := lexer.SenseBody(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 
 				bodyData, err := parser.SenseBody(*bodySymbols)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 
@@ -79,6 +83,7 @@ func (c *Client) decode() {
 				hearSyms, err := lexer.Hear(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 
@@ -117,6 +122,7 @@ func (c *Client) decode() {
 				cptData, err := parser.ChangePlayerType(m.data)
 				if err != nil {
 					c.errChannel <- err.Error()
+					c.mutex.Unlock()
 					continue
 				}
 				if cptData.PlayerType != -1 {

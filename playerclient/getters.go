@@ -82,6 +82,8 @@ func (c *Client) TeammateTypes() types.TeammateTypes {
 
 // TeamGoals returns player's own team goals
 func (c *Client) TeamGoals() int64 {
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
 	if c.teamSide == rcsscommon.LeftSide {
 		return c.goalsL
 	} else if c.teamSide == rcsscommon.RightSide {
@@ -92,6 +94,8 @@ func (c *Client) TeamGoals() int64 {
 
 // OpponentGoals returns opponent's team goals
 func (c *Client) OpponentGoals() int64 {
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
 	if c.teamSide == rcsscommon.RightSide {
 		return c.goalsL
 	} else if c.teamSide == rcsscommon.LeftSide {
