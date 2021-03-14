@@ -11,7 +11,12 @@ func (c *Client) execute() {
 	var cmd string
 	var err error
 	for {
-		cmd = <-c.cmdChannel
+		select {
+		case cmd = <-c.cmdChannel:
+		case <-time.After(10 * time.Minute):
+			c.errChannel <- "execute loop timed out"
+			return
+		}
 
 		// Wait until client receives player port
 		for c.serverAddr == nil {
@@ -23,7 +28,7 @@ func (c *Client) execute() {
 			cmd = cmd + "\x00"
 		}
 
-		_, err = c.conn.WriteToUDP([]byte(cmd+"\x00"), c.serverAddr)
+		_, err = c.conn.WriteToUDP([]byte(cmd), c.serverAddr)
 		if err != nil {
 			c.errChannel <- fmt.Sprintf("error sending command to server: %s", err)
 		}
